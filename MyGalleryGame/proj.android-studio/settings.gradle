@@ -1,0 +1,7 @@
+include ':libcocos2dx'
+project(':libcocos2dx').projectDir = new File(settingsDir, '../cocos2d/cocos/platform/android/libcocos2dx')
+include ':MyGalleryGame'
+project(':MyGalleryGame').projectDir = new File(settingsDir, 'app')
+
+include ':facebook_lib'
+project(':facebook_lib').projectDir = new File(settingsDir, '../cocos2d/cocos/platform/android/java/libs/facebook_lib')

@@ -1,0 +1,16 @@
+{
+    "android": {
+        "Facebook": {
+            "debug": false,
+    "app_id":"177481739254269",
+    "url_scheme_suffix":""
+
+
+        }
+    }, 
+    "ios": {
+        "Facebook": {
+            "debug": true
+        }
+    }
+}
