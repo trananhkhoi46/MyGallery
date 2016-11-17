@@ -356,7 +356,50 @@ obj/local/armeabi/objs-debug/MyGame_shared/__/__/Classes/AppDelegate.o: \
  /Users/Kskull/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/../cocos2d/cocos/3d/../platform/android/CCApplication-android.h \
  /Users/Kskull/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/../cocos2d/cocos/3d/../renderer/CCGLProgramCache.h \
  /Users/Kskull/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/../cocos2d/cocos/3d/../renderer/ccGLStateCache.h \
- jni/../../Classes/HelloWorldScene.h jni/PluginFacebook/PluginFacebook.h
+ jni/../../Classes/SplashScene.h jni/../../Classes/BaseScene.h \
+ /Users/Kskull/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/../cocos2d/extensions/../cocos/ui/CocosGUI.h \
+ /Users/Kskull/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/../cocos2d/cocos/3d/../ui/UIWidget.h \
+ /Users/Kskull/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/../cocos2d/cocos/3d/../2d/CCProtectedNode.h \
+ /Users/Kskull/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/../cocos2d/cocos/3d/../ui/UILayoutParameter.h \
+ /Users/Kskull/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/../cocos2d/cocos/3d/../ui/GUIExport.h \
+ /Users/Kskull/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/../cocos2d/cocos/3d/../ui/GUIDefine.h \
+ /Users/Kskull/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/../cocos2d/cocos/3d/../base/ObjectFactory.h \
+ /Users/Kskull/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/../cocos2d/cocos/3d/../ui/UILayout.h \
+ /Users/Kskull/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/../cocos2d/cocos/3d/../ui/UIButton.h \
+ /Users/Kskull/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/../cocos2d/cocos/3d/../ui/UICheckBox.h \
+ /Users/Kskull/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/../cocos2d/cocos/3d/../ui/UIAbstractCheckButton.h \
+ /Users/Kskull/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/../cocos2d/cocos/3d/../ui/UIRadioButton.h \
+ /Users/Kskull/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/../cocos2d/cocos/3d/../ui/UIImageView.h \
+ /Users/Kskull/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/../cocos2d/cocos/3d/../ui/UIText.h \
+ /Users/Kskull/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/../cocos2d/cocos/3d/../ui/UITextAtlas.h \
+ /Users/Kskull/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/../cocos2d/cocos/3d/../ui/UILoadingBar.h \
+ /Users/Kskull/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/../cocos2d/cocos/3d/../ui/UIScrollView.h \
+ /Users/Kskull/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/../cocos2d/cocos/3d/../ui/UIListView.h \
+ /Users/Kskull/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/../cocos2d/cocos/3d/../ui/UISlider.h \
+ /Users/Kskull/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/../cocos2d/cocos/3d/../ui/UITextField.h \
+ /Users/Kskull/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/../cocos2d/cocos/3d/../ui/UITextBMFont.h \
+ /Users/Kskull/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/../cocos2d/cocos/3d/../ui/UIPageView.h \
+ /Users/Kskull/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/../cocos2d/cocos/3d/../ui/UIHelper.h \
+ /Users/Kskull/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/../cocos2d/cocos/3d/../ui/UIRichText.h \
+ /Users/Kskull/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/../cocos2d/cocos/3d/../ui/UIHBox.h \
+ /Users/Kskull/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/../cocos2d/cocos/3d/../ui/UIVBox.h \
+ /Users/Kskull/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/../cocos2d/cocos/3d/../ui/UIRelativeBox.h \
+ /Users/Kskull/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/../cocos2d/cocos/3d/../ui/UIVideoPlayer.h \
+ /Users/Kskull/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/../cocos2d/cocos/3d/../ui/UIWebView.h \
+ /Users/Kskull/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/../cocos2d/cocos/3d/../ui/UIDeprecated.h \
+ /Users/Kskull/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/../cocos2d/cocos/3d/../ui/UIScale9Sprite.h \
+ /Users/Kskull/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/../cocos2d/cocos/3d/../ui/UIEditBox/UIEditBox.h \
+ /Users/Kskull/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/../cocos2d/cocos/3d/../ui/UILayoutComponent.h \
+ /Users/Kskull/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/../cocos2d/cocos/3d/../ui/UITabControl.h \
+ /Users/Kskull/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/../cocos2d/cocos/3d/../editor-support/cocostudio/CocosStudioExtension.h \
+ /Users/Kskull/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/../cocos2d/extensions/../cocos/network/HttpRequest.h \
+ /Users/Kskull/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/../cocos2d/extensions/../cocos/network/HttpClient.h \
+ /Users/Kskull/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/../cocos2d/cocos/3d/../network/HttpRequest.h \
+ /Users/Kskull/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/../cocos2d/cocos/3d/../network/HttpResponse.h \
+ /Users/Kskull/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/../cocos2d/cocos/3d/../network/HttpCookie.h \
+ /Users/Kskull/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/../cocos2d/cocos/audio/android/../include/SimpleAudioEngine.h \
+ /Users/Kskull/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/../cocos2d/cocos/3d/../audio/include/Export.h \
+ jni/../../Classes/Resources.h jni/PluginFacebook/PluginFacebook.h
 
 jni/../../Classes/AppDelegate.h:
 
@@ -1072,6 +1115,94 @@ jni/../../Classes/AppDelegate.h:
 
 /Users/Kskull/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/../cocos2d/cocos/3d/../renderer/ccGLStateCache.h:
 
-jni/../../Classes/HelloWorldScene.h:
+jni/../../Classes/SplashScene.h:
+
+jni/../../Classes/BaseScene.h:
+
+/Users/Kskull/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/../cocos2d/extensions/../cocos/ui/CocosGUI.h:
+
+/Users/Kskull/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/../cocos2d/cocos/3d/../ui/UIWidget.h:
+
+/Users/Kskull/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/../cocos2d/cocos/3d/../2d/CCProtectedNode.h:
+
+/Users/Kskull/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/../cocos2d/cocos/3d/../ui/UILayoutParameter.h:
+
+/Users/Kskull/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/../cocos2d/cocos/3d/../ui/GUIExport.h:
+
+/Users/Kskull/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/../cocos2d/cocos/3d/../ui/GUIDefine.h:
+
+/Users/Kskull/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/../cocos2d/cocos/3d/../base/ObjectFactory.h:
+
+/Users/Kskull/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/../cocos2d/cocos/3d/../ui/UILayout.h:
+
+/Users/Kskull/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/../cocos2d/cocos/3d/../ui/UIButton.h:
+
+/Users/Kskull/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/../cocos2d/cocos/3d/../ui/UICheckBox.h:
+
+/Users/Kskull/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/../cocos2d/cocos/3d/../ui/UIAbstractCheckButton.h:
+
+/Users/Kskull/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/../cocos2d/cocos/3d/../ui/UIRadioButton.h:
+
+/Users/Kskull/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/../cocos2d/cocos/3d/../ui/UIImageView.h:
+
+/Users/Kskull/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/../cocos2d/cocos/3d/../ui/UIText.h:
+
+/Users/Kskull/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/../cocos2d/cocos/3d/../ui/UITextAtlas.h:
+
+/Users/Kskull/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/../cocos2d/cocos/3d/../ui/UILoadingBar.h:
+
+/Users/Kskull/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/../cocos2d/cocos/3d/../ui/UIScrollView.h:
+
+/Users/Kskull/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/../cocos2d/cocos/3d/../ui/UIListView.h:
+
+/Users/Kskull/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/../cocos2d/cocos/3d/../ui/UISlider.h:
+
+/Users/Kskull/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/../cocos2d/cocos/3d/../ui/UITextField.h:
+
+/Users/Kskull/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/../cocos2d/cocos/3d/../ui/UITextBMFont.h:
+
+/Users/Kskull/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/../cocos2d/cocos/3d/../ui/UIPageView.h:
+
+/Users/Kskull/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/../cocos2d/cocos/3d/../ui/UIHelper.h:
+
+/Users/Kskull/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/../cocos2d/cocos/3d/../ui/UIRichText.h:
+
+/Users/Kskull/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/../cocos2d/cocos/3d/../ui/UIHBox.h:
+
+/Users/Kskull/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/../cocos2d/cocos/3d/../ui/UIVBox.h:
+
+/Users/Kskull/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/../cocos2d/cocos/3d/../ui/UIRelativeBox.h:
+
+/Users/Kskull/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/../cocos2d/cocos/3d/../ui/UIVideoPlayer.h:
+
+/Users/Kskull/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/../cocos2d/cocos/3d/../ui/UIWebView.h:
+
+/Users/Kskull/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/../cocos2d/cocos/3d/../ui/UIDeprecated.h:
+
+/Users/Kskull/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/../cocos2d/cocos/3d/../ui/UIScale9Sprite.h:
+
+/Users/Kskull/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/../cocos2d/cocos/3d/../ui/UIEditBox/UIEditBox.h:
+
+/Users/Kskull/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/../cocos2d/cocos/3d/../ui/UILayoutComponent.h:
+
+/Users/Kskull/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/../cocos2d/cocos/3d/../ui/UITabControl.h:
+
+/Users/Kskull/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/../cocos2d/cocos/3d/../editor-support/cocostudio/CocosStudioExtension.h:
+
+/Users/Kskull/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/../cocos2d/extensions/../cocos/network/HttpRequest.h:
+
+/Users/Kskull/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/../cocos2d/extensions/../cocos/network/HttpClient.h:
+
+/Users/Kskull/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/../cocos2d/cocos/3d/../network/HttpRequest.h:
+
+/Users/Kskull/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/../cocos2d/cocos/3d/../network/HttpResponse.h:
+
+/Users/Kskull/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/../cocos2d/cocos/3d/../network/HttpCookie.h:
+
+/Users/Kskull/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/../cocos2d/cocos/audio/android/../include/SimpleAudioEngine.h:
+
+/Users/Kskull/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/../cocos2d/cocos/3d/../audio/include/Export.h:
+
+jni/../../Classes/Resources.h:
 
 jni/PluginFacebook/PluginFacebook.h:
