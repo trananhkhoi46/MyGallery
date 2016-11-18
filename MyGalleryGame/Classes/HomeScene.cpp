@@ -30,6 +30,7 @@ bool HomeScene::init() {
 	}
 
 	isMenuBarShowing = false;
+	TTFConfig configControlButton(s_font, 65 * s_font_ratio);
 
 	//Add background
 	Sprite* background = Sprite::create(s_homescene_background);
@@ -108,6 +109,13 @@ bool HomeScene::init() {
 	btnSticker->setPressedActionEnabled(true);
 	//	btnSetting->addTouchEventListener(CC_CALLBACK_2(HomeScene::playButton, this));
 	this->addChild(btnSticker);
+	Label* labelButtonSticker = Label::createWithTTF(configControlButton,
+			"STICKER", TextHAlignment::CENTER);
+	labelButtonSticker->setPosition(
+			Vec2(btnSticker->getPositionX() + 33, btnSticker->getPositionY()));
+	labelButtonSticker->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
+	labelButtonSticker->setColor(Color3B::BLACK);
+	this->addChild(labelButtonSticker);
 
 	//Add btn album
 	Button* btnAlbum = Button::create(s_homescene_btn_album);
@@ -121,6 +129,13 @@ bool HomeScene::init() {
 	btnAlbum->setPressedActionEnabled(true);
 	//	btnSetting->addTouchEventListener(CC_CALLBACK_2(HomeScene::playButton, this));
 	this->addChild(btnAlbum);
+	Label* labelButtonAlbum = Label::createWithTTF(configControlButton, "ALBUM",
+			TextHAlignment::CENTER);
+	labelButtonAlbum->setPosition(
+			Vec2(btnAlbum->getPositionX() + 60, btnAlbum->getPositionY() - 10));
+	labelButtonAlbum->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
+	labelButtonAlbum->setColor(Color3B::BLACK);
+	this->addChild(labelButtonAlbum);
 
 	//Add btn home
 	Button* btnHome = Button::create(s_homescene_btn_home);
@@ -133,8 +148,14 @@ bool HomeScene::init() {
 							- 10));
 	btnHome->setTouchEnabled(true);
 	btnHome->setPressedActionEnabled(true);
-	//	btnSetting->addTouchEventListener(CC_CALLBACK_2(HomeScene::playButton, this));
 	this->addChild(btnHome);
+	Label* labelButtonHome = Label::createWithTTF(configControlButton, "HOME",
+			TextHAlignment::CENTER);
+	labelButtonHome->setPosition(
+			Vec2(btnHome->getPositionX() + 30, btnHome->getPositionY() - 10));
+	labelButtonHome->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
+	labelButtonHome->setColor(Color3B::BLACK);
+	this->addChild(labelButtonHome);
 
 	//Add btn friend
 	Button* btnFriend = Button::create(s_homescene_btn_friend);
@@ -145,6 +166,13 @@ bool HomeScene::init() {
 	btnFriend->setPressedActionEnabled(true);
 	//	btnSetting->addTouchEventListener(CC_CALLBACK_2(HomeScene::playButton, this));
 	this->addChild(btnFriend);
+	Label* labelButtonFriend = Label::createWithTTF(configControlButton,
+			"FRIEND", TextHAlignment::CENTER);
+	labelButtonFriend->setPosition(
+			Vec2(btnFriend->getPositionX(), btnFriend->getPositionY() - 55));
+	labelButtonFriend->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
+	labelButtonFriend->setColor(Color3B::BLACK);
+	this->addChild(labelButtonFriend);
 
 	//Add btn trade
 	Button* btnTrade = Button::create(s_homescene_btn_trade);
@@ -157,6 +185,13 @@ bool HomeScene::init() {
 	btnTrade->setPressedActionEnabled(true);
 	//	btnSetting->addTouchEventListener(CC_CALLBACK_2(HomeScene::playButton, this));
 	this->addChild(btnTrade);
+	Label* labelButtonTrade = Label::createWithTTF(configControlButton, "TRADE",
+			TextHAlignment::CENTER);
+	labelButtonTrade->setPosition(
+			Vec2(btnTrade->getPositionX(), btnTrade->getPositionY() - 55));
+	labelButtonTrade->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
+	labelButtonTrade->setColor(Color3B::BLACK);
+	this->addChild(labelButtonTrade);
 
 	//Add btn rewarded ads
 	Button* btnRewardedAds = Button::create(s_homescene_btn_rewarded_ads);
@@ -222,8 +257,8 @@ bool HomeScene::init() {
 
 	//Keyboard handling
 	auto keyboardListener = EventListenerKeyboard::create();
-	keyboardListener->onKeyReleased =
-			CC_CALLBACK_2(HomeScene::onKeyReleased, this);
+	keyboardListener->onKeyReleased = CC_CALLBACK_2(HomeScene::onKeyReleased,
+			this);
 	_eventDispatcher->addEventListenerWithSceneGraphPriority(keyboardListener,
 			this);
 
@@ -272,11 +307,12 @@ void HomeScene::settingButtonsCallback(Ref* pSender,
 }
 
 void HomeScene::invalidateMenuBarPosition() {
-	if (menuBar -> numberOfRunningActions() == 0) {
-	menuBar->runAction(
-			MoveTo::create(0.5f,
-					isMenuBarShowing ?
-							menuBarVisiblePosition : menuBarInvisiblePosition));
+	if (menuBar->numberOfRunningActions() == 0) {
+		menuBar->runAction(
+				MoveTo::create(0.3f,
+						isMenuBarShowing ?
+								menuBarVisiblePosition :
+								menuBarInvisiblePosition));
 	}
 }
 
@@ -294,6 +330,7 @@ bool HomeScene::onTouchBegan(Touch* touch, Event* event) {
 }
 void HomeScene::onKeyReleased(EventKeyboard::KeyCode keycode, Event* event) {
 	if (keycode == EventKeyboard::KeyCode::KEY_ESCAPE) {
+
 	}
 }
 

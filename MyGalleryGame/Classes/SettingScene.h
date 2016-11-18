@@ -11,6 +11,9 @@ public:
 	// there's no 'id' in cpp, so we recommend returning the class instance pointer
 	static cocos2d::Scene* scene();
 	CREATE_FUNC(SettingScene)
+	void settingButtonsCallback(Ref* pSender,
+			ui::Widget::TouchEventType eEventType);
+	void onKeyReleased(EventKeyboard::KeyCode keycode, Event* event);
 };
 
 
