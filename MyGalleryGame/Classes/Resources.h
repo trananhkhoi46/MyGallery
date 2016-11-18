@@ -27,6 +27,13 @@ static const char s_homescene_btn_trade[] = "homescene/btn_trade.png";
 static const char s_homescene_btn_rewarded_ads[] = "homescene/btn_rewarded_ads.png";
 static const char s_homescene_btn_iap[] = "homescene/btn_iap.png";
 
+//Setting Scene elements
+static const char s_settingscene_background[] = "settingscene/bg_setting.png";
+static const char s_settingscene_btn_back[] = "settingscene/btn_back.png";
+static const char s_settingscene_btn_loggout[] = "settingscene/btn_loggout.png";
+static const char s_settingscene_rdb_selected[] = "settingscene/rdb_selected.png";
+static const char s_settingscene_rdb_unselected[] = "settingscene/rdb_unselected.png";
+
 //Sound
 static const char s_gameon[] = "sound/game_on.mp3";
 static const char s_click[] = "sound/click.mp3";

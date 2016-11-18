@@ -95,7 +95,7 @@ bool HomeScene::init() {
 	btnFacebookPage->setPressedActionEnabled(true);
 	btnFacebookPage->addTouchEventListener(
 			CC_CALLBACK_2(HomeScene::settingButtonsCallback, this));
-	btnRating->setTag(kTagRating);
+	btnFacebookPage->setTag(kTagFacebookPage);
 	menuBar->addChild(btnFacebookPage);
 
 	//Add btn sticker
@@ -272,10 +272,12 @@ void HomeScene::settingButtonsCallback(Ref* pSender,
 }
 
 void HomeScene::invalidateMenuBarPosition() {
+	if (menuBar -> numberOfRunningActions() == 0) {
 	menuBar->runAction(
 			MoveTo::create(0.5f,
 					isMenuBarShowing ?
 							menuBarVisiblePosition : menuBarInvisiblePosition));
+	}
 }
 
 void HomeScene::update(float dt) {
