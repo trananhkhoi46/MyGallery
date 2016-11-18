@@ -29,8 +29,11 @@ bool HomeScene::init() {
 		return false;
 	}
 
+	currentStickers = UserDefault::getInstance()->getIntegerForKey(
+	CURRENT_STICKER, 30);
 	isMenuBarShowing = false;
 	TTFConfig configControlButton(s_font, 65 * s_font_ratio);
+	TTFConfig configLabelSticker(s_font, 100 * s_font_ratio);
 
 	//Add background
 	Sprite* background = Sprite::create(s_homescene_background);
@@ -236,7 +239,7 @@ bool HomeScene::init() {
 	LoadingBar* loadingBar = LoadingBar::create();
 	loadingBar->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
 	loadingBar->loadTexture(s_homescene_progress);
-	loadingBar->setPercent(30);
+	loadingBar->setPercent(currentStickers * 100 / MAX_STICKER);
 	loadingBar->setPosition(
 			Vec2(winSize.width - loadingBar->getContentSize().width / 2 - 40,
 					winSize.height * 0.8));
@@ -247,6 +250,17 @@ bool HomeScene::init() {
 	progressBackground->setPosition(loadingBar->getPositionX(),
 			loadingBar->getPositionY());
 	this->addChild(progressBackground);
+
+	labelSticker =
+			Label::createWithTTF(configLabelSticker,
+					String::createWithFormat("%d/%d", currentStickers,
+							MAX_STICKER)->getCString(), TextHAlignment::CENTER);
+	labelSticker->setPosition(
+			Vec2(progressBackground->getPositionX(),
+					progressBackground->getPositionY() + 80));
+	labelSticker->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
+	labelSticker->setColor(Color3B::BLACK);
+	this->addChild(labelSticker);
 
 	//Handling touch event
 	auto listener = EventListenerTouchOneByOne::create();
@@ -317,6 +331,9 @@ void HomeScene::invalidateMenuBarPosition() {
 }
 
 void HomeScene::update(float dt) {
+
+//	labelSticker->setString(currentStickers + "/" + MAX_STICKER);
+//	loadingBar->setPercent(currentStickers / MAX_STICKER);
 
 }
 bool HomeScene::onTouchBegan(Touch* touch, Event* event) {

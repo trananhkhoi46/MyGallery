@@ -5,9 +5,10 @@
 #define SOUND "sound"
 #define MUSIC "music"
 #define ALERT "alert"
-#define MAX_STICKER "maxsticker"
 #define CURRENT_STICKER "currentsticker"
 
+//Sticker max number
+#define MAX_STICKER 250
 
 //URL
 #define s_linkToGooglePlayMoreGame "https://play.google.com/store/apps/developer?id=Khoi+Nguyen+Entertainment"
