@@ -240,8 +240,8 @@ bool HomeScene::init() {
 			spriteTimeFreeSticker->getContentSize().height / 2 + 10);
 	this->addChild(spriteTimeFreeSticker);
 
-	labelTimeToGetFreeSticker = Label::createWithTTF(configControlButton,
-			"FREE in\n4:01:03", TextHAlignment::CENTER);
+	labelTimeToGetFreeSticker = Label::createWithTTF(configControlButton, "",
+			TextHAlignment::CENTER);
 	labelTimeToGetFreeSticker->setPosition(
 			Vec2(spriteTimeFreeSticker->getContentSize().width / 2,
 					spriteTimeFreeSticker->getContentSize().height / 2 - 120));
