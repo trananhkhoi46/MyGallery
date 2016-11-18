@@ -15,6 +15,8 @@ public:
 	bool onTouchBegan(Touch* touch, Event* event);
 	void update(float interval);
 	void invalidateMenuBarPosition();
+	void settingButtonsCallback(Ref* pSender,
+			ui::Widget::TouchEventType eEventType);
 
 	int currentStickers;
 	int maxStickers;

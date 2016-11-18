@@ -1,4 +1,10 @@
 #include "HomeScene.h"
+#include "SettingScene.h"
+
+#define kTagFacebookPage 0
+#define kTagMoreGame 1
+#define kTagRating 2
+#define kTagSetting 3
 
 Scene* HomeScene::scene() {
 	// 'scene' is an autorelease object
@@ -40,7 +46,7 @@ bool HomeScene::init() {
 	menuBarVisiblePosition = Vec2(5 + menuBar->getContentSize().width / 2,
 			winSize.height - menuBar->getContentSize().height / 2);
 	menuBarInvisiblePosition = Vec2(5 + menuBar->getContentSize().width / 2,
-			winSize.height + menuBar->getContentSize().height / 2 - 150);
+			winSize.height + menuBar->getContentSize().height / 2 - 170);
 	menuBar->setPosition(menuBarVisiblePosition);
 
 	//Add btn setting
@@ -50,7 +56,9 @@ bool HomeScene::init() {
 					menuBar->getContentSize().height * 0.3));
 	btnSetting->setTouchEnabled(true);
 	btnSetting->setPressedActionEnabled(true);
-//	btnSetting->addTouchEventListener(CC_CALLBACK_2(HomeScene::playButton, this));
+	btnSetting->addTouchEventListener(
+			CC_CALLBACK_2(HomeScene::settingButtonsCallback, this));
+	btnSetting->setTag(kTagSetting);
 	menuBar->addChild(btnSetting);
 	HomeScene::invalidateMenuBarPosition();
 
@@ -61,7 +69,9 @@ bool HomeScene::init() {
 					menuBar->getContentSize().height * 0.5));
 	btnRating->setTouchEnabled(true);
 	btnRating->setPressedActionEnabled(true);
-	//	btnSetting->addTouchEventListener(CC_CALLBACK_2(HomeScene::playButton, this));
+	btnRating->addTouchEventListener(
+			CC_CALLBACK_2(HomeScene::settingButtonsCallback, this));
+	btnRating->setTag(kTagRating);
 	menuBar->addChild(btnRating);
 
 	//Add btn more game
@@ -71,7 +81,9 @@ bool HomeScene::init() {
 					menuBar->getContentSize().height * 0.7));
 	btnMoreGame->setTouchEnabled(true);
 	btnMoreGame->setPressedActionEnabled(true);
-	//	btnSetting->addTouchEventListener(CC_CALLBACK_2(HomeScene::playButton, this));
+	btnMoreGame->addTouchEventListener(
+			CC_CALLBACK_2(HomeScene::settingButtonsCallback, this));
+	btnMoreGame->setTag(kTagMoreGame);
 	menuBar->addChild(btnMoreGame);
 
 	//Add btn rating
@@ -81,7 +93,9 @@ bool HomeScene::init() {
 					menuBar->getContentSize().height * 0.9));
 	btnFacebookPage->setTouchEnabled(true);
 	btnFacebookPage->setPressedActionEnabled(true);
-	//	btnSetting->addTouchEventListener(CC_CALLBACK_2(HomeScene::playButton, this));
+	btnFacebookPage->addTouchEventListener(
+			CC_CALLBACK_2(HomeScene::settingButtonsCallback, this));
+	btnRating->setTag(kTagRating);
 	menuBar->addChild(btnFacebookPage);
 
 	//Add btn sticker
@@ -218,10 +232,50 @@ bool HomeScene::init() {
 	return result;
 }
 
+void HomeScene::settingButtonsCallback(Ref* pSender,
+		ui::Widget::TouchEventType eEventType) {
+	if (eEventType == ui::Widget::TouchEventType::ENDED) {
+		int tag = (int) dynamic_cast<Button*>(pSender)->getTag();
+		switch (tag) {
+		case kTagFacebookPage:
+			Application::getInstance()->openURL(s_linkToFacebookPage);
+			break;
+		case kTagMoreGame:
+#if(CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+			Application::getInstance()->openURL(s_linkToAppStoreMoreGame);
+#endif
+#if(CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+			Application::getInstance()->openURL(s_linkToGooglePlayMoreGame);
+#endif
+			break;
+		case kTagRating:
+#if(CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+			Application::getInstance()->openURL(s_linkToAppStoreRating);
+#endif
+#if(CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+			Application::getInstance()->openURL(s_linkToGooglePlayRating);
+#endif
+			break;
+		case kTagSetting: {
+			auto *newScene = SettingScene::scene();
+			auto transition = TransitionFade::create(1.0, newScene);
+			Director *pDirector = Director::getInstance();
+			pDirector->replaceScene(transition);
+		}
+			break;
+		default:
+			CCLOG("Error in Menu inflatten");
+			break;
+		}
+
+	}
+}
+
 void HomeScene::invalidateMenuBarPosition() {
-	menuBar->setPosition(
-			isMenuBarShowing ?
-					menuBarVisiblePosition : menuBarInvisiblePosition);
+	menuBar->runAction(
+			MoveTo::create(0.5f,
+					isMenuBarShowing ?
+							menuBarVisiblePosition : menuBarInvisiblePosition));
 }
 
 void HomeScene::update(float dt) {
@@ -229,7 +283,7 @@ void HomeScene::update(float dt) {
 }
 bool HomeScene::onTouchBegan(Touch* touch, Event* event) {
 	Rect rect = menuBar->getBoundingBox();
-	rect.setRect(rect.origin.x,rect.origin.y,rect.size.width,200);
+	rect.setRect(rect.origin.x, rect.origin.y, rect.size.width, 200);
 	if (rect.containsPoint(touch->getLocation())) {
 		isMenuBarShowing = !isMenuBarShowing;
 		invalidateMenuBarPosition();

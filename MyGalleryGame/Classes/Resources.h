@@ -1,14 +1,6 @@
 #ifndef _RESOURCE_H_
 #define _RESOURCE_H_
 
-
-//Global KEY
-static const char SOUND[] = "sound";
-static const char MUSIC[] = "music";
-static const char ALERT[] = "alert";
-static const char MAX_STICKER[] = "maxsticker";
-static const char CURRENT_STICKER[] = "currentsticker";\
-
 //Font
 static const char s_font[] = "fonts/panpizza.ttf";
 const float s_font_ratio= 1;

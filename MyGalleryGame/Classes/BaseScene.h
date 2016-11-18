@@ -7,6 +7,7 @@
 #include "cocos/network/HttpClient.h"
 #include "SimpleAudioEngine.h"
 #include "Resources.h"
+#include "Constants.h"
 
 using namespace cocos2d::network;
 using namespace cocos2d::ui;
