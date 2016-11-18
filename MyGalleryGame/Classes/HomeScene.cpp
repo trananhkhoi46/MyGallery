@@ -23,6 +23,8 @@ bool HomeScene::init() {
 		return false;
 	}
 
+	isMenuBarShowing = false;
+
 	//Add background
 	Sprite* background = Sprite::create(s_homescene_background);
 	background->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
@@ -30,11 +32,16 @@ bool HomeScene::init() {
 	this->addChild(background);
 
 	//Add menu bar
-	Sprite* menuBar = Sprite::create(s_homescene_menu_bar);
+	menuBar = Sprite::create(s_homescene_menu_bar);
 	menuBar->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
-	menuBar->setPosition(5 + menuBar->getContentSize().width / 2,
-			winSize.height - menuBar->getContentSize().height / 2);
 	this->addChild(menuBar);
+
+	//Set menubar position
+	menuBarVisiblePosition = Vec2(5 + menuBar->getContentSize().width / 2,
+			winSize.height - menuBar->getContentSize().height / 2);
+	menuBarInvisiblePosition = Vec2(5 + menuBar->getContentSize().width / 2,
+			winSize.height + menuBar->getContentSize().height / 2 - 150);
+	menuBar->setPosition(menuBarVisiblePosition);
 
 	//Add btn setting
 	Button* btnSetting = Button::create(s_homescene_btn_setting);
@@ -45,6 +52,7 @@ bool HomeScene::init() {
 	btnSetting->setPressedActionEnabled(true);
 //	btnSetting->addTouchEventListener(CC_CALLBACK_2(HomeScene::playButton, this));
 	menuBar->addChild(btnSetting);
+	HomeScene::invalidateMenuBarPosition();
 
 	//Add btn rating
 	Button* btnRating = Button::create(s_homescene_btn_rating);
@@ -180,9 +188,9 @@ bool HomeScene::init() {
 	loadingBar->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
 	loadingBar->loadTexture(s_homescene_progress);
 	loadingBar->setPercent(30);
-	loadingBar->setPosition(Vec2(
-			winSize.width - loadingBar->getContentSize().width / 2 - 40,
-			winSize.height * 0.8));
+	loadingBar->setPosition(
+			Vec2(winSize.width - loadingBar->getContentSize().width / 2 - 40,
+					winSize.height * 0.8));
 	this->addChild(loadingBar);
 
 	Sprite* progressBackground = Sprite::create(s_homescene_bg_progress);
@@ -210,11 +218,22 @@ bool HomeScene::init() {
 	return result;
 }
 
+void HomeScene::invalidateMenuBarPosition() {
+	menuBar->setPosition(
+			isMenuBarShowing ?
+					menuBarVisiblePosition : menuBarInvisiblePosition);
+}
+
 void HomeScene::update(float dt) {
 
 }
 bool HomeScene::onTouchBegan(Touch* touch, Event* event) {
-
+	Rect rect = menuBar->getBoundingBox();
+	rect.setRect(rect.origin.x,rect.origin.y,rect.size.width,200);
+	if (rect.containsPoint(touch->getLocation())) {
+		isMenuBarShowing = !isMenuBarShowing;
+		invalidateMenuBarPosition();
+	}
 	return true;
 }
 void HomeScene::onKeyReleased(EventKeyboard::KeyCode keycode, Event* event) {

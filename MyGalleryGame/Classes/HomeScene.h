@@ -14,11 +14,16 @@ public:
 	void onKeyReleased(EventKeyboard::KeyCode keycode, Event* event);
 	bool onTouchBegan(Touch* touch, Event* event);
 	void update(float interval);
+	void invalidateMenuBarPosition();
 
 	int currentStickers;
 	int maxStickers;
+	bool isMenuBarShowing;
+	Vec2 menuBarVisiblePosition;
+	Vec2 menuBarInvisiblePosition;
 
 	Label* labelSticker;
+	Sprite* menuBar;
 };
 
 #endif // __HOME_SCENE_H__
