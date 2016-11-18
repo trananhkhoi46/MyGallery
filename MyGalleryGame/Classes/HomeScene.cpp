@@ -243,11 +243,16 @@ bool HomeScene::init() {
 	labelTimeToGetFreeSticker = Label::createWithTTF(configControlButton,
 			"FREE in\n4:01:03", TextHAlignment::CENTER);
 	labelTimeToGetFreeSticker->setPosition(
-			Vec2(spriteTimeFreeSticker->getPositionX(),
-					spriteTimeFreeSticker->getPositionY() - 120));
+			Vec2(spriteTimeFreeSticker->getContentSize().width / 2,
+					spriteTimeFreeSticker->getContentSize().height / 2 - 120));
 	labelTimeToGetFreeSticker->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
 	labelTimeToGetFreeSticker->setColor(Color3B::BLACK);
-	this->addChild(labelTimeToGetFreeSticker);
+	spriteTimeFreeSticker->addChild(labelTimeToGetFreeSticker);
+	auto scale = ScaleBy::create(0.7f, 1.1f);
+	auto scale2 = scale->reverse();
+	auto seq = Sequence::create(scale, scale2, nullptr);
+	auto repeat = RepeatForever::create(seq);
+	spriteTimeFreeSticker->runAction(repeat);
 
 	//Progress bar
 	LoadingBar* loadingBar = LoadingBar::create();
@@ -357,7 +362,7 @@ void HomeScene::settingButtonsCallback(Ref* pSender,
 void HomeScene::invalidateMenuBarPosition() {
 	if (menuBar->numberOfRunningActions() == 0) {
 		menuBar->runAction(
-				MoveTo::create(0.3f,
+				MoveTo::create(0.15f,
 						isMenuBarShowing ?
 								menuBarVisiblePosition :
 								menuBarInvisiblePosition));
