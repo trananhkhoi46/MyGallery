@@ -16,6 +16,7 @@ LOCAL_SRC_FILES := hellocpp/main.cpp \
 ../../Classes/AppDelegate.cpp \
 ../../Classes/HomeScene.cpp \
 ../../Classes/BaseScene.cpp \
+../../Classes/SettingScene.cpp \
 ../../Classes/SplashScene.cpp
 
 LOCAL_CPPFLAGS := -DSDKBOX_ENABLED
