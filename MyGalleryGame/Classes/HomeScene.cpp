@@ -30,10 +30,15 @@ bool HomeScene::init() {
 	}
 
 	currentStickers = UserDefault::getInstance()->getIntegerForKey(
-	CURRENT_STICKER, 30);
+	CURRENT_STICKER, 160);
+	timeToGetFreeStickerInSecond = UserDefault::getInstance()->getIntegerForKey(
+	TIME_TO_GET_FREE_STICKER_IN_SECOND, time(nullptr));
+	//FIXME for testing
+	timeToGetFreeStickerInSecond += 300;
+
 	isMenuBarShowing = false;
 	TTFConfig configControlButton(s_font, 65 * s_font_ratio);
-	TTFConfig configLabelSticker(s_font, 100 * s_font_ratio);
+	TTFConfig configLabelSticker(s_font, 60 * s_font_ratio);
 
 	//Add background
 	Sprite* background = Sprite::create(s_homescene_background);
@@ -218,13 +223,13 @@ bool HomeScene::init() {
 	//	btnSetting->addTouchEventListener(CC_CALLBACK_2(HomeScene::playButton, this));
 	this->addChild(btnIAP);
 
-	//Sprite below iap to show time to get IAP
-	Sprite* spriteTimeIAP = Sprite::create(
-			s_homescene_sprite_time_to_get_iap_sticker);
-	spriteTimeIAP->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
-	spriteTimeIAP->setPosition(btnIAP->getPositionX() - 30,
-			btnIAP->getPositionY() - btnIAP->getContentSize().height / 2 - 50);
-	this->addChild(spriteTimeIAP);
+//	//Sprite below iap to show time to get IAP
+//	Sprite* spriteTimeIAP = Sprite::create(
+//			s_homescene_sprite_time_to_get_iap_sticker);
+//	spriteTimeIAP->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
+//	spriteTimeIAP->setPosition(btnIAP->getPositionX() - 30,
+//			btnIAP->getPositionY() - btnIAP->getContentSize().height / 2 - 50);
+//	this->addChild(spriteTimeIAP);
 
 	//Sprite to show time to get free sticker
 	Sprite* spriteTimeFreeSticker = Sprite::create(
@@ -234,6 +239,15 @@ bool HomeScene::init() {
 			spriteTimeFreeSticker->getContentSize().width / 2 + 10,
 			spriteTimeFreeSticker->getContentSize().height / 2 + 10);
 	this->addChild(spriteTimeFreeSticker);
+
+	labelTimeToGetFreeSticker = Label::createWithTTF(configControlButton,
+			"FREE in\n4:01:03", TextHAlignment::CENTER);
+	labelTimeToGetFreeSticker->setPosition(
+			Vec2(spriteTimeFreeSticker->getPositionX(),
+					spriteTimeFreeSticker->getPositionY() - 120));
+	labelTimeToGetFreeSticker->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
+	labelTimeToGetFreeSticker->setColor(Color3B::BLACK);
+	this->addChild(labelTimeToGetFreeSticker);
 
 	//Progress bar
 	LoadingBar* loadingBar = LoadingBar::create();
@@ -251,13 +265,12 @@ bool HomeScene::init() {
 			loadingBar->getPositionY());
 	this->addChild(progressBackground);
 
-	labelSticker =
-			Label::createWithTTF(configLabelSticker,
-					String::createWithFormat("%d/%d", currentStickers,
-							MAX_STICKER)->getCString(), TextHAlignment::CENTER);
+	labelSticker = Label::createWithTTF(configLabelSticker,
+			String::createWithFormat("%d/%d stickers", currentStickers,
+			MAX_STICKER)->getCString(), TextHAlignment::CENTER);
 	labelSticker->setPosition(
 			Vec2(progressBackground->getPositionX(),
-					progressBackground->getPositionY() + 80));
+					progressBackground->getPositionY()));
 	labelSticker->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
 	labelSticker->setColor(Color3B::BLACK);
 	this->addChild(labelSticker);
@@ -277,10 +290,31 @@ bool HomeScene::init() {
 			this);
 
 	scheduleUpdate();
-
+	schedule(schedule_selector(HomeScene::timer), 1);
 	return result;
 }
 
+void HomeScene::timer(float interval) {
+	int currentTimeInSecond = time(nullptr);
+	int secondLeft = timeToGetFreeStickerInSecond - currentTimeInSecond;
+	int minuteLeft = secondLeft / 60;
+	secondLeft = secondLeft % 60;
+	labelTimeToGetFreeSticker->setString(
+			String::createWithFormat("FREE in\n%d:%d", minuteLeft, secondLeft)->getCString());
+}
+
+void HomeScene::iapButtonsCallback(Ref* pSender,
+		ui::Widget::TouchEventType eEventType) {
+	if (eEventType == ui::Widget::TouchEventType::ENDED) {
+
+	}
+}
+void HomeScene::rewardedButtonsCallback(Ref* pSender,
+		ui::Widget::TouchEventType eEventType) {
+	if (eEventType == ui::Widget::TouchEventType::ENDED) {
+
+	}
+}
 void HomeScene::settingButtonsCallback(Ref* pSender,
 		ui::Widget::TouchEventType eEventType) {
 	if (eEventType == ui::Widget::TouchEventType::ENDED) {

@@ -399,7 +399,8 @@ obj/local/armeabi/objs-debug/MyGame_shared/__/__/Classes/HomeScene.o: \
  /Users/Kskull/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/../cocos2d/cocos/3d/../network/HttpCookie.h \
  /Users/Kskull/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/../cocos2d/cocos/audio/android/../include/SimpleAudioEngine.h \
  /Users/Kskull/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/../cocos2d/cocos/3d/../audio/include/Export.h \
- jni/../../Classes/Resources.h
+ jni/../../Classes/Resources.h jni/../../Classes/Constants.h \
+ jni/../../Classes/SettingScene.h
 
 jni/../../Classes/HomeScene.h:
 
@@ -1202,3 +1203,7 @@ jni/../../Classes/BaseScene.h:
 /Users/Kskull/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/../cocos2d/cocos/3d/../audio/include/Export.h:
 
 jni/../../Classes/Resources.h:
+
+jni/../../Classes/Constants.h:
+
+jni/../../Classes/SettingScene.h:

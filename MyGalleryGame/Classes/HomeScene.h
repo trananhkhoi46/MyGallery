@@ -14,17 +14,24 @@ public:
 	void onKeyReleased(EventKeyboard::KeyCode keycode, Event* event);
 	bool onTouchBegan(Touch* touch, Event* event);
 	void update(float interval);
+	void timer(float interval);
 	void invalidateMenuBarPosition();
 	void settingButtonsCallback(Ref* pSender,
+			ui::Widget::TouchEventType eEventType);
+	void iapButtonsCallback(Ref* pSender,
+			ui::Widget::TouchEventType eEventType);
+	void rewardedButtonsCallback(Ref* pSender,
 			ui::Widget::TouchEventType eEventType);
 
 	int currentStickers;
 	int maxStickers;
+	int timeToGetFreeStickerInSecond;
 	bool isMenuBarShowing;
 	Vec2 menuBarVisiblePosition;
 	Vec2 menuBarInvisiblePosition;
 
 	Label* labelSticker;
+	Label* labelTimeToGetFreeSticker;
 	Sprite* menuBar;
 };
 

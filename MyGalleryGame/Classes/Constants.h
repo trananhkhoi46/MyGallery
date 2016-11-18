@@ -6,6 +6,7 @@
 #define MUSIC "music"
 #define ALERT "alert"
 #define CURRENT_STICKER "currentsticker"
+#define TIME_TO_GET_FREE_STICKER_IN_SECOND "TIME_TO_GET_FREE_STICKER_IN_SECOND"
 
 //Sticker max number
 #define MAX_STICKER 250
