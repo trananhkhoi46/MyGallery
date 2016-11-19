@@ -123,10 +123,12 @@ void HomeScene::initPacketButtons() {
 	btnFreePacketTop->setPosition(Vec2(winSize.width / 2, winSize.height / 2));
 	this->addChild(btnFreePacketTop);
 	btnFreePacketBottom = Button::create(s_homescene_btn_free_packet_bottom);
+	btnFreePacketBottom->setPressedActionEnabled(false);
 	btnFreePacketBottom->setPosition(
 			Vec2(winSize.width / 2, winSize.height / 2));
 	btnFreePacketBottom->addTouchEventListener(
 			CC_CALLBACK_2(HomeScene::packetButtonsCallback, this));
+	btnFreePacketBottom->setTag(kTagFreePacket);
 	this->addChild(btnFreePacketBottom);
 }
 
@@ -216,6 +218,13 @@ void HomeScene::initOtherViews() {
 	labelSticker->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
 	labelSticker->setColor(Color3B::BLACK);
 	this->addChild(labelSticker);
+
+	//Add cut sprite
+	cut = Sprite::create(s_homescene_cut_sheet[0]);
+	cut->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
+	cut->setPositionX(-cut->getContentSize().width / 2);
+	cut->setPositionY(winSize.height / 2 + 200);
+	this->addChild(cut);
 }
 
 void HomeScene::initSettingMenu() {
@@ -352,8 +361,11 @@ void HomeScene::timer(float interval) {
 	int secondLeft = timeToGetFreeStickerInSecond - currentTimeInSecond;
 	int minuteLeft = secondLeft / 60;
 	secondLeft = secondLeft % 60;
-	labelTimeToGetFreeSticker->setString(
-			String::createWithFormat("FREE in\n%d:%d", minuteLeft, secondLeft)->getCString());
+	if (secondLeft >= 0) {
+		labelTimeToGetFreeSticker->setString(
+				String::createWithFormat("FREE in\n%d:%d", minuteLeft,
+						secondLeft)->getCString());
+	}
 
 	isFreePacketAvailable = time(nullptr) >= timeToGetFreeStickerInSecond;
 	if (isFreePacketAvailable) {
@@ -372,11 +384,31 @@ void HomeScene::setVisibilityFreePacket() {
 void HomeScene::packetButtonsCallback(Ref* pSender,
 		ui::Widget::TouchEventType eEventType) {
 	if (eEventType == ui::Widget::TouchEventType::ENDED) {
-		int animationDuration = 0;
+		int animationDuration = 3;
 		Button* button = dynamic_cast<Button*>(pSender);
 		int tag = (int) button->getTag();
 		switch (tag) {
 		case kTagFreePacket: {
+			cut->runAction(
+					Sequence::create(
+							Spawn::createWithTwoActions(
+									Repeat::create(cut_animate, 20),
+									MoveBy::create(2,
+											Vec2(
+													winSize.width
+															+ cut->getContentSize().width,
+													0))),
+							MoveBy::create(0,
+									Vec2(
+											-winSize.width
+													- cut->getContentSize().width,
+											0)), nullptr));
+
+			btnFreePacketTop->runAction(
+					Sequence::create(DelayTime::create(0.85),
+							MoveBy::create(0.2, Vec2(0, 100)),
+							DelayTime::create(2),
+							MoveBy::create(0, Vec2(0, -100)), nullptr));
 		}
 			break;
 		case kTagBundlePacket: {
@@ -394,17 +426,22 @@ void HomeScene::packetButtonsCallback(Ref* pSender,
 
 		}
 
-		auto func =
+		//Cut animation
+
+		auto funcResetScheduleGetFreeSticker =
 				CallFunc::create([=]() {
 					//Set the next time get free packet in 5 hours
 					//		timeToGetFreeStickerInSecond = time(nullptr) + 18000;
-						timeToGetFreeStickerInSecond = time(nullptr) + 60;
+						timeToGetFreeStickerInSecond = time(nullptr) + 10;
 						UserDefault::getInstance()->setIntegerForKey(
 								TIME_TO_GET_FREE_STICKER_IN_SECOND, timeToGetFreeStickerInSecond);
+						isFreePacketAvailable = time(nullptr) >= timeToGetFreeStickerInSecond;
+						setVisibilityFreePacket();
+						schedule(schedule_selector(HomeScene::timer), 1);
 					});
 		button->runAction(
-				Sequence::create(DelayTime::create(animationDuration), func,
-						nullptr));
+				Sequence::create(DelayTime::create(animationDuration),
+						funcResetScheduleGetFreeSticker, nullptr));
 	}
 }
 void HomeScene::iapButtonsCallback(Ref* pSender,
