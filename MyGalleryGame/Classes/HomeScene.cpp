@@ -6,6 +6,9 @@
 #define kTagRating 2
 #define kTagSetting 3
 
+TTFConfig configControlButton(s_font, 65 * s_font_ratio);
+TTFConfig configLabelSticker(s_font, 60 * s_font_ratio);
+
 Scene* HomeScene::scene() {
 	// 'scene' is an autorelease object
 	Scene *scene = Scene::create();
@@ -29,16 +32,8 @@ bool HomeScene::init() {
 		return false;
 	}
 
-	currentStickers = UserDefault::getInstance()->getIntegerForKey(
-	CURRENT_STICKER, 160);
-	timeToGetFreeStickerInSecond = UserDefault::getInstance()->getIntegerForKey(
-	TIME_TO_GET_FREE_STICKER_IN_SECOND, time(nullptr));
-	//FIXME for testing
-	timeToGetFreeStickerInSecond += 300;
-
-	isMenuBarShowing = false;
-	TTFConfig configControlButton(s_font, 65 * s_font_ratio);
-	TTFConfig configLabelSticker(s_font, 60 * s_font_ratio);
+	//Init default variables
+	initDefaultVariables();
 
 	//Add background
 	Sprite* background = Sprite::create(s_homescene_background);
@@ -46,6 +41,185 @@ bool HomeScene::init() {
 	background->setPosition(winSize.width / 2, winSize.height / 2);
 	this->addChild(background);
 
+	//Init views
+	initSettingMenu();
+	initControlButtons();
+	initPacketButtons();
+	initOtherViews();
+
+	//Handling touch event
+	auto listener = EventListenerTouchOneByOne::create();
+	listener->setSwallowTouches(true);
+
+	listener->onTouchBegan = CC_CALLBACK_2(HomeScene::onTouchBegan, this);
+	_eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
+
+	//Keyboard handling
+	auto keyboardListener = EventListenerKeyboard::create();
+	keyboardListener->onKeyReleased = CC_CALLBACK_2(HomeScene::onKeyReleased,
+			this);
+	_eventDispatcher->addEventListenerWithSceneGraphPriority(keyboardListener,
+			this);
+
+	//Schedule game loops
+	scheduleUpdate();
+	schedule(schedule_selector(HomeScene::timer), 1);
+	return result;
+}
+void HomeScene::initDefaultVariables() {
+	currentStickers = UserDefault::getInstance()->getIntegerForKey(
+	CURRENT_STICKER, 160);
+	timeToGetFreeStickerInSecond = UserDefault::getInstance()->getIntegerForKey(
+	TIME_TO_GET_FREE_STICKER_IN_SECOND, time(nullptr));
+
+	isMenuBarShowing = false;
+
+	//Cut animation
+	int frameAmount_cut = 2;
+	Vector<SpriteFrame*> animFrames_cut(frameAmount_cut);
+	for (int i = 0; i < frameAmount_cut; i++) {
+		Rect rect = Rect(0, 0, 144, 85);
+		auto frame = SpriteFrame::create(s_homescene_cut_sheet[i], rect);
+		animFrames_cut.pushBack(frame);
+	}
+	auto animation_cut = Animation::createWithSpriteFrames(animFrames_cut,
+			0.1f);
+	cut_animate = Animate::create(animation_cut);
+	cut_animate->retain();
+}
+void HomeScene::initPacketButtons() {
+	//Sprite to show time to get free sticker
+	spriteTimeFreeSticker = Sprite::create(
+			s_homescene_sprite_time_to_get_free_sticker);
+	spriteTimeFreeSticker->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
+	spriteTimeFreeSticker->setPosition(
+			spriteTimeFreeSticker->getContentSize().width / 2 + 10,
+			spriteTimeFreeSticker->getContentSize().height / 2 + 10);
+	this->addChild(spriteTimeFreeSticker);
+
+	labelTimeToGetFreeSticker = Label::createWithTTF(configControlButton, "",
+			TextHAlignment::CENTER);
+	labelTimeToGetFreeSticker->setPosition(
+			Vec2(spriteTimeFreeSticker->getContentSize().width / 2,
+					spriteTimeFreeSticker->getContentSize().height / 2 - 120));
+	labelTimeToGetFreeSticker->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
+	labelTimeToGetFreeSticker->setColor(Color3B::BLACK);
+	spriteTimeFreeSticker->addChild(labelTimeToGetFreeSticker);
+	auto scale = ScaleBy::create(0.7f, 1.1f);
+	auto scale2 = scale->reverse();
+	auto seq = Sequence::create(scale, scale2, nullptr);
+	auto repeat = RepeatForever::create(seq);
+	spriteTimeFreeSticker->runAction(repeat);
+
+	//Add btn free packet
+	Button* btnFreePacketTop = Button::create(s_homescene_btn_free_packet_top);
+	btnFreePacketTop->setPosition(Vec2(winSize.width / 2, winSize.height / 2));
+	this->addChild(btnFreePacketTop);
+	Button* btnFreePacketBottom = Button::create(
+			s_homescene_btn_free_packet_bottom);
+	btnFreePacketBottom->setPosition(
+			Vec2(winSize.width / 2, winSize.height / 2));
+	btnFreePacketBottom->setTouchEnabled(true);
+	btnFreePacketBottom->addTouchEventListener(
+			CC_CALLBACK_2(HomeScene::packetButtonsCallback, this));
+	this->addChild(btnFreePacketBottom);
+}
+
+void HomeScene::initOtherViews() {
+	//Add btn friend
+	Button* btnFriend = Button::create(s_homescene_btn_friend);
+	btnFriend->setPosition(
+			Vec2(winSize.width - btnFriend->getContentSize().width / 2 - 10,
+					btnFriend->getContentSize().height / 2 + 10));
+	btnFriend->setTouchEnabled(true);
+	btnFriend->setPressedActionEnabled(true);
+	//	btnSetting->addTouchEventListener(CC_CALLBACK_2(HomeScene::playButton, this));
+	this->addChild(btnFriend);
+	Label* labelButtonFriend = Label::createWithTTF(configControlButton,
+			"FRIEND", TextHAlignment::CENTER);
+	labelButtonFriend->setPosition(
+			Vec2(btnFriend->getPositionX(), btnFriend->getPositionY() - 55));
+	labelButtonFriend->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
+	labelButtonFriend->setColor(Color3B::BLACK);
+	this->addChild(labelButtonFriend);
+
+	//Add btn trade
+	Button* btnTrade = Button::create(s_homescene_btn_trade);
+	btnTrade->setPosition(
+			Vec2(
+					winSize.width - btnTrade->getContentSize().width / 2
+							- btnFriend->getContentSize().width - 20 - 10,
+					btnTrade->getContentSize().height / 2 + 10));
+	btnTrade->setTouchEnabled(true);
+	btnTrade->setPressedActionEnabled(true);
+	//	btnSetting->addTouchEventListener(CC_CALLBACK_2(HomeScene::playButton, this));
+	this->addChild(btnTrade);
+	Label* labelButtonTrade = Label::createWithTTF(configControlButton, "TRADE",
+			TextHAlignment::CENTER);
+	labelButtonTrade->setPosition(
+			Vec2(btnTrade->getPositionX(), btnTrade->getPositionY() - 55));
+	labelButtonTrade->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
+	labelButtonTrade->setColor(Color3B::BLACK);
+	this->addChild(labelButtonTrade);
+
+	//Add btn rewarded ads
+	Button* btnRewardedAds = Button::create(s_homescene_btn_rewarded_ads);
+	btnRewardedAds->setPosition(
+			Vec2(
+					winSize.width / 2
+							- btnRewardedAds->getContentSize().width / 2 - 30,
+					winSize.height * 0.5));
+	btnRewardedAds->setTouchEnabled(true);
+	btnRewardedAds->setPressedActionEnabled(true);
+	//	btnSetting->addTouchEventListener(CC_CALLBACK_2(HomeScene::playButton, this));
+	this->addChild(btnRewardedAds);
+
+	//Add btn iap
+	Button* btnIAP = Button::create(s_homescene_btn_iap);
+	btnIAP->setPosition(
+			Vec2(winSize.width / 2 + btnIAP->getContentSize().width / 2 + 30,
+					winSize.height * 0.5));
+	btnIAP->setTouchEnabled(true);
+	btnIAP->setPressedActionEnabled(true);
+	//	btnSetting->addTouchEventListener(CC_CALLBACK_2(HomeScene::playButton, this));
+	this->addChild(btnIAP);
+
+	//	//Sprite below iap to show time to get IAP
+	//	Sprite* spriteTimeIAP = Sprite::create(
+	//			s_homescene_sprite_time_to_get_iap_sticker);
+	//	spriteTimeIAP->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
+	//	spriteTimeIAP->setPosition(btnIAP->getPositionX() - 30,
+	//			btnIAP->getPositionY() - btnIAP->getContentSize().height / 2 - 50);
+	//	this->addChild(spriteTimeIAP);
+
+	//Progress bar
+	LoadingBar* loadingBar = LoadingBar::create();
+	loadingBar->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
+	loadingBar->loadTexture(s_homescene_progress);
+	loadingBar->setPercent(currentStickers * 100 / MAX_STICKER);
+	loadingBar->setPosition(
+			Vec2(winSize.width - loadingBar->getContentSize().width / 2 - 40,
+					winSize.height * 0.8));
+	this->addChild(loadingBar);
+
+	Sprite* progressBackground = Sprite::create(s_homescene_bg_progress);
+	progressBackground->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
+	progressBackground->setPosition(loadingBar->getPositionX(),
+			loadingBar->getPositionY());
+	this->addChild(progressBackground);
+
+	labelSticker = Label::createWithTTF(configLabelSticker,
+			String::createWithFormat("%d/%d stickers", currentStickers,
+			MAX_STICKER)->getCString(), TextHAlignment::CENTER);
+	labelSticker->setPosition(
+			Vec2(progressBackground->getPositionX(),
+					progressBackground->getPositionY()));
+	labelSticker->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
+	labelSticker->setColor(Color3B::BLACK);
+	this->addChild(labelSticker);
+}
+
+void HomeScene::initSettingMenu() {
 	//Add menu bar
 	menuBar = Sprite::create(s_homescene_menu_bar);
 	menuBar->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
@@ -106,197 +280,72 @@ bool HomeScene::init() {
 			CC_CALLBACK_2(HomeScene::settingButtonsCallback, this));
 	btnFacebookPage->setTag(kTagFacebookPage);
 	menuBar->addChild(btnFacebookPage);
+}
+void HomeScene::initControlButtons() {
 
-	//Add btn sticker
-	Button* btnSticker = Button::create(s_homescene_btn_sticker);
-	btnSticker->setPosition(
-			Vec2(winSize.width - btnSticker->getContentSize().width / 2 - 5,
-					winSize.height - btnSticker->getContentSize().height / 2
+	//Add btn sticker scene
+	Button* btnStickerScene = Button::create(s_homescene_btn_sticker);
+	btnStickerScene->setPosition(
+			Vec2(
+					winSize.width - btnStickerScene->getContentSize().width / 2
+							- 5,
+					winSize.height
+							- btnStickerScene->getContentSize().height / 2
 							- 10));
-	btnSticker->setTouchEnabled(true);
-	btnSticker->setPressedActionEnabled(true);
+	btnStickerScene->setTouchEnabled(true);
+	btnStickerScene->setPressedActionEnabled(true);
 	//	btnSetting->addTouchEventListener(CC_CALLBACK_2(HomeScene::playButton, this));
-	this->addChild(btnSticker);
+	this->addChild(btnStickerScene);
 	Label* labelButtonSticker = Label::createWithTTF(configControlButton,
 			"STICKER", TextHAlignment::CENTER);
 	labelButtonSticker->setPosition(
-			Vec2(btnSticker->getPositionX() + 33, btnSticker->getPositionY()));
+			Vec2(btnStickerScene->getPositionX() + 33,
+					btnStickerScene->getPositionY()));
 	labelButtonSticker->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
 	labelButtonSticker->setColor(Color3B::BLACK);
 	this->addChild(labelButtonSticker);
 
 	//Add btn album
-	Button* btnAlbum = Button::create(s_homescene_btn_album);
-	btnAlbum->setPosition(
+	Button* btnAlbumScene = Button::create(s_homescene_btn_album);
+	btnAlbumScene->setPosition(
 			Vec2(
-					winSize.width - btnAlbum->getContentSize().width / 2
-							- btnSticker->getContentSize().width - 5 - 20,
-					winSize.height - btnAlbum->getContentSize().height / 2
+					winSize.width - btnAlbumScene->getContentSize().width / 2
+							- btnStickerScene->getContentSize().width - 5 - 20,
+					winSize.height - btnAlbumScene->getContentSize().height / 2
 							- 10));
-	btnAlbum->setTouchEnabled(true);
-	btnAlbum->setPressedActionEnabled(true);
+	btnAlbumScene->setTouchEnabled(true);
+	btnAlbumScene->setPressedActionEnabled(true);
 	//	btnSetting->addTouchEventListener(CC_CALLBACK_2(HomeScene::playButton, this));
-	this->addChild(btnAlbum);
+	this->addChild(btnAlbumScene);
 	Label* labelButtonAlbum = Label::createWithTTF(configControlButton, "ALBUM",
 			TextHAlignment::CENTER);
 	labelButtonAlbum->setPosition(
-			Vec2(btnAlbum->getPositionX() + 60, btnAlbum->getPositionY() - 10));
+			Vec2(btnAlbumScene->getPositionX() + 60,
+					btnAlbumScene->getPositionY() - 10));
 	labelButtonAlbum->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
 	labelButtonAlbum->setColor(Color3B::BLACK);
 	this->addChild(labelButtonAlbum);
 
 	//Add btn home
-	Button* btnHome = Button::create(s_homescene_btn_home);
-	btnHome->setPosition(
+	Button* btnHomeScene = Button::create(s_homescene_btn_home);
+	btnHomeScene->setPosition(
 			Vec2(
-					winSize.width - btnHome->getContentSize().width / 2
-							- btnAlbum->getContentSize().width
-							- btnSticker->getContentSize().width - 5 - 40,
-					winSize.height - btnHome->getContentSize().height / 2
+					winSize.width - btnHomeScene->getContentSize().width / 2
+							- btnAlbumScene->getContentSize().width
+							- btnStickerScene->getContentSize().width - 5 - 40,
+					winSize.height - btnHomeScene->getContentSize().height / 2
 							- 10));
-	btnHome->setTouchEnabled(true);
-	btnHome->setPressedActionEnabled(true);
-	this->addChild(btnHome);
+	btnHomeScene->setTouchEnabled(true);
+	btnHomeScene->setPressedActionEnabled(true);
+	this->addChild(btnHomeScene);
 	Label* labelButtonHome = Label::createWithTTF(configControlButton, "HOME",
 			TextHAlignment::CENTER);
 	labelButtonHome->setPosition(
-			Vec2(btnHome->getPositionX() + 30, btnHome->getPositionY() - 10));
+			Vec2(btnHomeScene->getPositionX() + 30,
+					btnHomeScene->getPositionY() - 10));
 	labelButtonHome->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
 	labelButtonHome->setColor(Color3B::BLACK);
 	this->addChild(labelButtonHome);
-
-	//Add btn friend
-	Button* btnFriend = Button::create(s_homescene_btn_friend);
-	btnFriend->setPosition(
-			Vec2(winSize.width - btnFriend->getContentSize().width / 2 - 10,
-					btnFriend->getContentSize().height / 2 + 10));
-	btnFriend->setTouchEnabled(true);
-	btnFriend->setPressedActionEnabled(true);
-	//	btnSetting->addTouchEventListener(CC_CALLBACK_2(HomeScene::playButton, this));
-	this->addChild(btnFriend);
-	Label* labelButtonFriend = Label::createWithTTF(configControlButton,
-			"FRIEND", TextHAlignment::CENTER);
-	labelButtonFriend->setPosition(
-			Vec2(btnFriend->getPositionX(), btnFriend->getPositionY() - 55));
-	labelButtonFriend->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
-	labelButtonFriend->setColor(Color3B::BLACK);
-	this->addChild(labelButtonFriend);
-
-	//Add btn trade
-	Button* btnTrade = Button::create(s_homescene_btn_trade);
-	btnTrade->setPosition(
-			Vec2(
-					winSize.width - btnTrade->getContentSize().width / 2
-							- btnFriend->getContentSize().width - 20 - 10,
-					btnTrade->getContentSize().height / 2 + 10));
-	btnTrade->setTouchEnabled(true);
-	btnTrade->setPressedActionEnabled(true);
-	//	btnSetting->addTouchEventListener(CC_CALLBACK_2(HomeScene::playButton, this));
-	this->addChild(btnTrade);
-	Label* labelButtonTrade = Label::createWithTTF(configControlButton, "TRADE",
-			TextHAlignment::CENTER);
-	labelButtonTrade->setPosition(
-			Vec2(btnTrade->getPositionX(), btnTrade->getPositionY() - 55));
-	labelButtonTrade->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
-	labelButtonTrade->setColor(Color3B::BLACK);
-	this->addChild(labelButtonTrade);
-
-	//Add btn rewarded ads
-	Button* btnRewardedAds = Button::create(s_homescene_btn_rewarded_ads);
-	btnRewardedAds->setPosition(
-			Vec2(
-					winSize.width / 2
-							- btnRewardedAds->getContentSize().width / 2 - 30,
-					winSize.height * 0.5));
-	btnRewardedAds->setTouchEnabled(true);
-	btnRewardedAds->setPressedActionEnabled(true);
-	//	btnSetting->addTouchEventListener(CC_CALLBACK_2(HomeScene::playButton, this));
-	this->addChild(btnRewardedAds);
-
-	//Add btn iap
-	Button* btnIAP = Button::create(s_homescene_btn_iap);
-	btnIAP->setPosition(
-			Vec2(winSize.width / 2 + btnIAP->getContentSize().width / 2 + 30,
-					winSize.height * 0.5));
-	btnIAP->setTouchEnabled(true);
-	btnIAP->setPressedActionEnabled(true);
-	//	btnSetting->addTouchEventListener(CC_CALLBACK_2(HomeScene::playButton, this));
-	this->addChild(btnIAP);
-
-//	//Sprite below iap to show time to get IAP
-//	Sprite* spriteTimeIAP = Sprite::create(
-//			s_homescene_sprite_time_to_get_iap_sticker);
-//	spriteTimeIAP->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
-//	spriteTimeIAP->setPosition(btnIAP->getPositionX() - 30,
-//			btnIAP->getPositionY() - btnIAP->getContentSize().height / 2 - 50);
-//	this->addChild(spriteTimeIAP);
-
-	//Sprite to show time to get free sticker
-	Sprite* spriteTimeFreeSticker = Sprite::create(
-			s_homescene_sprite_time_to_get_free_sticker);
-	spriteTimeFreeSticker->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
-	spriteTimeFreeSticker->setPosition(
-			spriteTimeFreeSticker->getContentSize().width / 2 + 10,
-			spriteTimeFreeSticker->getContentSize().height / 2 + 10);
-	this->addChild(spriteTimeFreeSticker);
-
-	labelTimeToGetFreeSticker = Label::createWithTTF(configControlButton, "",
-			TextHAlignment::CENTER);
-	labelTimeToGetFreeSticker->setPosition(
-			Vec2(spriteTimeFreeSticker->getContentSize().width / 2,
-					spriteTimeFreeSticker->getContentSize().height / 2 - 120));
-	labelTimeToGetFreeSticker->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
-	labelTimeToGetFreeSticker->setColor(Color3B::BLACK);
-	spriteTimeFreeSticker->addChild(labelTimeToGetFreeSticker);
-	auto scale = ScaleBy::create(0.7f, 1.1f);
-	auto scale2 = scale->reverse();
-	auto seq = Sequence::create(scale, scale2, nullptr);
-	auto repeat = RepeatForever::create(seq);
-	spriteTimeFreeSticker->runAction(repeat);
-
-	//Progress bar
-	LoadingBar* loadingBar = LoadingBar::create();
-	loadingBar->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
-	loadingBar->loadTexture(s_homescene_progress);
-	loadingBar->setPercent(currentStickers * 100 / MAX_STICKER);
-	loadingBar->setPosition(
-			Vec2(winSize.width - loadingBar->getContentSize().width / 2 - 40,
-					winSize.height * 0.8));
-	this->addChild(loadingBar);
-
-	Sprite* progressBackground = Sprite::create(s_homescene_bg_progress);
-	progressBackground->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
-	progressBackground->setPosition(loadingBar->getPositionX(),
-			loadingBar->getPositionY());
-	this->addChild(progressBackground);
-
-	labelSticker = Label::createWithTTF(configLabelSticker,
-			String::createWithFormat("%d/%d stickers", currentStickers,
-			MAX_STICKER)->getCString(), TextHAlignment::CENTER);
-	labelSticker->setPosition(
-			Vec2(progressBackground->getPositionX(),
-					progressBackground->getPositionY()));
-	labelSticker->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
-	labelSticker->setColor(Color3B::BLACK);
-	this->addChild(labelSticker);
-
-	//Handling touch event
-	auto listener = EventListenerTouchOneByOne::create();
-	listener->setSwallowTouches(true);
-
-	listener->onTouchBegan = CC_CALLBACK_2(HomeScene::onTouchBegan, this);
-	_eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
-
-	//Keyboard handling
-	auto keyboardListener = EventListenerKeyboard::create();
-	keyboardListener->onKeyReleased = CC_CALLBACK_2(HomeScene::onKeyReleased,
-			this);
-	_eventDispatcher->addEventListenerWithSceneGraphPriority(keyboardListener,
-			this);
-
-	scheduleUpdate();
-	schedule(schedule_selector(HomeScene::timer), 1);
-	return result;
 }
 
 void HomeScene::timer(float interval) {
@@ -308,6 +357,12 @@ void HomeScene::timer(float interval) {
 			String::createWithFormat("FREE in\n%d:%d", minuteLeft, secondLeft)->getCString());
 }
 
+void HomeScene::packetButtonsCallback(Ref* pSender,
+		ui::Widget::TouchEventType eEventType) {
+	if (eEventType == ui::Widget::TouchEventType::ENDED) {
+
+	}
+}
 void HomeScene::iapButtonsCallback(Ref* pSender,
 		ui::Widget::TouchEventType eEventType) {
 	if (eEventType == ui::Widget::TouchEventType::ENDED) {

@@ -27,6 +27,19 @@ static const char s_homescene_btn_trade[] = "homescene/btn_trade.png";
 static const char s_homescene_btn_rewarded_ads[] = "homescene/btn_rewarded_ads.png";
 static const char s_homescene_btn_iap[] = "homescene/btn_iap.png";
 
+static char* s_homescene_cut_sheet[] = {"homescene/cut_1.png","homescene/cut_2.png"};
+static const char s_homescene_btn_free_packet_top[] = "homescene/free_packet_top.png";
+static const char s_homescene_btn_free_packet_bottom[] = "homescene/btn_iap.png";
+static const char s_homescene_btn_common_packet_top[] = "homescene/btn_iap.png";
+static const char s_homescene_btn_common_packet_bottom[] = "homescene/btn_iap.png";
+static const char s_homescene_btn_uncommon_packet_top[] = "homescene/btn_iap.png";
+static const char s_homescene_btn_uncommon_packet_bottom[] = "homescene/btn_iap.png";
+static const char s_homescene_btn_rare_packet_top[] = "homescene/btn_iap.png";
+static const char s_homescene_btn_rare_packet_bottom[] = "homescene/btn_iap.png";
+static const char s_homescene_btn_bundle_packet_top[] = "homescene/btn_iap.png";
+static const char s_homescene_btn_bundle_packet_bottom[] = "homescene/btn_iap.png";
+
+
 //Setting Scene elements
 static const char s_settingscene_background[] = "settingscene/bg_setting.png";
 static const char s_settingscene_btn_back[] = "settingscene/btn_back.png";

@@ -22,6 +22,13 @@ public:
 			ui::Widget::TouchEventType eEventType);
 	void rewardedButtonsCallback(Ref* pSender,
 			ui::Widget::TouchEventType eEventType);
+	void packetButtonsCallback(Ref* pSender,
+			ui::Widget::TouchEventType eEventType);
+	void initPacketButtons();
+	void initSettingMenu();
+	void initControlButtons();
+	void initOtherViews();
+	void initDefaultVariables();
 
 	int currentStickers;
 	int maxStickers;
@@ -33,6 +40,19 @@ public:
 	Label* labelSticker;
 	Label* labelTimeToGetFreeSticker;
 	Sprite* menuBar;
+	Sprite* cut;
+	Sprite* spriteTimeFreeSticker;
+	Animate* cut_animate;
+	Button* btnFreePacketTop;
+	Button* btnFreePacketBottom;
+	Button* btnCommonPacketTop;
+	Button* btnCommonPacketBottom;
+	Button* btnUncommonPacketTop;
+	Button* btnUncommonPacketBottom;
+	Button* btnRarePacketTop;
+	Button* btnRarePacketBottom;
+	Button* btnBundlePacketTop;
+	Button* btnBundlePacketBottom;
 };
 
 #endif // __HOME_SCENE_H__
