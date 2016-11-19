@@ -29,15 +29,15 @@ static const char s_homescene_btn_iap[] = "homescene/btn_iap.png";
 
 static char* s_homescene_cut_sheet[] = {"homescene/cut_1.png","homescene/cut_2.png"};
 static const char s_homescene_btn_free_packet_top[] = "homescene/free_packet_top.png";
-static const char s_homescene_btn_free_packet_bottom[] = "homescene/btn_iap.png";
-static const char s_homescene_btn_common_packet_top[] = "homescene/btn_iap.png";
-static const char s_homescene_btn_common_packet_bottom[] = "homescene/btn_iap.png";
-static const char s_homescene_btn_uncommon_packet_top[] = "homescene/btn_iap.png";
-static const char s_homescene_btn_uncommon_packet_bottom[] = "homescene/btn_iap.png";
-static const char s_homescene_btn_rare_packet_top[] = "homescene/btn_iap.png";
-static const char s_homescene_btn_rare_packet_bottom[] = "homescene/btn_iap.png";
-static const char s_homescene_btn_bundle_packet_top[] = "homescene/btn_iap.png";
-static const char s_homescene_btn_bundle_packet_bottom[] = "homescene/btn_iap.png";
+static const char s_homescene_btn_free_packet_bottom[] = "homescene/free_packet_bottom.png";
+static const char s_homescene_btn_common_packet_top[] = "homescene/common_packet_top.png";
+static const char s_homescene_btn_common_packet_bottom[] = "homescene/common_packet_bottom.png";
+static const char s_homescene_btn_uncommon_packet_top[] = "homescene/uncommon_packet_top.png";
+static const char s_homescene_btn_uncommon_packet_bottom[] = "homescene/uncommon_packet_bottom.png";
+static const char s_homescene_btn_rare_packet_top[] = "homescene/rare_packet_top.png";
+static const char s_homescene_btn_rare_packet_bottom[] = "homescene/rare_packet_bottom.png";
+static const char s_homescene_btn_bundle_packet_top[] = "homescene/bundle_packet_top.png";
+static const char s_homescene_btn_bundle_packet_bottom[] = "homescene/bundle_packet_bottom.png";
 
 
 //Setting Scene elements

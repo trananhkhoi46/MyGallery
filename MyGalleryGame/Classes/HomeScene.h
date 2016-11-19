@@ -29,11 +29,13 @@ public:
 	void initControlButtons();
 	void initOtherViews();
 	void initDefaultVariables();
+	void setVisibilityFreePacket();
 
 	int currentStickers;
 	int maxStickers;
 	int timeToGetFreeStickerInSecond;
 	bool isMenuBarShowing;
+	bool isFreePacketAvailable;
 	Vec2 menuBarVisiblePosition;
 	Vec2 menuBarInvisiblePosition;
 
@@ -53,6 +55,8 @@ public:
 	Button* btnRarePacketBottom;
 	Button* btnBundlePacketTop;
 	Button* btnBundlePacketBottom;
+	Button* btnRewardedAds;
+	Button* btnIAP;
 };
 
 #endif // __HOME_SCENE_H__

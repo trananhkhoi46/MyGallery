@@ -5,6 +5,11 @@
 #define kTagMoreGame 1
 #define kTagRating 2
 #define kTagSetting 3
+#define kTagFreePacket 4
+#define kTagBundlePacket 5
+#define kTagCommonPacket 6
+#define kTagUncommonPacket 7
+#define kTagRarePacket 8
 
 TTFConfig configControlButton(s_font, 65 * s_font_ratio);
 TTFConfig configLabelSticker(s_font, 60 * s_font_ratio);
@@ -46,6 +51,7 @@ bool HomeScene::init() {
 	initControlButtons();
 	initPacketButtons();
 	initOtherViews();
+	setVisibilityFreePacket();
 
 	//Handling touch event
 	auto listener = EventListenerTouchOneByOne::create();
@@ -73,6 +79,7 @@ void HomeScene::initDefaultVariables() {
 	TIME_TO_GET_FREE_STICKER_IN_SECOND, time(nullptr));
 
 	isMenuBarShowing = false;
+	isFreePacketAvailable = time(nullptr) >= timeToGetFreeStickerInSecond;
 
 	//Cut animation
 	int frameAmount_cut = 2;
@@ -112,14 +119,12 @@ void HomeScene::initPacketButtons() {
 	spriteTimeFreeSticker->runAction(repeat);
 
 	//Add btn free packet
-	Button* btnFreePacketTop = Button::create(s_homescene_btn_free_packet_top);
+	btnFreePacketTop = Button::create(s_homescene_btn_free_packet_top);
 	btnFreePacketTop->setPosition(Vec2(winSize.width / 2, winSize.height / 2));
 	this->addChild(btnFreePacketTop);
-	Button* btnFreePacketBottom = Button::create(
-			s_homescene_btn_free_packet_bottom);
+	btnFreePacketBottom = Button::create(s_homescene_btn_free_packet_bottom);
 	btnFreePacketBottom->setPosition(
 			Vec2(winSize.width / 2, winSize.height / 2));
-	btnFreePacketBottom->setTouchEnabled(true);
 	btnFreePacketBottom->addTouchEventListener(
 			CC_CALLBACK_2(HomeScene::packetButtonsCallback, this));
 	this->addChild(btnFreePacketBottom);
@@ -163,7 +168,7 @@ void HomeScene::initOtherViews() {
 	this->addChild(labelButtonTrade);
 
 	//Add btn rewarded ads
-	Button* btnRewardedAds = Button::create(s_homescene_btn_rewarded_ads);
+	btnRewardedAds = Button::create(s_homescene_btn_rewarded_ads);
 	btnRewardedAds->setPosition(
 			Vec2(
 					winSize.width / 2
@@ -171,26 +176,20 @@ void HomeScene::initOtherViews() {
 					winSize.height * 0.5));
 	btnRewardedAds->setTouchEnabled(true);
 	btnRewardedAds->setPressedActionEnabled(true);
-	//	btnSetting->addTouchEventListener(CC_CALLBACK_2(HomeScene::playButton, this));
+	btnRewardedAds->addTouchEventListener(
+			CC_CALLBACK_2(HomeScene::rewardedButtonsCallback, this));
 	this->addChild(btnRewardedAds);
 
 	//Add btn iap
-	Button* btnIAP = Button::create(s_homescene_btn_iap);
+	btnIAP = Button::create(s_homescene_btn_iap);
 	btnIAP->setPosition(
 			Vec2(winSize.width / 2 + btnIAP->getContentSize().width / 2 + 30,
 					winSize.height * 0.5));
 	btnIAP->setTouchEnabled(true);
 	btnIAP->setPressedActionEnabled(true);
-	//	btnSetting->addTouchEventListener(CC_CALLBACK_2(HomeScene::playButton, this));
+	btnIAP->addTouchEventListener(
+			CC_CALLBACK_2(HomeScene::iapButtonsCallback, this));
 	this->addChild(btnIAP);
-
-	//	//Sprite below iap to show time to get IAP
-	//	Sprite* spriteTimeIAP = Sprite::create(
-	//			s_homescene_sprite_time_to_get_iap_sticker);
-	//	spriteTimeIAP->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
-	//	spriteTimeIAP->setPosition(btnIAP->getPositionX() - 30,
-	//			btnIAP->getPositionY() - btnIAP->getContentSize().height / 2 - 50);
-	//	this->addChild(spriteTimeIAP);
 
 	//Progress bar
 	LoadingBar* loadingBar = LoadingBar::create();
@@ -355,12 +354,57 @@ void HomeScene::timer(float interval) {
 	secondLeft = secondLeft % 60;
 	labelTimeToGetFreeSticker->setString(
 			String::createWithFormat("FREE in\n%d:%d", minuteLeft, secondLeft)->getCString());
+
+	isFreePacketAvailable = time(nullptr) >= timeToGetFreeStickerInSecond;
+	if (isFreePacketAvailable) {
+		setVisibilityFreePacket();
+		this->unschedule(schedule_selector(HomeScene::timer));
+	}
+}
+void HomeScene::setVisibilityFreePacket() {
+	btnRewardedAds->setVisible(!isFreePacketAvailable);
+	btnIAP->setVisible(!isFreePacketAvailable);
+	spriteTimeFreeSticker->setVisible(!isFreePacketAvailable);
+	btnFreePacketBottom->setVisible(isFreePacketAvailable);
+	btnFreePacketTop->setVisible(isFreePacketAvailable);
 }
 
 void HomeScene::packetButtonsCallback(Ref* pSender,
 		ui::Widget::TouchEventType eEventType) {
 	if (eEventType == ui::Widget::TouchEventType::ENDED) {
+		int animationDuration = 0;
+		Button* button = dynamic_cast<Button*>(pSender);
+		int tag = (int) button->getTag();
+		switch (tag) {
+		case kTagFreePacket: {
+		}
+			break;
+		case kTagBundlePacket: {
+		}
+			break;
+		case kTagCommonPacket: {
+		}
+			break;
+		case kTagUncommonPacket: {
+		}
+			break;
+		case kTagRarePacket: {
+		}
+			break;
 
+		}
+
+		auto func =
+				CallFunc::create([=]() {
+					//Set the next time get free packet in 5 hours
+					//		timeToGetFreeStickerInSecond = time(nullptr) + 18000;
+						timeToGetFreeStickerInSecond = time(nullptr) + 60;
+						UserDefault::getInstance()->setIntegerForKey(
+								TIME_TO_GET_FREE_STICKER_IN_SECOND, timeToGetFreeStickerInSecond);
+					});
+		button->runAction(
+				Sequence::create(DelayTime::create(animationDuration), func,
+						nullptr));
 	}
 }
 void HomeScene::iapButtonsCallback(Ref* pSender,
