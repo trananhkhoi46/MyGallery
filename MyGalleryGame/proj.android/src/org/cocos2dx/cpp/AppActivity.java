@@ -27,6 +27,24 @@ THE SOFTWARE.
 package org.cocos2dx.cpp;
 
 import org.cocos2dx.lib.Cocos2dxActivity;
+import com.easyndk.classes.AndroidNDKHelper;
+import android.widget.Toast;
+import org.json.JSONObject;
+import android.os.Bundle;
 
 public class AppActivity extends Cocos2dxActivity {
+public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+
+		// In the main Activity, assigning that activity as a receiver for C++
+		// messages
+		AndroidNDKHelper.SetNDKReciever(this);
+	}
+	public void showToast(JSONObject prms) {
+		String message = "";
+		try {
+			message = prms.getString("messageToShow");
+		} catch (Exception e) {} 
+		Toast.makeText(getApplicationContext(),message, 500).show();
+	}
 }

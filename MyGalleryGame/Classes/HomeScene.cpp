@@ -674,9 +674,23 @@ bool HomeScene::onTouchBegan(Touch* touch, Event* event) {
 	}
 	return true;
 }
+
+//TODO exist game if press back twice in 2 seconds
+bool firstClick = true;
 void HomeScene::onKeyReleased(EventKeyboard::KeyCode keycode, Event* event) {
 	if (keycode == EventKeyboard::KeyCode::KEY_ESCAPE) {
+		if (firstClick) {
+			firstClick = false;
+			SocialPlugin::showToast("Press back again to Exit!");
 
+			auto func = CallFunc::create([=]() {
+				firstClick = true;
+			});
+			this->runAction(
+					Sequence::create(DelayTime::create(2), func, nullptr));
+		} else {
+			CCDirector::sharedDirector()->end();
+		}
 	}
 }
 //---------------------------------------------------------------------End of callback methods
