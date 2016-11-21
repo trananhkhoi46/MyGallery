@@ -26,6 +26,7 @@ static const char s_homescene_btn_friend[] = "homescene/btn_friend.png";
 static const char s_homescene_btn_trade[] = "homescene/btn_trade.png";
 static const char s_homescene_btn_rewarded_ads[] = "homescene/btn_rewarded_ads.png";
 static const char s_homescene_btn_iap[] = "homescene/btn_iap.png";
+static const char s_homescene_btn_continue[] = "homescene/btn_continue.png";
 
 static char* s_homescene_cut_sheet[] = {"homescene/cut_1.png","homescene/cut_2.png"};
 static const char s_homescene_btn_free_packet_top[] = "homescene/free_packet_top.png";

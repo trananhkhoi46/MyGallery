@@ -3,6 +3,8 @@
 
 #include "BaseScene.h"
 
+
+
 class HomeScene: public BaseScene {
 public:
 	// Here's a difference. Method 'init' in cocos2d-x returns bool, instead of returning 'id' in cocos2d-iphone
@@ -30,6 +32,9 @@ public:
 	void initOtherViews();
 	void initDefaultVariables();
 	void setVisibilityFreePacket();
+	void earn3RandomStickers();
+	void earn3Stickers(STICKER_RARITY rarity);
+	void closeBlurLayer();
 
 	int currentStickers;
 	int maxStickers;
@@ -39,6 +44,7 @@ public:
 	Vec2 menuBarVisiblePosition;
 	Vec2 menuBarInvisiblePosition;
 
+	Layer* blurLayer;
 	Label* labelSticker;
 	Label* labelTimeToGetFreeSticker;
 	Sprite* menuBar;
@@ -57,6 +63,7 @@ public:
 	Button* btnBundlePacketBottom;
 	Button* btnRewardedAds;
 	Button* btnIAP;
+	Button* btnContinue;
 };
 
 #endif // __HOME_SCENE_H__

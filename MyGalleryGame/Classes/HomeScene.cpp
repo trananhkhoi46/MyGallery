@@ -10,6 +10,7 @@
 #define kTagCommonPacket 6
 #define kTagUncommonPacket 7
 #define kTagRarePacket 8
+#define kTagNewSticker 9
 
 TTFConfig configControlButton(s_font, 65 * s_font_ratio);
 TTFConfig configLabelSticker(s_font, 60 * s_font_ratio);
@@ -47,11 +48,11 @@ bool HomeScene::init() {
 	this->addChild(background);
 
 	//Init views
+	initPacketButtons();
+	setVisibilityFreePacket();
+	initOtherViews();
 	initSettingMenu();
 	initControlButtons();
-	initPacketButtons();
-	initOtherViews();
-	setVisibilityFreePacket();
 
 	//Handling touch event
 	auto listener = EventListenerTouchOneByOne::create();
@@ -225,6 +226,39 @@ void HomeScene::initOtherViews() {
 	cut->setPositionX(-cut->getContentSize().width / 2);
 	cut->setPositionY(winSize.height / 2 + 200);
 	this->addChild(cut);
+
+	//Add blur layer
+	blurLayer = LayerColor::create(Color4B(0, 0, 0, 255 * 0.5f));
+	blurLayer->setContentSize(winSize);
+	blurLayer->setPosition(Vec2::ZERO);
+	blurLayer->setAnchorPoint(Vec2(0.0f, 0.0f));
+	this->addChild(blurLayer);
+
+	//Add btn continue
+	btnContinue = Button::create(s_homescene_btn_continue);
+	btnContinue->setPosition(
+			Vec2(winSize.width - btnContinue->getContentSize().width / 2 - 30,
+					btnContinue->getContentSize().height / 2 + 30));
+	btnContinue->setTouchEnabled(true);
+	btnContinue->setPressedActionEnabled(true);
+	btnContinue->addTouchEventListener([this](Ref *pSender,
+			Widget::TouchEventType type) {
+		if (type == cocos2d::ui::Widget::TouchEventType::ENDED)
+		{
+			closeBlurLayer();
+		}});
+	blurLayer->addChild(btnContinue);
+
+}
+
+void HomeScene::closeBlurLayer() {
+	Vector<Node*> layerChildren = blurLayer->getChildren();
+	for (const auto child : layerChildren) {
+		if (child && child->getTag() == kTagNewSticker) {
+			blurLayer->removeChild(child, false);
+		}
+	}
+	blurLayer->setVisible(false);
 }
 
 void HomeScene::initSettingMenu() {
@@ -409,6 +443,7 @@ void HomeScene::packetButtonsCallback(Ref* pSender,
 							MoveBy::create(0.2, Vec2(0, 100)),
 							DelayTime::create(2),
 							MoveBy::create(0, Vec2(0, -100)), nullptr));
+
 		}
 			break;
 		case kTagBundlePacket: {
@@ -428,22 +463,51 @@ void HomeScene::packetButtonsCallback(Ref* pSender,
 
 		//Cut animation
 
-		auto funcResetScheduleGetFreeSticker =
-				CallFunc::create([=]() {
-					//Set the next time get free packet in 5 hours
-					//		timeToGetFreeStickerInSecond = time(nullptr) + 18000;
-						timeToGetFreeStickerInSecond = time(nullptr) + 10;
-						UserDefault::getInstance()->setIntegerForKey(
-								TIME_TO_GET_FREE_STICKER_IN_SECOND, timeToGetFreeStickerInSecond);
-						isFreePacketAvailable = time(nullptr) >= timeToGetFreeStickerInSecond;
-						setVisibilityFreePacket();
-						schedule(schedule_selector(HomeScene::timer), 1);
-					});
+		auto funcResetScheduleGetFreeSticker = CallFunc::create([=]() {
+			earn3RandomStickers();
+		});
 		button->runAction(
 				Sequence::create(DelayTime::create(animationDuration),
 						funcResetScheduleGetFreeSticker, nullptr));
 	}
 }
+
+void HomeScene::earn3RandomStickers() {
+	//Set the next time get free packet in 5 hours
+	//		timeToGetFreeStickerInSecond = time(nullptr) + 18000;
+	timeToGetFreeStickerInSecond = time(nullptr) + 10;
+	UserDefault::getInstance()->setIntegerForKey(
+	TIME_TO_GET_FREE_STICKER_IN_SECOND, timeToGetFreeStickerInSecond);
+	isFreePacketAvailable = time(nullptr) >= timeToGetFreeStickerInSecond;
+	setVisibilityFreePacket();
+	schedule(schedule_selector(HomeScene::timer), 1);
+
+	earn3Stickers(STICKER_RARITY::RANDOM);
+}
+
+void HomeScene::earn3Stickers(STICKER_RARITY rarity) {
+	blurLayer->setVisible(true);
+
+	switch (rarity) {
+	case STICKER_RARITY::RANDOM: {
+		CCLog("bambi earn 3 sticker random");
+	}
+		break;
+	case STICKER_RARITY::COMMON: {
+		CCLog("bambi earn 3 sticker common");
+	}
+		break;
+	case STICKER_RARITY::UNCOMMON: {
+		CCLog("bambi earn 3 sticker uncommon");
+	}
+		break;
+	case STICKER_RARITY::RARE: {
+		CCLog("bambi earn 3 sticker rare");
+	}
+		break;
+	}
+}
+
 void HomeScene::iapButtonsCallback(Ref* pSender,
 		ui::Widget::TouchEventType eEventType) {
 	if (eEventType == ui::Widget::TouchEventType::ENDED) {
