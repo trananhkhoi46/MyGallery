@@ -25,6 +25,9 @@ LOCAL_SRC_FILES := hellocpp/main.cpp \
 ../../Classes/jansson/strconv.c \
 ../../Classes/jansson/utf.c \
 ../../Classes/jansson/value.c \
+../../Classes/StickerScene.cpp \
+../../Classes/AlbumScene.cpp \
+../../Classes/BScrollView.cpp \
 ../../Classes/StickerHelper.cpp \
 ../../Classes/AppDelegate.cpp \
 ../../Classes/HomeScene.cpp \

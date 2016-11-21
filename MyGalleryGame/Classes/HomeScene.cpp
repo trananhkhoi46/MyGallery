@@ -1,5 +1,7 @@
 #include "HomeScene.h"
 #include "SettingScene.h"
+#include "StickerScene.h"
+#include "AlbumScene.h"
 
 #define kTagFacebookPage 0
 #define kTagMoreGame 1
@@ -341,7 +343,15 @@ void HomeScene::initControlButtons() {
 							- 10));
 	btnStickerScene->setTouchEnabled(true);
 	btnStickerScene->setPressedActionEnabled(true);
-	//	btnSetting->addTouchEventListener(CC_CALLBACK_2(HomeScene::playButton, this));
+	btnStickerScene->addTouchEventListener([this](Ref *pSender,
+			Widget::TouchEventType type) {
+		if (type == cocos2d::ui::Widget::TouchEventType::ENDED)
+		{
+			auto *newScene = StickerScene::scene();
+			auto transition = TransitionFade::create(1.0, newScene);
+			Director *pDirector = Director::getInstance();
+			pDirector->replaceScene(transition);
+		}});
 	this->addChild(btnStickerScene);
 	Label* labelButtonSticker = Label::createWithTTF(configControlButton,
 			"STICKER", TextHAlignment::CENTER);
@@ -362,7 +372,15 @@ void HomeScene::initControlButtons() {
 							- 10));
 	btnAlbumScene->setTouchEnabled(true);
 	btnAlbumScene->setPressedActionEnabled(true);
-	//	btnSetting->addTouchEventListener(CC_CALLBACK_2(HomeScene::playButton, this));
+	btnAlbumScene->addTouchEventListener([this](Ref *pSender,
+				Widget::TouchEventType type) {
+			if (type == cocos2d::ui::Widget::TouchEventType::ENDED)
+			{
+				auto *newScene = AlbumScene::scene();
+				auto transition = TransitionFade::create(1.0, newScene);
+				Director *pDirector = Director::getInstance();
+				pDirector->replaceScene(transition);
+			}});
 	this->addChild(btnAlbumScene);
 	Label* labelButtonAlbum = Label::createWithTTF(configControlButton, "ALBUM",
 			TextHAlignment::CENTER);
@@ -372,27 +390,6 @@ void HomeScene::initControlButtons() {
 	labelButtonAlbum->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
 	labelButtonAlbum->setColor(Color3B::BLACK);
 	this->addChild(labelButtonAlbum);
-
-	//Add btn home
-	Button* btnHomeScene = Button::create(s_homescene_btn_home);
-	btnHomeScene->setPosition(
-			Vec2(
-					winSize.width - btnHomeScene->getContentSize().width / 2
-							- btnAlbumScene->getContentSize().width
-							- btnStickerScene->getContentSize().width - 5 - 40,
-					winSize.height - btnHomeScene->getContentSize().height / 2
-							- 10));
-	btnHomeScene->setTouchEnabled(true);
-	btnHomeScene->setPressedActionEnabled(true);
-	this->addChild(btnHomeScene);
-	Label* labelButtonHome = Label::createWithTTF(configControlButton, "HOME",
-			TextHAlignment::CENTER);
-	labelButtonHome->setPosition(
-			Vec2(btnHomeScene->getPositionX() + 30,
-					btnHomeScene->getPositionY() - 10));
-	labelButtonHome->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
-	labelButtonHome->setColor(Color3B::BLACK);
-	this->addChild(labelButtonHome);
 }
 //---------------------------------------------------------------------End of init methods
 //---------------------------------------------------------------------Game loop methods
@@ -676,15 +673,15 @@ bool HomeScene::onTouchBegan(Touch* touch, Event* event) {
 }
 
 //TODO exist game if press back twice in 2 seconds
-bool firstClick = true;
+bool firstClickInHomeScene = true;
 void HomeScene::onKeyReleased(EventKeyboard::KeyCode keycode, Event* event) {
 	if (keycode == EventKeyboard::KeyCode::KEY_ESCAPE) {
-		if (firstClick) {
-			firstClick = false;
+		if (firstClickInHomeScene) {
+			firstClickInHomeScene = false;
 			SocialPlugin::showToast("Press back again to Exit!");
 
 			auto func = CallFunc::create([=]() {
-				firstClick = true;
+				firstClickInHomeScene = true;
 			});
 			this->runAction(
 					Sequence::create(DelayTime::create(2), func, nullptr));

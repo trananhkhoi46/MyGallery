@@ -19,7 +19,6 @@ static const char s_homescene_btn_sticker[] = "homescene/btn_sticker.png";
 static const char s_homescene_btn_setting[] = "homescene/btn_setting.png";
 static const char s_homescene_btn_rating[] = "homescene/btn_rating.png";
 static const char s_homescene_btn_more_game[] = "homescene/btn_more_game.png";
-static const char s_homescene_btn_home[] = "homescene/btn_home.png";
 static const char s_homescene_btn_facebook_page[] = "homescene/btn_facebook_page.png";
 static const char s_homescene_btn_album[] = "homescene/btn_album.png";
 static const char s_homescene_btn_friend[] = "homescene/btn_friend.png";
@@ -49,6 +48,17 @@ static const char s_settingscene_btn_back[] = "settingscene/btn_back.png";
 static const char s_settingscene_btn_loggout[] = "settingscene/btn_loggout.png";
 static const char s_settingscene_rdb_selected[] = "settingscene/rdb_selected.png";
 static const char s_settingscene_rdb_unselected[] = "settingscene/rdb_unselected.png";
+
+//Sticker Scene elements
+static const char s_stickerscene_background[] = "stickerscene/bg_sticker.png";
+static const char s_stickerscene_btn_home[] = "stickerscene/btn_home.png";
+static const char s_stickerscene_btn_album[] = "stickerscene/btn_album.png";
+
+//Album Scene elements
+static const char s_albumscene_background[] = "albumscene/bg_album.png";
+static const char s_albumscene_btn_sticker[] = "albumscene/btn_sticker.png";
+static const char s_albumscene_btn_home[] = "albumscene/btn_home.png";
+
 
 //Sound
 static const char s_gameon[] = "sound/game_on.mp3";
