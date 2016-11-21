@@ -5,6 +5,11 @@
 using namespace std;
 using namespace cocos2d;
 
+//Enum
+enum STICKER_RARITY {
+	COMMON, UNCOMMON, RARE
+};
+
 class StickerPage {
 public:
 	inline static StickerPage* create(string background_image,
@@ -21,7 +26,7 @@ class Sticker {
 public:
 	inline static Sticker* create(string sticker_image,
 			vector<string> sticker_image_animation, Vec2 position,
-			string sticker_sound, int rarity, int sticker_id,
+			string sticker_sound, STICKER_RARITY rarity, int sticker_id,
 			int sticker_page_id) {
 		Sticker* result = new Sticker();
 		result->sticker_image = sticker_image;
@@ -37,7 +42,7 @@ public:
 	int sticker_id;
 	int sticker_page_id;
 	Vec2 position;
-	int rarity;
+	STICKER_RARITY rarity;
 	string sticker_sound;
 	string sticker_image;
 	vector<string> sticker_image_animation;
@@ -80,23 +85,23 @@ static vector<Sticker*> vt_stickers = {
 //
 		Sticker::create("sticker/page1/sticker_1_1.png",
 				s_sticker_image_1_animation, Vec2(100, 200),
-				"sticker/page1/sound_1.ogg", 1, 1, 1),
+				"sticker/page1/sound_1.ogg", STICKER_RARITY::COMMON, 1, 1),
 //
 		Sticker::create("sticker/page1/sticker_2_1.png",
 				s_sticker_image_2_animation, Vec2(200, 200),
-				"sticker/page1/sound_2.ogg", 1, 1, 1),
+				"sticker/page1/sound_2.ogg", STICKER_RARITY::UNCOMMON, 2, 1),
 //
 		Sticker::create("sticker/page1/sticker_3_1.png",
 				s_sticker_image_3_animation, Vec2(300, 200),
-				"sticker/page1/sound_3.ogg", 1, 1, 1),
+				"sticker/page1/sound_3.ogg", STICKER_RARITY::RARE, 3, 1),
 //
 		Sticker::create("sticker/page1/sticker_4_1.png",
 				s_sticker_image_4_animation, Vec2(400, 200),
-				"sticker/page1/sound_4.ogg", 1, 1, 1),
+				"sticker/page1/sound_4.ogg", STICKER_RARITY::UNCOMMON, 4, 1),
 //
 		Sticker::create("sticker/page1/sticker_5_1.png",
 				s_sticker_image_5_animation, Vec2(500, 200),
-				"sticker/page1/sound_5.ogg", 1, 1, 1),
+				"sticker/page1/sound_5.ogg", STICKER_RARITY::COMMON, 5, 1),
 //
 		};
 //

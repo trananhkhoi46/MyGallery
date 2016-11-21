@@ -49,10 +49,12 @@ bool HomeScene::init() {
 
 	//Init views
 	initPacketButtons();
-	setVisibilityFreePacket();
 	initOtherViews();
 	initSettingMenu();
 	initControlButtons();
+
+	//Set visibily for some views at first time
+	setVisibilityFreePacket();
 
 	//Handling touch event
 	auto listener = EventListenerTouchOneByOne::create();
@@ -73,9 +75,30 @@ bool HomeScene::init() {
 	schedule(schedule_selector(HomeScene::timer), 1);
 	return result;
 }
+
+void HomeScene::invalidateProgressBar() {
+	currentStickers = getCurrentExistSticker(true);
+	labelSticker->setString(
+			String::createWithFormat("%d/%d stickers", currentStickers, MAX_STICKER)->getCString());
+	progressBar->setPercent(currentStickers * 100 / MAX_STICKER);
+}
+
+int HomeScene::getCurrentExistSticker(bool withUniqueElements) {
+	vector < string > vtCurrentSticker = CppUtils::splitStringByDelim(
+			UserDefault::getInstance()->getStringForKey(CURRENT_STICKER), ',');
+	if (withUniqueElements) {
+		set < string
+				> setCurrentSticker(vtCurrentSticker.begin(),
+						vtCurrentSticker.end());
+		return setCurrentSticker.size();
+	} else {
+		return vtCurrentSticker.size();
+	}
+}
+
 void HomeScene::initDefaultVariables() {
-	currentStickers = UserDefault::getInstance()->getIntegerForKey(
-	CURRENT_STICKER, 160);
+	currentStickers = getCurrentExistSticker(true);
+
 	timeToGetFreeStickerInSecond = UserDefault::getInstance()->getIntegerForKey(
 	TIME_TO_GET_FREE_STICKER_IN_SECOND, time(nullptr));
 
@@ -124,6 +147,7 @@ void HomeScene::initPacketButtons() {
 	btnFreePacketTop->setPosition(Vec2(winSize.width / 2, winSize.height / 2));
 	this->addChild(btnFreePacketTop);
 	btnFreePacketBottom = Button::create(s_homescene_btn_free_packet_bottom);
+	btnFreePacketBottom->setZoomScale(0);
 	btnFreePacketBottom->setPressedActionEnabled(false);
 	btnFreePacketBottom->setPosition(
 			Vec2(winSize.width / 2, winSize.height / 2));
@@ -195,19 +219,19 @@ void HomeScene::initOtherViews() {
 	this->addChild(btnIAP);
 
 	//Progress bar
-	LoadingBar* loadingBar = LoadingBar::create();
-	loadingBar->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
-	loadingBar->loadTexture(s_homescene_progress);
-	loadingBar->setPercent(currentStickers * 100 / MAX_STICKER);
-	loadingBar->setPosition(
-			Vec2(winSize.width - loadingBar->getContentSize().width / 2 - 40,
+	progressBar = LoadingBar::create();
+	progressBar->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
+	progressBar->loadTexture(s_homescene_progress);
+	progressBar->setPercent(currentStickers * 100 / MAX_STICKER);
+	progressBar->setPosition(
+			Vec2(winSize.width - progressBar->getContentSize().width / 2 - 40,
 					winSize.height * 0.8));
-	this->addChild(loadingBar);
+	this->addChild(progressBar);
 
 	Sprite* progressBackground = Sprite::create(s_homescene_bg_progress);
 	progressBackground->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
-	progressBackground->setPosition(loadingBar->getPositionX(),
-			loadingBar->getPositionY());
+	progressBackground->setPosition(progressBar->getPositionX(),
+			progressBar->getPositionY());
 	this->addChild(progressBackground);
 
 	labelSticker = Label::createWithTTF(configLabelSticker,
@@ -228,11 +252,19 @@ void HomeScene::initOtherViews() {
 	this->addChild(cut);
 
 	//Add blur layer
-	blurLayer = LayerColor::create(Color4B(0, 0, 0, 255 * 0.5f));
+	blurLayer = LayerColor::create(Color4B(0, 0, 0, 255));
 	blurLayer->setContentSize(winSize);
 	blurLayer->setPosition(Vec2::ZERO);
 	blurLayer->setAnchorPoint(Vec2(0.0f, 0.0f));
+	blurLayer->setVisible(false);
 	this->addChild(blurLayer);
+
+	//Add background to blurLayer
+	Sprite* background = Sprite::create(s_homescene_background);
+	background->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
+	background->setPosition(winSize.width / 2, winSize.height / 2);
+	background->setOpacity(123);
+	blurLayer->addChild(background);
 
 	//Add btn continue
 	btnContinue = Button::create(s_homescene_btn_continue);
@@ -417,7 +449,8 @@ void HomeScene::setVisibilityFreePacket() {
 
 void HomeScene::packetButtonsCallback(Ref* pSender,
 		ui::Widget::TouchEventType eEventType) {
-	if (eEventType == ui::Widget::TouchEventType::ENDED) {
+	if (eEventType == ui::Widget::TouchEventType::BEGAN
+			&& !blurLayer->isVisible()) {
 		int animationDuration = 3;
 		Button* button = dynamic_cast<Button*>(pSender);
 		int tag = (int) button->getTag();
@@ -473,50 +506,134 @@ void HomeScene::packetButtonsCallback(Ref* pSender,
 }
 
 void HomeScene::earn3RandomStickers() {
-	//Set the next time get free packet in 5 hours
-	//		timeToGetFreeStickerInSecond = time(nullptr) + 18000;
-	timeToGetFreeStickerInSecond = time(nullptr) + 10;
+	timeToGetFreeStickerInSecond = time(
+			nullptr) + TIME_TO_GET_FREE_PACKET_IN_SECOND;
 	UserDefault::getInstance()->setIntegerForKey(
 	TIME_TO_GET_FREE_STICKER_IN_SECOND, timeToGetFreeStickerInSecond);
 	isFreePacketAvailable = time(nullptr) >= timeToGetFreeStickerInSecond;
 	setVisibilityFreePacket();
 	schedule(schedule_selector(HomeScene::timer), 1);
 
-	earn3Stickers(STICKER_RARITY::RANDOM);
+	earn3Stickers(STICKER_RARITY::COMMON, true);
 }
 
-void HomeScene::earn3Stickers(STICKER_RARITY rarity) {
+bool HomeScene::isStickerHasAlreadyExisted(int stickerId) {
+	string stickerIdString = CppUtils::doubleToString(stickerId);
+	vector < string > listString = CppUtils::splitStringByDelim(
+			UserDefault::getInstance()->getStringForKey(CURRENT_STICKER), ',');
+	for (int i = 0; i < listString.size(); i++) {
+		if (listString.at(i) == stickerIdString) {
+			return true;
+		}
+	}
+	return false;
+}
+
+void HomeScene::saveToMyStickerList(string stickerIdString) {
+	UserDefault::getInstance()->setStringForKey(CURRENT_STICKER,
+			UserDefault::getInstance()->getStringForKey(CURRENT_STICKER, "")
+					+ "," + stickerIdString);
+	CCLog("bambi saveToMyStickerList - after saving successfully: %s",
+			UserDefault::getInstance()->getStringForKey(CURRENT_STICKER).c_str());
+}
+void HomeScene::saveToMyStickerList(int stickerId) {
+	saveToMyStickerList(CppUtils::doubleToString(stickerId));
+}
+
+void HomeScene::earn3Stickers(STICKER_RARITY rarity, bool isRandom) {
 	blurLayer->setVisible(true);
 
-	switch (rarity) {
-	case STICKER_RARITY::RANDOM: {
-		CCLog("bambi earn 3 sticker random");
+	if (isRandom) {
+		string stickerIdString = "";
+		for (int i = 0; i < 3; i++) {
+			//Determine position of the sticker
+			Vec2 position;
+			if (i == 0) {
+				position = Vec2(winSize.width / 3 - 40, winSize.height * 0.65);
+			} else if (i == 1) {
+				position = Vec2(winSize.width * 2 / 3 + 40,
+						winSize.height * 0.65);
+			} else {
+				position = Vec2(winSize.width / 2, winSize.height * 0.3);
+			}
+
+			//Add sticker sprite
+			Sticker * sticker = vt_stickers.at(
+					CppUtils::randomBetween(0, vt_stickers.size() - 1));
+
+			Sprite* stickerSprite = Sprite::create(sticker->sticker_image);
+			stickerSprite->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
+			stickerSprite->setTag(kTagNewSticker);
+
+			//Add sprite_new if needed
+			if (!isStickerHasAlreadyExisted(sticker->sticker_id)) {
+				Sprite* newSprite = Sprite::create(s_homescene_new);
+				newSprite->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
+				newSprite->setPosition(
+						Vec2(
+								stickerSprite->getContentSize().width
+										- newSprite->getContentSize().width / 2,
+								stickerSprite->getContentSize().height
+										- newSprite->getContentSize().height
+												/ 2));
+				stickerSprite->addChild(newSprite);
+			}
+
+			//Add a light below the sticker if type != common
+			if (sticker->rarity != STICKER_RARITY::COMMON) {
+				Sprite* lightSprite = Sprite::create(s_homescene_uncommon);
+				lightSprite->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
+				lightSprite->setPosition(position);
+				blurLayer->addChild(lightSprite);
+
+				lightSprite->runAction(
+						RepeatForever::create(RotateBy::create(5, 180)));
+				lightSprite->runAction(
+						RepeatForever::create(
+								Sequence::create(ScaleTo::create(0.5, 0.9),
+										ScaleTo::create(0.5, 1), nullptr)));
+			}
+
+			stickerSprite->setPosition(position);
+			blurLayer->addChild(stickerSprite);
+
+			stickerIdString += CppUtils::doubleToString(sticker->sticker_id);
+			if (i < 2) {
+				stickerIdString += ",";
+			}
+		}
+		saveToMyStickerList(stickerIdString);
+	} else {
+		switch (rarity) {
+		case STICKER_RARITY::COMMON: {
+			CCLog("bambi earn3Stickers common");
+		}
+			break;
+		case STICKER_RARITY::UNCOMMON: {
+			CCLog("bambi earn3Stickers uncommon");
+		}
+			break;
+		case STICKER_RARITY::RARE: {
+			CCLog("bambi earn3Stickers rare");
+		}
+			break;
+		}
 	}
-		break;
-	case STICKER_RARITY::COMMON: {
-		CCLog("bambi earn 3 sticker common");
-	}
-		break;
-	case STICKER_RARITY::UNCOMMON: {
-		CCLog("bambi earn 3 sticker uncommon");
-	}
-		break;
-	case STICKER_RARITY::RARE: {
-		CCLog("bambi earn 3 sticker rare");
-	}
-		break;
-	}
+
+	invalidateProgressBar();
 }
 
 void HomeScene::iapButtonsCallback(Ref* pSender,
 		ui::Widget::TouchEventType eEventType) {
-	if (eEventType == ui::Widget::TouchEventType::ENDED) {
+	if (eEventType == ui::Widget::TouchEventType::ENDED
+			&& !blurLayer->isVisible()) {
 
 	}
 }
 void HomeScene::rewardedButtonsCallback(Ref* pSender,
 		ui::Widget::TouchEventType eEventType) {
-	if (eEventType == ui::Widget::TouchEventType::ENDED) {
+	if (eEventType == ui::Widget::TouchEventType::ENDED
+			&& !blurLayer->isVisible()) {
 
 	}
 }
@@ -570,9 +687,6 @@ void HomeScene::invalidateMenuBarPosition() {
 }
 
 void HomeScene::update(float dt) {
-
-//	labelSticker->setString(currentStickers + "/" + MAX_STICKER);
-//	loadingBar->setPercent(currentStickers / MAX_STICKER);
 
 }
 bool HomeScene::onTouchBegan(Touch* touch, Event* event) {

@@ -33,8 +33,13 @@ public:
 	void initDefaultVariables();
 	void setVisibilityFreePacket();
 	void earn3RandomStickers();
-	void earn3Stickers(STICKER_RARITY rarity);
+	void earn3Stickers(STICKER_RARITY rarity, bool isRandom);
 	void closeBlurLayer();
+	bool isStickerHasAlreadyExisted(int stickerId);
+	void saveToMyStickerList(int stickerId);
+	void saveToMyStickerList(string stickerIdString);
+	int getCurrentExistSticker(bool withUniqueElements);
+	void invalidateProgressBar();
 
 	int currentStickers;
 	int maxStickers;
@@ -64,6 +69,7 @@ public:
 	Button* btnRewardedAds;
 	Button* btnIAP;
 	Button* btnContinue;
+	LoadingBar* progressBar;
 };
 
 #endif // __HOME_SCENE_H__

@@ -39,6 +39,8 @@ static const char s_homescene_btn_rare_packet_top[] = "homescene/rare_packet_top
 static const char s_homescene_btn_rare_packet_bottom[] = "homescene/rare_packet_bottom.png";
 static const char s_homescene_btn_bundle_packet_top[] = "homescene/bundle_packet_top.png";
 static const char s_homescene_btn_bundle_packet_bottom[] = "homescene/bundle_packet_bottom.png";
+static const char s_homescene_new[] = "homescene/sprite_new.png";
+static const char s_homescene_uncommon[] = "homescene/sprite_uncommon.png";
 
 
 //Setting Scene elements

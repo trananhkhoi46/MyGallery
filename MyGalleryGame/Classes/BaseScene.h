@@ -9,6 +9,7 @@
 #include "Resources.h"
 #include "Constants.h"
 #include "StickerResource.h"
+#include "CppUtils.h"
 
 using namespace cocos2d::network;
 using namespace cocos2d::ui;
