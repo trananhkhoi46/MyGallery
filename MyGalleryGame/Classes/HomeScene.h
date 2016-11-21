@@ -35,10 +35,6 @@ public:
 	void earn3RandomStickers();
 	void earn3Stickers(STICKER_RARITY rarity, bool isRandom);
 	void closeBlurLayer();
-	bool isStickerHasAlreadyExisted(int stickerId);
-	void saveToMyStickerList(int stickerId);
-	void saveToMyStickerList(string stickerIdString);
-	int getCurrentExistSticker(bool withUniqueElements);
 	void invalidateProgressBar();
 
 	int currentStickers;

@@ -77,27 +77,15 @@ bool HomeScene::init() {
 }
 
 void HomeScene::invalidateProgressBar() {
-	currentStickers = getCurrentExistSticker(true);
+	currentStickers = StickerHelper::getCurrentExistSticker(true);
 	labelSticker->setString(
-			String::createWithFormat("%d/%d stickers", currentStickers, MAX_STICKER)->getCString());
+			String::createWithFormat("%d/%d stickers", currentStickers,
+					MAX_STICKER)->getCString());
 	progressBar->setPercent(currentStickers * 100 / MAX_STICKER);
 }
 
-int HomeScene::getCurrentExistSticker(bool withUniqueElements) {
-	vector < string > vtCurrentSticker = CppUtils::splitStringByDelim(
-			UserDefault::getInstance()->getStringForKey(CURRENT_STICKER), ',');
-	if (withUniqueElements) {
-		set < string
-				> setCurrentSticker(vtCurrentSticker.begin(),
-						vtCurrentSticker.end());
-		return setCurrentSticker.size();
-	} else {
-		return vtCurrentSticker.size();
-	}
-}
-
 void HomeScene::initDefaultVariables() {
-	currentStickers = getCurrentExistSticker(true);
+	currentStickers = StickerHelper::getCurrentExistSticker(true);
 
 	timeToGetFreeStickerInSecond = UserDefault::getInstance()->getIntegerForKey(
 	TIME_TO_GET_FREE_STICKER_IN_SECOND, time(nullptr));
@@ -517,29 +505,6 @@ void HomeScene::earn3RandomStickers() {
 	earn3Stickers(STICKER_RARITY::COMMON, true);
 }
 
-bool HomeScene::isStickerHasAlreadyExisted(int stickerId) {
-	string stickerIdString = CppUtils::doubleToString(stickerId);
-	vector < string > listString = CppUtils::splitStringByDelim(
-			UserDefault::getInstance()->getStringForKey(CURRENT_STICKER), ',');
-	for (int i = 0; i < listString.size(); i++) {
-		if (listString.at(i) == stickerIdString) {
-			return true;
-		}
-	}
-	return false;
-}
-
-void HomeScene::saveToMyStickerList(string stickerIdString) {
-	UserDefault::getInstance()->setStringForKey(CURRENT_STICKER,
-			UserDefault::getInstance()->getStringForKey(CURRENT_STICKER, "")
-					+ "," + stickerIdString);
-	CCLog("bambi saveToMyStickerList - after saving successfully: %s",
-			UserDefault::getInstance()->getStringForKey(CURRENT_STICKER).c_str());
-}
-void HomeScene::saveToMyStickerList(int stickerId) {
-	saveToMyStickerList(CppUtils::doubleToString(stickerId));
-}
-
 void HomeScene::earn3Stickers(STICKER_RARITY rarity, bool isRandom) {
 	blurLayer->setVisible(true);
 
@@ -566,7 +531,8 @@ void HomeScene::earn3Stickers(STICKER_RARITY rarity, bool isRandom) {
 			stickerSprite->setTag(kTagNewSticker);
 
 			//Add sprite_new if needed
-			if (!isStickerHasAlreadyExisted(sticker->sticker_id)) {
+			if (!StickerHelper::isStickerHasAlreadyExisted(
+					sticker->sticker_id)) {
 				Sprite* newSprite = Sprite::create(s_homescene_new);
 				newSprite->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
 				newSprite->setPosition(
@@ -584,6 +550,7 @@ void HomeScene::earn3Stickers(STICKER_RARITY rarity, bool isRandom) {
 				Sprite* lightSprite = Sprite::create(s_homescene_uncommon);
 				lightSprite->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
 				lightSprite->setPosition(position);
+				lightSprite->setTag(kTagNewSticker); //For being removed from blurLayer later
 				blurLayer->addChild(lightSprite);
 
 				lightSprite->runAction(
@@ -602,7 +569,7 @@ void HomeScene::earn3Stickers(STICKER_RARITY rarity, bool isRandom) {
 				stickerIdString += ",";
 			}
 		}
-		saveToMyStickerList(stickerIdString);
+		StickerHelper::saveToMyStickerList(stickerIdString);
 	} else {
 		switch (rarity) {
 		case STICKER_RARITY::COMMON: {
