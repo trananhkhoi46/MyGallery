@@ -15,6 +15,7 @@
 TTFConfig configControlButton(s_font, 65 * s_font_ratio);
 TTFConfig configLabelSticker(s_font, 60 * s_font_ratio);
 
+//---------------------------------------------------------------------Constructor methods
 Scene* HomeScene::scene() {
 	// 'scene' is an autorelease object
 	Scene *scene = Scene::create();
@@ -75,15 +76,8 @@ bool HomeScene::init() {
 	schedule(schedule_selector(HomeScene::timer), 1);
 	return result;
 }
-
-void HomeScene::invalidateProgressBar() {
-	currentStickers = StickerHelper::getCurrentExistSticker(true);
-	labelSticker->setString(
-			String::createWithFormat("%d/%d stickers", currentStickers,
-					MAX_STICKER)->getCString());
-	progressBar->setPercent(currentStickers * 100 / MAX_STICKER);
-}
-
+//---------------------------------------------------------------------End of constructor methods
+//---------------------------------------------------------------------Init methods
 void HomeScene::initDefaultVariables() {
 	currentStickers = StickerHelper::getCurrentExistSticker(true);
 
@@ -106,6 +100,7 @@ void HomeScene::initDefaultVariables() {
 	cut_animate = Animate::create(animation_cut);
 	cut_animate->retain();
 }
+
 void HomeScene::initPacketButtons() {
 	//Sprite to show time to get free sticker
 	spriteTimeFreeSticker = Sprite::create(
@@ -271,16 +266,6 @@ void HomeScene::initOtherViews() {
 
 }
 
-void HomeScene::closeBlurLayer() {
-	Vector<Node*> layerChildren = blurLayer->getChildren();
-	for (const auto child : layerChildren) {
-		if (child && child->getTag() == kTagNewSticker) {
-			blurLayer->removeChild(child, false);
-		}
-	}
-	blurLayer->setVisible(false);
-}
-
 void HomeScene::initSettingMenu() {
 	//Add menu bar
 	menuBar = Sprite::create(s_homescene_menu_bar);
@@ -409,6 +394,11 @@ void HomeScene::initControlButtons() {
 	labelButtonHome->setColor(Color3B::BLACK);
 	this->addChild(labelButtonHome);
 }
+//---------------------------------------------------------------------End of init methods
+//---------------------------------------------------------------------Game loop methods
+void HomeScene::update(float dt) {
+
+}
 
 void HomeScene::timer(float interval) {
 	int currentTimeInSecond = time(nullptr);
@@ -427,6 +417,8 @@ void HomeScene::timer(float interval) {
 		this->unschedule(schedule_selector(HomeScene::timer));
 	}
 }
+//---------------------------------------------------------------------End of game loop methods
+//---------------------------------------------------------------------Invalidate views methods
 void HomeScene::setVisibilityFreePacket() {
 	btnRewardedAds->setVisible(!isFreePacketAvailable);
 	btnIAP->setVisible(!isFreePacketAvailable);
@@ -435,64 +427,35 @@ void HomeScene::setVisibilityFreePacket() {
 	btnFreePacketTop->setVisible(isFreePacketAvailable);
 }
 
-void HomeScene::packetButtonsCallback(Ref* pSender,
-		ui::Widget::TouchEventType eEventType) {
-	if (eEventType == ui::Widget::TouchEventType::BEGAN
-			&& !blurLayer->isVisible()) {
-		int animationDuration = 3;
-		Button* button = dynamic_cast<Button*>(pSender);
-		int tag = (int) button->getTag();
-		switch (tag) {
-		case kTagFreePacket: {
-			cut->runAction(
-					Sequence::create(
-							Spawn::createWithTwoActions(
-									Repeat::create(cut_animate, 20),
-									MoveBy::create(2,
-											Vec2(
-													winSize.width
-															+ cut->getContentSize().width,
-													0))),
-							MoveBy::create(0,
-									Vec2(
-											-winSize.width
-													- cut->getContentSize().width,
-											0)), nullptr));
-
-			btnFreePacketTop->runAction(
-					Sequence::create(DelayTime::create(0.85),
-							MoveBy::create(0.2, Vec2(0, 100)),
-							DelayTime::create(2),
-							MoveBy::create(0, Vec2(0, -100)), nullptr));
-
-		}
-			break;
-		case kTagBundlePacket: {
-		}
-			break;
-		case kTagCommonPacket: {
-		}
-			break;
-		case kTagUncommonPacket: {
-		}
-			break;
-		case kTagRarePacket: {
-		}
-			break;
-
-		}
-
-		//Cut animation
-
-		auto funcResetScheduleGetFreeSticker = CallFunc::create([=]() {
-			earn3RandomStickers();
-		});
-		button->runAction(
-				Sequence::create(DelayTime::create(animationDuration),
-						funcResetScheduleGetFreeSticker, nullptr));
-	}
+void HomeScene::invalidateProgressBar() {
+	currentStickers = StickerHelper::getCurrentExistSticker(true);
+	labelSticker->setString(
+			String::createWithFormat("%d/%d stickers", currentStickers,
+			MAX_STICKER)->getCString());
+	progressBar->setPercent(currentStickers * 100 / MAX_STICKER);
 }
 
+void HomeScene::invalidateMenuBarPosition() {
+	if (menuBar->numberOfRunningActions() == 0) {
+		menuBar->runAction(
+				MoveTo::create(0.15f,
+						isMenuBarShowing ?
+								menuBarVisiblePosition :
+								menuBarInvisiblePosition));
+	}
+}
+void HomeScene::closeBlurLayer() {
+	Vector<Node*> layerChildren = blurLayer->getChildren();
+	for (const auto child : layerChildren) {
+		if (child && child->getTag() == kTagNewSticker) {
+			blurLayer->removeChild(child, false);
+		}
+	}
+	blurLayer->setVisible(false);
+}
+
+//---------------------------------------------------------------------End of invalidate views methods
+//---------------------------------------------------------------------Game logic methods
 void HomeScene::earn3RandomStickers() {
 	timeToGetFreeStickerInSecond = time(
 			nullptr) + TIME_TO_GET_FREE_PACKET_IN_SECOND;
@@ -589,6 +552,65 @@ void HomeScene::earn3Stickers(STICKER_RARITY rarity, bool isRandom) {
 
 	invalidateProgressBar();
 }
+//---------------------------------------------------------------------End of game logic methods
+//---------------------------------------------------------------------Callback methods
+void HomeScene::packetButtonsCallback(Ref* pSender,
+		ui::Widget::TouchEventType eEventType) {
+	if (eEventType == ui::Widget::TouchEventType::BEGAN
+			&& !blurLayer->isVisible()) {
+		int animationDuration = 3;
+		Button* button = dynamic_cast<Button*>(pSender);
+		int tag = (int) button->getTag();
+		switch (tag) {
+		case kTagFreePacket: {
+			cut->runAction(
+					Sequence::create(
+							Spawn::createWithTwoActions(
+									Repeat::create(cut_animate, 20),
+									MoveBy::create(2,
+											Vec2(
+													winSize.width
+															+ cut->getContentSize().width,
+													0))),
+							MoveBy::create(0,
+									Vec2(
+											-winSize.width
+													- cut->getContentSize().width,
+											0)), nullptr));
+
+			btnFreePacketTop->runAction(
+					Sequence::create(DelayTime::create(0.85),
+							MoveBy::create(0.2, Vec2(0, 100)),
+							DelayTime::create(2),
+							MoveBy::create(0, Vec2(0, -100)), nullptr));
+
+		}
+			break;
+		case kTagBundlePacket: {
+		}
+			break;
+		case kTagCommonPacket: {
+		}
+			break;
+		case kTagUncommonPacket: {
+		}
+			break;
+		case kTagRarePacket: {
+		}
+			break;
+
+		}
+
+		//Cut animation
+
+		auto funcResetScheduleGetFreeSticker = CallFunc::create([=]() {
+			earn3RandomStickers();
+		});
+		button->runAction(
+				Sequence::create(DelayTime::create(animationDuration),
+						funcResetScheduleGetFreeSticker, nullptr));
+	}
+}
 
 void HomeScene::iapButtonsCallback(Ref* pSender,
 		ui::Widget::TouchEventType eEventType) {
@@ -643,19 +665,6 @@ void HomeScene::settingButtonsCallback(Ref* pSender,
 	}
 }
 
-void HomeScene::invalidateMenuBarPosition() {
-	if (menuBar->numberOfRunningActions() == 0) {
-		menuBar->runAction(
-				MoveTo::create(0.15f,
-						isMenuBarShowing ?
-								menuBarVisiblePosition :
-								menuBarInvisiblePosition));
-	}
-}
-
-void HomeScene::update(float dt) {
-
-}
 bool HomeScene::onTouchBegan(Touch* touch, Event* event) {
 	Rect rect = menuBar->getBoundingBox();
 	rect.setRect(rect.origin.x, rect.origin.y, rect.size.width, 200);
@@ -670,4 +679,4 @@ void HomeScene::onKeyReleased(EventKeyboard::KeyCode keycode, Event* event) {
 
 	}
 }
-
+//---------------------------------------------------------------------End of callback methods
