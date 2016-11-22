@@ -28,6 +28,7 @@ LOCAL_SRC_FILES := hellocpp/main.cpp \
 ../../Classes/StickerScene.cpp \
 ../../Classes/AlbumScene.cpp \
 ../../Classes/BScrollView.cpp \
+../../Classes/BLabel.cpp \
 ../../Classes/StickerHelper.cpp \
 ../../Classes/AppDelegate.cpp \
 ../../Classes/HomeScene.cpp \

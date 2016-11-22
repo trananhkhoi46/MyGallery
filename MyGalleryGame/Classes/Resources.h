@@ -16,6 +16,7 @@ static const char s_homescene_bg_progress[] = "homescene/bg_progress.png";
 static const char s_homescene_sprite_time_to_get_iap_sticker[] = "homescene/sprite_time_to_get_iap_sticker.png";
 static const char s_homescene_sprite_time_to_get_free_sticker[] = "homescene/sprite_time_to_get_free_sticker.png";
 static const char s_homescene_btn_sticker[] = "homescene/btn_sticker.png";
+static const char s_homescene_btn_home[] = "homescene/btn_home.png";
 static const char s_homescene_btn_setting[] = "homescene/btn_setting.png";
 static const char s_homescene_btn_rating[] = "homescene/btn_rating.png";
 static const char s_homescene_btn_more_game[] = "homescene/btn_more_game.png";
@@ -53,11 +54,23 @@ static const char s_settingscene_rdb_unselected[] = "settingscene/rdb_unselected
 static const char s_stickerscene_background[] = "stickerscene/bg_sticker.png";
 static const char s_stickerscene_btn_home[] = "stickerscene/btn_home.png";
 static const char s_stickerscene_btn_album[] = "stickerscene/btn_album.png";
+static const char s_stickerscene_btn_sticker[] = "stickerscene/btn_sticker.png";
+static const char s_stickerscene_btn_stick[] = "stickerscene/btn_stick.png";
+static const char s_stickerscene_btn_all[] = "stickerscene/btn_all.png";
+static const char s_stickerscene_btn_sell[] = "stickerscene/btn_sell.png";
+static const char s_stickerscene_menu_bottom[] = "stickerscene/bottom_bar.png";
+static const char s_stickerscene_sprite_exclamation[] = "stickerscene/sprite_exclamation.png";
+static const char s_stickerscene_sprite_question[] = "stickerscene/sprite_question.png";
+static const char s_stickerscene_sprite_search[] = "stickerscene/sprite_search.png";
+static const char s_stickerscene_sprite_sticker_detail[] = "stickerscene/sticker_detail.png";
+static const char s_stickerscene_sprite_stick[] = "stickerscene/stick.png";
+
 
 //Album Scene elements
 static const char s_albumscene_background[] = "albumscene/bg_album.png";
 static const char s_albumscene_btn_sticker[] = "albumscene/btn_sticker.png";
 static const char s_albumscene_btn_home[] = "albumscene/btn_home.png";
+static const char s_albumscene_btn_album[] = "albumscene/btn_album.png";
 
 
 //Sound
