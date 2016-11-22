@@ -404,7 +404,7 @@ obj/local/armeabi/objs-debug/MyGame_shared/__/__/Classes/AppDelegate.o: \
  /Users/Kskull/Documents/Cocos2dx/ndk/sources/cxx-stl/gnu-libstdc++/4.9/include/iostream \
  /Users/Kskull/Documents/Cocos2dx/ndk/sources/cxx-stl/gnu-libstdc++/4.9/include/iterator \
  jni/../../Classes/StickerHelper.h jni/../../Classes/SocialPlugin.h \
- jni/PluginFacebook/PluginFacebook.h
+ jni/../../Classes/BLabel.h jni/PluginFacebook/PluginFacebook.h
 
 jni/../../Classes/AppDelegate.h:
 
@@ -1223,5 +1223,7 @@ jni/../../Classes/CppUtils.h:
 jni/../../Classes/StickerHelper.h:
 
 jni/../../Classes/SocialPlugin.h:
+
+jni/../../Classes/BLabel.h:
 
 jni/PluginFacebook/PluginFacebook.h:

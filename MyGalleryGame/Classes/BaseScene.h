@@ -12,6 +12,7 @@
 #include "CppUtils.h"
 #include "StickerHelper.h"
 #include "SocialPlugin.h"
+#include "BLabel.h"
 
 using namespace cocos2d::network;
 using namespace cocos2d::ui;

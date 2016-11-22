@@ -7,13 +7,15 @@
 USING_NS_CC;
 using namespace std;
 
-
-class BLabel : public cocos2d::Label
-{
+class BLabel: public cocos2d::Label {
 public:
-	CREATE_FUNC(BLabel);
-	static BLabel* createWithTTF(TTFConfig config,TextHAlignment textAlignment);
-	void showText(string text,float durationPerSplitedString,string splitBy);
+	CREATE_FUNC(BLabel)
+	;
+	static BLabel* createWithTTF(TTFConfig config,
+			TextHAlignment textAlignment);
+	static BLabel* createWithTTF(TTFConfig config, const std::string& text,
+			TextHAlignment textAlignment);
+	void showText(string text, float durationPerSplitedString, char splitBy);
 
 private:
 

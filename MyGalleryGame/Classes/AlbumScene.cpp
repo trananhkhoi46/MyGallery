@@ -27,7 +27,7 @@ bool AlbumScene::init() {
 	TTFConfig config(s_font, 120 * s_font_ratio);
 
 	//Add background
-	Sprite* background = Sprite::create(s_stickerscene_background);
+	Sprite* background = Sprite::create(s_albumscene_background);
 	background->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
 	background->setPosition(winSize.width / 2, winSize.height / 2);
 	this->addChild(background);
@@ -70,18 +70,38 @@ void AlbumScene::initControlButtons() {
 	Label* labelButtonSticker = Label::createWithTTF(configControlButton,
 			"STICKER", TextHAlignment::CENTER);
 	labelButtonSticker->setPosition(
-			Vec2(btnStickerScene->getPositionX() + 60,
-					btnStickerScene->getPositionY() - 10));
+			Vec2(btnStickerScene->getPositionX() + 33,
+					btnStickerScene->getPositionY()));
 	labelButtonSticker->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
 	labelButtonSticker->setColor(Color3B::BLACK);
 	this->addChild(labelButtonSticker);
+
+	//Add btn album
+	Button* btnAlbumScene = Button::create(s_albumscene_btn_album);
+	btnAlbumScene->setPosition(
+			Vec2(
+					winSize.width - btnAlbumScene->getContentSize().width / 2
+							- btnStickerScene->getContentSize().width - 5 - 20,
+					winSize.height - btnAlbumScene->getContentSize().height / 2
+							- 10));
+	btnAlbumScene->setZoomScale(0);
+	this->addChild(btnAlbumScene);
+	Label* labelButtonAlbum = Label::createWithTTF(configControlButton, "ALBUM",
+			TextHAlignment::CENTER);
+	labelButtonAlbum->setPosition(
+			Vec2(btnAlbumScene->getPositionX() + 60,
+					btnAlbumScene->getPositionY() - 10));
+	labelButtonAlbum->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
+	labelButtonAlbum->setColor(Color3B::BLACK);
+	this->addChild(labelButtonAlbum);
 
 	//Add btn home
 	Button* btnHomeScene = Button::create(s_albumscene_btn_home);
 	btnHomeScene->setPosition(
 			Vec2(
 					winSize.width - btnHomeScene->getContentSize().width / 2
-							- btnHomeScene->getContentSize().width - 5 - 20,
+							- btnHomeScene->getContentSize().width
+							- btnAlbumScene->getContentSize().width - 5 - 40,
 					winSize.height - btnHomeScene->getContentSize().height / 2
 							- 10));
 	btnHomeScene->setTouchEnabled(true);
@@ -134,7 +154,6 @@ void AlbumScene::addAllStickersToScrollView() {
 		positionY -= itemMargin;
 	}
 }
-
 
 bool firstClickInAlbumScene = true;
 void AlbumScene::onKeyReleased(EventKeyboard::KeyCode keycode, Event* event) {

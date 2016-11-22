@@ -13,9 +13,12 @@ public:
 	StickerHelper() = delete; //Ghi vay compiler ko khoi tao constructor
 
 	static bool isStickerHasAlreadyExisted(int stickerId);
+	static bool isStickerHasNotSticked(int stickerId);
 	static void saveToMyStickerList(int stickerId);
 	static void saveToMyStickerList(string stickerIdString);
-	static int getCurrentExistSticker(bool withUniqueElements);
+	static int getCurrentExistStickerNumber(bool withUniqueElements);
+	static vector<Sticker*> getCurrentExistSticker(bool withUniqueElements);
+	static int getStickerQuantityInMyList(int stickerId);
 };
 
 #endif

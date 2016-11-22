@@ -81,7 +81,7 @@ bool HomeScene::init() {
 //---------------------------------------------------------------------End of constructor methods
 //---------------------------------------------------------------------Init methods
 void HomeScene::initDefaultVariables() {
-	currentStickers = StickerHelper::getCurrentExistSticker(true);
+	currentStickers = StickerHelper::getCurrentExistStickerNumber(true);
 
 	timeToGetFreeStickerInSecond = UserDefault::getInstance()->getIntegerForKey(
 	TIME_TO_GET_FREE_STICKER_IN_SECOND, time(nullptr));
@@ -373,14 +373,14 @@ void HomeScene::initControlButtons() {
 	btnAlbumScene->setTouchEnabled(true);
 	btnAlbumScene->setPressedActionEnabled(true);
 	btnAlbumScene->addTouchEventListener([this](Ref *pSender,
-				Widget::TouchEventType type) {
-			if (type == cocos2d::ui::Widget::TouchEventType::ENDED)
-			{
-				auto *newScene = AlbumScene::scene();
-				auto transition = TransitionFade::create(1.0, newScene);
-				Director *pDirector = Director::getInstance();
-				pDirector->replaceScene(transition);
-			}});
+			Widget::TouchEventType type) {
+		if (type == cocos2d::ui::Widget::TouchEventType::ENDED)
+		{
+			auto *newScene = AlbumScene::scene();
+			auto transition = TransitionFade::create(1.0, newScene);
+			Director *pDirector = Director::getInstance();
+			pDirector->replaceScene(transition);
+		}});
 	this->addChild(btnAlbumScene);
 	Label* labelButtonAlbum = Label::createWithTTF(configControlButton, "ALBUM",
 			TextHAlignment::CENTER);
@@ -390,6 +390,26 @@ void HomeScene::initControlButtons() {
 	labelButtonAlbum->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
 	labelButtonAlbum->setColor(Color3B::BLACK);
 	this->addChild(labelButtonAlbum);
+
+	//Add btn home
+	Button* btnHomeScene = Button::create(s_homescene_btn_home);
+	btnHomeScene->setPosition(
+			Vec2(
+					winSize.width - btnHomeScene->getContentSize().width / 2
+							- btnAlbumScene->getContentSize().width
+							- btnStickerScene->getContentSize().width - 5 - 40,
+					winSize.height - btnHomeScene->getContentSize().height / 2
+							- 10));
+	btnHomeScene->setZoomScale(0);
+	this->addChild(btnHomeScene);
+	Label* labelButtonHome = Label::createWithTTF(configControlButton, "HOME",
+			TextHAlignment::CENTER);
+	labelButtonHome->setPosition(
+			Vec2(btnHomeScene->getPositionX() + 30,
+					btnHomeScene->getPositionY() - 10));
+	labelButtonHome->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
+	labelButtonHome->setColor(Color3B::BLACK);
+	this->addChild(labelButtonHome);
 }
 //---------------------------------------------------------------------End of init methods
 //---------------------------------------------------------------------Game loop methods
@@ -425,7 +445,7 @@ void HomeScene::setVisibilityFreePacket() {
 }
 
 void HomeScene::invalidateProgressBar() {
-	currentStickers = StickerHelper::getCurrentExistSticker(true);
+	currentStickers = StickerHelper::getCurrentExistStickerNumber(true);
 	labelSticker->setString(
 			String::createWithFormat("%d/%d stickers", currentStickers,
 			MAX_STICKER)->getCString());
