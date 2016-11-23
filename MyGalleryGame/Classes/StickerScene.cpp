@@ -39,13 +39,18 @@ bool StickerScene::init() {
 	//Add all stickers to scrollview
 	addAllStickersToScrollView();
 
+	//Handling touch event
+	auto listener = EventListenerTouchOneByOne::create();
+	listener->setSwallowTouches(true);
+	listener->onTouchBegan = CC_CALLBACK_2(StickerScene::onTouchBegan, this);
+	_eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
+
 	//Keyboard handling
 	auto keyboardListener = EventListenerKeyboard::create();
 	keyboardListener->onKeyReleased = CC_CALLBACK_2(StickerScene::onKeyReleased,
 			this);
 	_eventDispatcher->addEventListenerWithSceneGraphPriority(keyboardListener,
 			this);
-
 	return result;
 }
 void StickerScene::initControlButtons() {
@@ -142,8 +147,8 @@ void StickerScene::addAllStickersToScrollView() {
 			winSize.height - scrollviewMarginTop);
 
 	//Create scrollview
-	BScrollView* scrollview = BScrollView::createVertical(
-			ceil(numberOfItems / 2.0f), itemMargin, scrollFrameSize);
+	scrollview = BScrollView::createVertical(ceil(numberOfItems / 2.0f),
+			itemMargin, scrollFrameSize);
 	scrollview->setPosition(
 			Vec2(winSize.width / 2,
 					winSize.height / 2 - scrollviewMarginTop / 2));
@@ -155,25 +160,38 @@ void StickerScene::addAllStickersToScrollView() {
 	for (int i = 0; i < numberOfItems; i++) {
 		Sticker* sticker = vt_current_exist_sticker.at(i);
 
-		//Sticker
-		Sprite* itemSprite = Sprite::create(sticker->sticker_image);
-		itemSprite->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
-		itemSprite->setPosition(
+		//Add btn sticker
+		Button* btnStickerScene = Button::create(sticker->sticker_image);
+		btnStickerScene->setPosition(
 				Vec2(
 						positionX
 								+ scrollFrameSize.width
 										* (i % 2 == 0 ? 0.28 : 0.72)
 								- itemMargin / 2, positionY));
-		scrollview->addChild(itemSprite);
+		btnStickerScene->setTouchEnabled(true);
+		btnStickerScene->setZoomScale(0);
+		btnStickerScene->setPressedActionEnabled(true);
+		btnStickerScene->setTag(sticker->sticker_id);
+		btnStickerScene->addTouchEventListener(
+				[this](Ref *pSender,
+						Widget::TouchEventType type) {
+					if (type == cocos2d::ui::Widget::TouchEventType::ENDED)
+					{
+						int tag = (int) dynamic_cast<Button*>(pSender)->getTag();
+						CCLog("bambi btnStickerScene->addTouchEventListener, tag: %d",tag);
+						openStickerDetailLayer(StickerHelper::getStickerFromId(tag));
+					}});
+		scrollview->addChild(btnStickerScene);
 
 		//Sticker detail sprite
 		Sprite* itemDetailSprite = Sprite::create(
 				s_stickerscene_sprite_sticker_detail);
 		itemDetailSprite->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
 		itemDetailSprite->setPosition(
-				Vec2(itemSprite->getPositionX(),
-						itemSprite->getPositionY()
-								- itemSprite->getContentSize().width / 2 - 50));
+				Vec2(btnStickerScene->getPositionX(),
+						btnStickerScene->getPositionY()
+								- btnStickerScene->getContentSize().width / 2
+								- 50));
 		scrollview->addChild(itemDetailSprite);
 
 		//Add number
@@ -190,12 +208,11 @@ void StickerScene::addAllStickersToScrollView() {
 		//Add sticker quantity
 		int stickerQuantity = StickerHelper::getStickerQuantityInMyList(
 				sticker->sticker_id);
-		BLabel* labelStickerQuantity =
-				BLabel::createWithTTF(configStickerDetailLabel,
-						String::createWithFormat(
-								stickerQuantity == 1 ?
-										"1 sticker" : "%d stickers", stickerQuantity)->getCString(),
-						TextHAlignment::CENTER);
+		BLabel* labelStickerQuantity = BLabel::createWithTTF(
+				configStickerDetailLabel,
+				String::createWithFormat(
+						stickerQuantity == 1 ? "1 sticker" : "%d stickers",
+						stickerQuantity)->getCString(), TextHAlignment::CENTER);
 		labelStickerQuantity->setPosition(
 				Vec2(255, itemDetailSprite->getContentSize().height / 2 - 2));
 		labelStickerQuantity->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
@@ -207,8 +224,8 @@ void StickerScene::addAllStickersToScrollView() {
 			Sprite* stickerStick = Sprite::create(s_stickerscene_sprite_stick);
 			stickerStick->setAnchorPoint(Vec2::ANCHOR_TOP_LEFT);
 			stickerStick->setPosition(
-					Vec2(0, itemSprite->getContentSize().height));
-			itemSprite->addChild(stickerStick);
+					Vec2(0, btnStickerScene->getContentSize().height));
+			btnStickerScene->addChild(stickerStick);
 
 			stickerStick->runAction(
 					RepeatForever::create(
@@ -220,6 +237,106 @@ void StickerScene::addAllStickersToScrollView() {
 			positionY -= itemMargin;
 		}
 	}
+}
+
+void StickerScene::openStickerDetailLayer(Sticker* sticker) {
+	if (backgroundLayer != nullptr && backgroundLayer->isVisible()) {
+		return;
+	}
+
+	CCLog("bambi openStickerDetailLayer");
+	TTFConfig configStickerDetailLabel(s_font, 100 * s_font_ratio);
+
+	//Add blur layer
+	backgroundLayer = LayerColor::create(Color4B(0, 0, 0, 255));
+	backgroundLayer->setContentSize(winSize);
+	backgroundLayer->setPosition(Vec2::ZERO);
+	backgroundLayer->setAnchorPoint(Vec2(0.0f, 0.0f));
+	this->addChild(backgroundLayer);
+
+	//Add sticker sprite at center of the screen
+	Sprite* stickerSprite = Sprite::create(sticker->sticker_image);
+	stickerSprite->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
+	stickerSprite->setPosition(winSize.width / 2, winSize.height / 2);
+	stickerSprite->setScale(1.5f);
+	backgroundLayer->addChild(stickerSprite);
+
+	//Add sticker id label
+	BLabel* labelStickerId = BLabel::createWithTTF(configStickerDetailLabel,
+			String::createWithFormat("#%d", sticker->sticker_id)->getCString(),
+			TextHAlignment::CENTER);
+	labelStickerId->setPosition(
+			Vec2(winSize.width / 2,
+					winSize.height - labelStickerId->getContentSize().height));
+	labelStickerId->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
+	labelStickerId->setColor(Color3B::WHITE);
+	backgroundLayer->addChild(labelStickerId);
+
+	//Add sticker name label
+	BLabel* labelStickerName = BLabel::createWithTTF(configStickerDetailLabel,
+			sticker->sticker_name, TextHAlignment::CENTER);
+	labelStickerName->setPosition(
+			Vec2(winSize.width / 2,
+					labelStickerId->getPositionY()
+							- labelStickerName->getContentSize().height));
+	labelStickerName->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
+	labelStickerName->setColor(Color3B::YELLOW);
+	backgroundLayer->addChild(labelStickerName);
+
+	//Add sticker glued info label
+	int stickerTotalNumber = StickerHelper::getStickerQuantityInMyList(
+			sticker->sticker_id);
+	int gluedNumber =
+			StickerHelper::isStickerHasNotSticked(sticker->sticker_id) ? 0 : 1;
+	int leftNumber = stickerTotalNumber - gluedNumber;
+	BLabel* labelStickerGluedInfo = BLabel::createWithTTF(
+			configStickerDetailLabel,
+			String::createWithFormat("(%d glued, %d left)", gluedNumber,
+					leftNumber)->getCString(), TextHAlignment::CENTER);
+	labelStickerGluedInfo->setPosition(
+			Vec2(winSize.width / 2,
+					labelStickerName->getPositionY()
+							- labelStickerGluedInfo->getContentSize().height));
+	labelStickerGluedInfo->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
+	labelStickerGluedInfo->setColor(Color3B::GRAY);
+	backgroundLayer->addChild(labelStickerGluedInfo);
+
+	//Add sticker page name label
+	BLabel* labelStickerPageName =
+			BLabel::createWithTTF(configStickerDetailLabel,
+					StickerHelper::getStickerPageFromId(
+							sticker->sticker_page_id)->sticker_page_name,
+					TextHAlignment::CENTER);
+	labelStickerPageName->setPosition(
+			Vec2(winSize.width / 2, winSize.height * 0.2));
+	labelStickerPageName->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
+	labelStickerPageName->setColor(Color3B::WHITE);
+	backgroundLayer->addChild(labelStickerPageName);
+
+	//Add sticker rarity label
+	BLabel* labelStickerRarity = BLabel::createWithTTF(configStickerDetailLabel,
+			StickerHelper::getRarityString(sticker->rarity),
+			TextHAlignment::CENTER);
+	labelStickerRarity->setPosition(
+			Vec2(winSize.width / 2,
+					labelStickerPageName->getPositionY()
+							- labelStickerRarity->getContentSize().height));
+	labelStickerRarity->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
+	labelStickerRarity->setColor(Color3B::WHITE);
+	backgroundLayer->addChild(labelStickerRarity);
+
+	//Hide scrollview to make onTouchBegan works
+	scrollview->setVisible(false);
+}
+
+bool StickerScene::onTouchBegan(Touch* touch, Event* event) {
+	CCLog("bambi onTouchBegan");
+	if (backgroundLayer != nullptr && backgroundLayer->isVisible()) {
+		this->removeChild(backgroundLayer, false);
+		backgroundLayer = nullptr;
+		scrollview->setVisible(true);
+	}
+	return true;
 }
 
 bool firstClickInStickerScene = true;

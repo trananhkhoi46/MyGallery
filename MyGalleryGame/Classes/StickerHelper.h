@@ -19,6 +19,9 @@ public:
 	static int getCurrentExistStickerNumber(bool withUniqueElements);
 	static vector<Sticker*> getCurrentExistSticker(bool withUniqueElements);
 	static int getStickerQuantityInMyList(int stickerId);
+	static Sticker* getStickerFromId(int stickerId);
+	static StickerPage* getStickerPageFromId(int stickerPageId);
+	static string getRarityString(STICKER_RARITY rarity);
 };
 
 #endif

@@ -24,6 +24,37 @@ bool StickerHelper::isStickerHasNotSticked(int stickerId) {
 	return true;
 }
 
+Sticker* StickerHelper::getStickerFromId(int stickerId) {
+	for (int i = 0; i < vt_stickers.size(); i++) {
+		if (stickerId == vt_stickers.at(i)->sticker_id) {
+			return vt_stickers.at(i);
+		}
+	}
+	return nullptr;
+}
+
+StickerPage* StickerHelper::getStickerPageFromId(int stickerPageId) {
+	for (int i = 0; i < vt_sticker_pages.size(); i++) {
+		if (stickerPageId == vt_sticker_pages.at(i)->sticker_page_id) {
+			return vt_sticker_pages.at(i);
+		}
+	}
+	return nullptr;
+}
+
+string StickerHelper::getRarityString(STICKER_RARITY rarity)
+{
+	switch (rarity) {
+		case COMMON:
+			return "Common";
+		case UNCOMMON:
+			return "Uncommon";
+		case RARE:
+			return "Rare";
+	}
+	return "";
+}
+
 void StickerHelper::saveToMyStickerList(string stickerIdString) {
 	UserDefault::getInstance()->setStringForKey(CURRENT_STICKER,
 			UserDefault::getInstance()->getStringForKey(CURRENT_STICKER, "")

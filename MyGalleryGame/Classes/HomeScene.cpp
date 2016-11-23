@@ -62,7 +62,6 @@ bool HomeScene::init() {
 	//Handling touch event
 	auto listener = EventListenerTouchOneByOne::create();
 	listener->setSwallowTouches(true);
-
 	listener->onTouchBegan = CC_CALLBACK_2(HomeScene::onTouchBegan, this);
 	_eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
 

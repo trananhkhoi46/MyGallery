@@ -15,6 +15,11 @@ public:
 	void initControlButtons();
 	void addAllStickersToScrollView();
 	void onKeyReleased(EventKeyboard::KeyCode keycode, Event* event);
+	bool onTouchBegan(Touch* touch, Event* event);
+	void openStickerDetailLayer(Sticker* sticker);
+
+	LayerColor* backgroundLayer;
+	BScrollView* scrollview;
 };
 
 
