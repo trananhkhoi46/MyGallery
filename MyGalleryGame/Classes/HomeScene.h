@@ -18,6 +18,10 @@ public:
 	void update(float interval);
 	void timer(float interval);
 	void invalidateMenuBarPosition();
+	void friendButtonCallback(Ref* pSender,
+			ui::Widget::TouchEventType eEventType);
+	void tradeButtonCallback(Ref* pSender,
+			ui::Widget::TouchEventType eEventType);
 	void settingButtonsCallback(Ref* pSender,
 			ui::Widget::TouchEventType eEventType);
 	void iapButtonsCallback(Ref* pSender,

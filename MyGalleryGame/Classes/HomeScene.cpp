@@ -149,7 +149,8 @@ void HomeScene::initOtherViews() {
 					btnFriend->getContentSize().height / 2 + 10));
 	btnFriend->setTouchEnabled(true);
 	btnFriend->setPressedActionEnabled(true);
-	//	btnSetting->addTouchEventListener(CC_CALLBACK_2(HomeScene::playButton, this));
+	btnFriend->addTouchEventListener(
+			CC_CALLBACK_2(HomeScene::friendButtonCallback, this));
 	this->addChild(btnFriend);
 	Label* labelButtonFriend = Label::createWithTTF(configControlButton,
 			"FRIEND", TextHAlignment::CENTER);
@@ -168,7 +169,8 @@ void HomeScene::initOtherViews() {
 					btnTrade->getContentSize().height / 2 + 10));
 	btnTrade->setTouchEnabled(true);
 	btnTrade->setPressedActionEnabled(true);
-	//	btnSetting->addTouchEventListener(CC_CALLBACK_2(HomeScene::playButton, this));
+	btnTrade->addTouchEventListener(
+			CC_CALLBACK_2(HomeScene::tradeButtonCallback, this));
 	this->addChild(btnTrade);
 	Label* labelButtonTrade = Label::createWithTTF(configControlButton, "TRADE",
 			TextHAlignment::CENTER);
@@ -632,16 +634,33 @@ void HomeScene::iapButtonsCallback(Ref* pSender,
 		ui::Widget::TouchEventType eEventType) {
 	if (eEventType == ui::Widget::TouchEventType::ENDED
 			&& !blurLayer->isVisible()) {
-
+		SocialPlugin::showToast("Doesn't support at the moment");
 	}
 }
 void HomeScene::rewardedButtonsCallback(Ref* pSender,
 		ui::Widget::TouchEventType eEventType) {
 	if (eEventType == ui::Widget::TouchEventType::ENDED
 			&& !blurLayer->isVisible()) {
-
+		SocialPlugin::showToast("Doesn't support at the moment");
 	}
 }
+
+void HomeScene::tradeButtonCallback(Ref* pSender,
+		ui::Widget::TouchEventType eEventType) {
+	if (eEventType == ui::Widget::TouchEventType::ENDED
+			&& !blurLayer->isVisible()) {
+		SocialPlugin::showToast("Doesn't support at the moment");
+	}
+}
+
+void HomeScene::friendButtonCallback(Ref* pSender,
+		ui::Widget::TouchEventType eEventType) {
+	if (eEventType == ui::Widget::TouchEventType::ENDED
+			&& !blurLayer->isVisible()) {
+		SocialPlugin::showToast("Doesn't support at the moment");
+	}
+}
+
 void HomeScene::settingButtonsCallback(Ref* pSender,
 		ui::Widget::TouchEventType eEventType) {
 	if (eEventType == ui::Widget::TouchEventType::ENDED) {

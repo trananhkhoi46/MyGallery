@@ -165,7 +165,7 @@ void SettingScene::settingButtonsCallback(Ref* pSender,
 		}
 			break;
 		case kTagLoginLogoutFacebook: {
-
+			SocialPlugin::showToast("Doesn't support at the moment");
 		}
 			break;
 		case kTagMusic: {
