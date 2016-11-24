@@ -45,7 +45,8 @@ LOCAL_C_INCLUDES := $(LOCAL_PATH)/../../Classes
 LOCAL_C_INCLUDES += $(LOCAL_PATH)/../../Classes/NDKHelper
 LOCAL_C_INCLUDES += $(LOCAL_PATH)/../../Classes/jansson
 LOCAL_WHOLE_STATIC_LIBRARIES := PluginFacebook \
-sdkbox
+sdkbox \
+PluginAdMob
 
 # _COCOS_HEADER_ANDROID_BEGIN
 # _COCOS_HEADER_ANDROID_END
@@ -61,6 +62,7 @@ include $(BUILD_SHARED_LIBRARY)
 $(call import-module,.)
 $(call import-module, ./sdkbox)
 $(call import-module, ./pluginfacebook)
+$(call import-module, ./pluginadmob)
 
 # _COCOS_LIB_IMPORT_ANDROID_BEGIN
 # _COCOS_LIB_IMPORT_ANDROID_END

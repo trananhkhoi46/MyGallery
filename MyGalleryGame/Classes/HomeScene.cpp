@@ -13,6 +13,8 @@
 #define kTagUncommonPacket 7
 #define kTagRarePacket 8
 #define kTagNewSticker 9
+#define kAdmobInstitialAds "gameover"
+
 
 TTFConfig configControlButton(s_font, 65 * s_font_ratio);
 TTFConfig configLabelSticker(s_font, 60 * s_font_ratio);
@@ -34,6 +36,14 @@ Scene* HomeScene::scene() {
 // on "init" you need to initialize your instance
 bool HomeScene::init() {
 	bool result = BaseScene::init();
+
+
+	//Show ads
+#ifdef SDKBOX_ENABLED
+	sdkbox::PluginAdMob::cache(kAdmobInstitialAds);
+#endif
+
+
 
 	//////////////////////////////
 	// 1. super init first

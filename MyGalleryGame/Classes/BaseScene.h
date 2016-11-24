@@ -13,13 +13,16 @@
 #include "StickerHelper.h"
 #include "SocialPlugin.h"
 #include "BLabel.h"
+#ifdef SDKBOX_ENABLED
+#include "PluginAdMob/PluginAdMob.h"
+#endif
+
 
 using namespace cocos2d::network;
 using namespace cocos2d::ui;
 using namespace CocosDenshion;
 using namespace std;
 USING_NS_CC;
-
 
 class BaseScene: public cocos2d::LayerColor {
 public:
@@ -28,6 +31,8 @@ public:
 	static cocos2d::Scene* scene();
 
 	CREATE_FUNC(BaseScene)
+	void showAds();
+	void cacheAds();
 
 	bool isSound;
 	bool isAlert;

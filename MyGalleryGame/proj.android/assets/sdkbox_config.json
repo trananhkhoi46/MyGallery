@@ -1,14 +1,30 @@
 {
     "android": {
+        "AdMob": {
+            "test": false, 
+            "ads": {
+                "gameover": {
+                    "type": "interstitial", 
+                    "id": "ca-app-pub-1329374026572143/1092476511"
+                }
+            }
+        }, 
         "Facebook": {
-            "debug": false,
-    "app_id":"177481739254269",
-    "url_scheme_suffix":""
-
-
+            "debug": false, 
+            "url_scheme_suffix": "", 
+            "app_id": "177481739254269"
         }
     }, 
     "ios": {
+        "AdMob": {
+            "test": false, 
+            "ads": {
+                "gameover": {
+                    "type": "interstitial", 
+                    "id": "ca-app-pub-1329374026572143/4185543717"
+                }
+            }
+        }, 
         "Facebook": {
             "debug": true
         }
