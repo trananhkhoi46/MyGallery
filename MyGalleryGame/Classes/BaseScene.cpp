@@ -17,7 +17,7 @@ class IAdmobListener : public sdkbox::AdMobListener {
 public:
 	virtual void adViewDidReceiveAd(const std::string &name) {
 		CCLog("bambi admob adViewDidReceiveAd %s: ", name.c_str());
-		sdkbox::PluginAdMob::show(name);
+		//sdkbox::PluginAdMob::show(name);
 	}
 	virtual void adViewDidFailToReceiveAdWithError(const std::string &name, const std::string &msg) {
 		CCLog("bambi admob adViewDidFailToReceiveAdWithError %s: ", msg.c_str());

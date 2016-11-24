@@ -13,7 +13,6 @@
 #define kTagUncommonPacket 7
 #define kTagRarePacket 8
 #define kTagNewSticker 9
-#define kAdmobInstitialAds "gameover"
 
 
 TTFConfig configControlButton(s_font, 65 * s_font_ratio);
@@ -40,7 +39,7 @@ bool HomeScene::init() {
 
 	//Show ads
 #ifdef SDKBOX_ENABLED
-	sdkbox::PluginAdMob::cache(kAdmobInstitialAds);
+	sdkbox::PluginAdMob::show(kAdmobInstitialAds);
 #endif
 
 

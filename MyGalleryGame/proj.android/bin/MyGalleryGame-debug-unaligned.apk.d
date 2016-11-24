@@ -3,10 +3,13 @@
 /Users/Kskull/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/bin/classes.dex \
 /Users/Kskull/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/cocos2d/cocos/platform/android/java/bin/classes.jar \
 /Users/Kskull/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/cocos2d/cocos/platform/android/java/libs/facebook_lib/bin/classes.jar \
+/Users/Kskull/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/cocos2d/cocos/platform/android/java/libs/gps/bin/classes.jar \
 /Users/Kskull/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/cocos2d/cocos/platform/android/java/libs/facebook_lib/libs/bolts-android-1.1.2.jar \
+/Users/Kskull/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/cocos2d/cocos/platform/android/java/libs/PluginAdMob.jar \
 /Users/Kskull/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/cocos2d/cocos/platform/android/java/libs/PluginFacebook.jar \
-/Users/Kskull/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/cocos2d/cocos/platform/android/java/libs/facebook_lib/libs/android-support-v4.jar \
+/Users/Kskull/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/cocos2d/cocos/platform/android/java/libs/android-support-v4.jar \
 /Users/Kskull/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/cocos2d/cocos/platform/android/java/libs/facebook_lib/libs/facebook-android-4.12.1.jar \
+/Users/Kskull/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/cocos2d/cocos/platform/android/java/libs/gps/libs/google-play-services.jar \
 /Users/Kskull/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/cocos2d/cocos/platform/android/java/libs/com.android.vending.expansion.zipfile.jar \
 /Users/Kskull/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/cocos2d/cocos/platform/android/java/libs/sdkbox.jar \
 /Users/Kskull/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/cocos2d/cocos/platform/android/java/libs/httpclient-4.4.1.1.jar \

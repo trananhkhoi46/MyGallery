@@ -1,6 +1,9 @@
 #ifndef _CONSTANTS_H_
 #define _CONSTANTS_H_
 
+//Admob key (corresponding with .json file in Resources)
+#define kAdmobInstitialAds "gameover"
+
 //Global KEY
 #define SOUND "sound"
 #define MUSIC "music"
