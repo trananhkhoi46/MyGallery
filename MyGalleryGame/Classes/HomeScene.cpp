@@ -14,7 +14,6 @@
 #define kTagRarePacket 8
 #define kTagNewSticker 9
 
-
 TTFConfig configControlButton(s_font, 65 * s_font_ratio);
 TTFConfig configLabelSticker(s_font, 60 * s_font_ratio);
 
@@ -44,10 +43,8 @@ Scene* HomeScene::scene() {
 bool HomeScene::init() {
 	bool result = BaseScene::init();
 
-
 	//Show ads
 	showFullscreenAds();
-
 
 	//////////////////////////////
 	// 1. super init first
@@ -714,9 +711,11 @@ void HomeScene::settingButtonsCallback(Ref* pSender,
 	}
 }
 
-void HomeScene::onVideoAdsPlayed()
-{
-	earn3RandomStickers();
+void HomeScene::onVideoAdsPlayed() {
+	isFreePacketAvailable = true;
+	setVisibilityFreePacket();
+	this->unschedule(schedule_selector(HomeScene::timer));
+
 }
 
 bool HomeScene::onTouchBegan(Touch* touch, Event* event) {

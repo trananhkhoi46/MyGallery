@@ -16,7 +16,7 @@
 
 //Sticker max number
 #define MAX_STICKER 5
-#define TIME_TO_GET_FREE_PACKET_IN_SECOND 60
+#define TIME_TO_GET_FREE_PACKET_IN_SECOND 300
 
 //URL
 #define s_linkToGooglePlayMoreGame "https://play.google.com/store/apps/developer?id=Khoi+Nguyen+Entertainment"
