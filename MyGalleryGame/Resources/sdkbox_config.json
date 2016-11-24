@@ -3,11 +3,23 @@
         "AdMob": {
             "test": false, 
             "ads": {
-                "gameover": {
+                "fullscreen_ads": {
                     "type": "interstitial", 
                     "id": "ca-app-pub-1329374026572143/1092476511"
                 }
             }
+        }, 
+        "Chartboost": {
+            "ads": {
+                "fullscreen_ads": {
+                    "type": "interstitial"
+                }, 
+                "rewarded_ads": {
+                    "type": "rewarded_video"
+                }
+            }, 
+            "id": "4f7b433509b6025804000002", 
+            "signature": "dd2d41b69ac01b80f443f5b6cf06096d457f82bd"
         }, 
         "Facebook": {
             "debug": false, 
@@ -19,11 +31,23 @@
         "AdMob": {
             "test": false, 
             "ads": {
-                "gameover": {
+                "fullscreen_ads": {
                     "type": "interstitial", 
                     "id": "ca-app-pub-1329374026572143/4185543717"
                 }
             }
+        }, 
+        "Chartboost": {
+            "ads": {
+                "fullscreen_ads": {
+                    "type": "interstitial"
+                }, 
+                "rewarded_ads": {
+                    "type": "rewarded_video"
+                }
+            }, 
+            "id": "4f21c409cd1cb2fb7000001b", 
+            "signature": "92e2de2fd7070327bdeb54c15a5295309c6fcd2d"
         }, 
         "Facebook": {
             "debug": true

@@ -22,7 +22,8 @@ LOCAL_LDLIBS := -landroid \
 LOCAL_C_INCLUDES := $(LOCAL_PATH)/../../../Classes
 LOCAL_WHOLE_STATIC_LIBRARIES := PluginFacebook \
 sdkbox \
-PluginAdMob
+PluginAdMob \
+PluginChartboost
 
 # _COCOS_HEADER_ANDROID_BEGIN
 # _COCOS_HEADER_ANDROID_END
@@ -39,6 +40,7 @@ $(call import-module,.)
 $(call import-module, ./sdkbox)
 $(call import-module, ./pluginfacebook)
 $(call import-module, ./pluginadmob)
+$(call import-module, ./pluginchartboost)
 
 # _COCOS_LIB_IMPORT_ANDROID_BEGIN
 # _COCOS_LIB_IMPORT_ANDROID_END

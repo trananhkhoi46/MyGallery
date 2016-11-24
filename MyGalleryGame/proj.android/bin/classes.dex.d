@@ -39,7 +39,7 @@
 /Users/Kskull/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/bin/dexedLibs/classes-178c5a0602a692b444db6a155d202179.jar \
 /Users/Kskull/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/bin/dexedLibs/classes-79b9d10368e4f82a70a8e5e43e241938.jar \
 /Users/Kskull/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/bin/dexedLibs/classes-d80e6124aca1dd8f75efb040b45c8ac0.jar \
-/Users/Kskull/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/bin/dexedLibs/bolts-android-1.1.2-2762c97d57199802f32759fc3836a08b.jar \
+/Users/Kskull/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/bin/dexedLibs/org.apache.http.legacy-03e3a44a1d00bcb4a65879a0f5c8647b.jar \
 /Users/Kskull/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/bin/dexedLibs/PluginAdMob-3ba97fc9346baccdb4fcc9728a6bbb6b.jar \
 /Users/Kskull/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/bin/dexedLibs/PluginFacebook-ccf6f59d70e0adb126ab96e9e9712120.jar \
 /Users/Kskull/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/bin/dexedLibs/android-support-v4-d2e156e2e6a3f0b1a521a06458d58780.jar \
@@ -48,4 +48,7 @@
 /Users/Kskull/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/bin/dexedLibs/com.android.vending.expansion.zipfile-558963c4238b1874efdea58bb7f7a498.jar \
 /Users/Kskull/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/bin/dexedLibs/sdkbox-ff3d0da5f30d6be89f559e0c25bb63ce.jar \
 /Users/Kskull/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/bin/dexedLibs/httpclient-4.4.1.1-8840352c08c7a5cf645364979f845c05.jar \
+/Users/Kskull/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/bin/dexedLibs/PluginChartboost-450cd39b7722f726bec9f7195fd066af.jar \
 /Users/Kskull/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/bin/dexedLibs/android-async-http-1.4.9-efb90e526d7be59d7358b17e0f540412.jar \
+/Users/Kskull/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/bin/dexedLibs/bolts-android-1.1.2-2762c97d57199802f32759fc3836a08b.jar \
+/Users/Kskull/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/bin/dexedLibs/chartboost-afcd730f55f1c1547cd50cd03d332051.jar \

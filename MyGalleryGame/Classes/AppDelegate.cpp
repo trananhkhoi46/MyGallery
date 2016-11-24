@@ -3,6 +3,7 @@
 #ifdef SDKBOX_ENABLED
 #include "PluginFacebook/PluginFacebook.h"
 #include "PluginAdMob/PluginAdMob.h"
+#include "PluginChartboost/PluginChartboost.h"
 #endif
 
 USING_NS_CC;
@@ -27,6 +28,7 @@ bool AppDelegate::applicationDidFinishLaunching() {
 #ifdef SDKBOX_ENABLED
 	sdkbox::PluginFacebook::init();
 	sdkbox::PluginAdMob::init();
+	sdkbox::PluginChartboost::init();
 #endif
 	// initialize director
 	auto director = Director::getInstance();
@@ -54,12 +56,12 @@ bool AppDelegate::applicationDidFinishLaunching() {
 	// run
 	director->runWithScene(scene);
 
-    FileUtils *fileUtils = FileUtils::getInstance();
-    std::vector<std::string> searchPaths = fileUtils->getSearchPaths();
-    searchPaths.insert(searchPaths.begin(), "res");
-    fileUtils->setSearchPaths(searchPaths);
+	FileUtils *fileUtils = FileUtils::getInstance();
+	std::vector < std::string > searchPaths = fileUtils->getSearchPaths();
+	searchPaths.insert(searchPaths.begin(), "res");
+	fileUtils->setSearchPaths(searchPaths);
 
-   return true;
+	return true;
 }
 
 // This function will be called when the app is inactive. Note, when receiving a phone call it is invoked.

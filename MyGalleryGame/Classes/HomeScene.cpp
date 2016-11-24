@@ -19,12 +19,20 @@ TTFConfig configControlButton(s_font, 65 * s_font_ratio);
 TTFConfig configLabelSticker(s_font, 60 * s_font_ratio);
 
 //---------------------------------------------------------------------Constructor methods
+HomeScene* HomeScene::instance = nullptr;
+HomeScene* HomeScene::getInstance() {
+	if (HomeScene::instance == nullptr) {
+		HomeScene::instance = HomeScene::create();
+	}
+	return HomeScene::instance;
+}
+
 Scene* HomeScene::scene() {
 	// 'scene' is an autorelease object
 	Scene *scene = Scene::create();
 
 	// 'layer' is an autorelease object
-	HomeScene *layer = HomeScene::create();
+	HomeScene *layer = HomeScene::getInstance();
 	// add layer as a child to scene
 	scene->addChild(layer);
 
@@ -38,10 +46,7 @@ bool HomeScene::init() {
 
 
 	//Show ads
-#ifdef SDKBOX_ENABLED
-	sdkbox::PluginAdMob::show(kAdmobInstitialAds);
-#endif
-
+	showFullscreenAds();
 
 
 	//////////////////////////////
@@ -650,7 +655,7 @@ void HomeScene::rewardedButtonsCallback(Ref* pSender,
 		ui::Widget::TouchEventType eEventType) {
 	if (eEventType == ui::Widget::TouchEventType::ENDED
 			&& !blurLayer->isVisible()) {
-		SocialPlugin::showToast("Doesn't support at the moment");
+		showRewardedAds();
 	}
 }
 
@@ -707,6 +712,11 @@ void HomeScene::settingButtonsCallback(Ref* pSender,
 		}
 
 	}
+}
+
+void HomeScene::onVideoAdsPlayed()
+{
+	earn3RandomStickers();
 }
 
 bool HomeScene::onTouchBegan(Touch* touch, Event* event) {

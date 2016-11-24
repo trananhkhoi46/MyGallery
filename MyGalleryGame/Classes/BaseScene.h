@@ -15,8 +15,8 @@
 #include "BLabel.h"
 #ifdef SDKBOX_ENABLED
 #include "PluginAdMob/PluginAdMob.h"
+#include "PluginChartboost/PluginChartboost.h"
 #endif
-
 
 using namespace cocos2d::network;
 using namespace cocos2d::ui;
@@ -31,8 +31,9 @@ public:
 	static cocos2d::Scene* scene();
 
 	CREATE_FUNC(BaseScene)
-	void showAds();
-	void cacheAds();
+	void showFullscreenAds();
+	void showRewardedAds();
+	void onVideoAdsPlayed();
 
 	bool isSound;
 	bool isAlert;

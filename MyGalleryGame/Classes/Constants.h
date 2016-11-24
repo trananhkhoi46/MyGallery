@@ -2,7 +2,9 @@
 #define _CONSTANTS_H_
 
 //Admob key (corresponding with .json file in Resources)
-#define kAdmobInstitialAds "gameover"
+#define kAdmobInstitialAds "fullscreen_ads"
+#define kChartboostInstitialAds "fullscreen_ads"
+#define kChartboostRewardedAds "rewarded_ads"
 
 //Global KEY
 #define SOUND "sound"

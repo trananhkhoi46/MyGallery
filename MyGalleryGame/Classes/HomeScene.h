@@ -5,12 +5,15 @@
 
 
 
-class HomeScene: public BaseScene {
+class HomeScene: public BaseScene{
+private:
+	static HomeScene* instance;
 public:
+
 	// Here's a difference. Method 'init' in cocos2d-x returns bool, instead of returning 'id' in cocos2d-iphone
 	virtual bool init();
 	static cocos2d::Scene* scene();
-
+	static HomeScene* getInstance();
 	CREATE_FUNC(HomeScene)
 
 	void onKeyReleased(EventKeyboard::KeyCode keycode, Event* event);
@@ -40,6 +43,7 @@ public:
 	void earn3Stickers(STICKER_RARITY rarity, bool isRandom);
 	void closeBlurLayer();
 	void invalidateProgressBar();
+	void onVideoAdsPlayed();
 
 	int currentStickers;
 	int maxStickers;
