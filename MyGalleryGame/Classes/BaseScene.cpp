@@ -116,37 +116,28 @@ public:
 };
 #endif
 void BaseScene::showFullscreenAds() {
-	CCLog("bambi showFullscreenAds in 3 seconds");
-	auto funcShowAds = CallFunc::create([=]() {
+	CCLog("bambi showFullscreenAds");
 #ifdef SDKBOX_ENABLED
-			int random = CppUtils::randomBetween(1,3);
-			if(random == 1)
-			{
-				sdkbox::PluginChartboost::show(kChartboostInstitialAds);
-			} else if(random == 2) {
-				sdkbox::PluginAdMob::show(kAdmobInstitialAds);
-			} else {
-				sdkbox::PluginVungle::show(kVungleInstitialAds);
-			}
+	int random = CppUtils::randomBetween(1,3);
+	if(random == 1)
+	{
+		sdkbox::PluginChartboost::show(kChartboostInstitialAds);
+	} else if(random == 2) {
+		sdkbox::PluginAdMob::show(kAdmobInstitialAds);
+	} else {
+		sdkbox::PluginVungle::show(kVungleInstitialAds);
+	}
 #endif
-		});
-	this->runAction(
-			Sequence::create(DelayTime::create(3), funcShowAds, nullptr));
 }
 void BaseScene::showRewardedAds() {
-	CCLog("bambi showRewardedAds in 3 seconds");
-	auto funcShowAds = CallFunc::create([=]() {
+	CCLog("bambi showRewardedAds");
 #ifdef SDKBOX_ENABLED
-			if(CppUtils::randomBetween(1,2) == 1) {
-				sdkbox::PluginChartboost::show(kChartboostRewardedAds);
-			} else {
-				sdkbox::PluginVungle::show(kVungleRewardedAds);
-			}
+	if(CppUtils::randomBetween(1,2) == 1) {
+		sdkbox::PluginChartboost::show(kChartboostRewardedAds);
+	} else {
+		sdkbox::PluginVungle::show(kVungleRewardedAds);
+	}
 #endif
-		});
-	this->runAction(
-			Sequence::create(DelayTime::create(3), funcShowAds, nullptr));
-
 }
 // on "init" you need to initialize your instance
 bool BaseScene::init() {

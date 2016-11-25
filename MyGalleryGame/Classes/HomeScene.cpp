@@ -44,7 +44,11 @@ bool HomeScene::init() {
 	bool result = BaseScene::init();
 
 	//Show ads
-	showFullscreenAds();
+	auto funcShowAds = CallFunc::create([=]() {
+		showFullscreenAds();
+	});
+	this->runAction(
+			Sequence::create(DelayTime::create(3), funcShowAds, nullptr));
 
 	//////////////////////////////
 	// 1. super init first
