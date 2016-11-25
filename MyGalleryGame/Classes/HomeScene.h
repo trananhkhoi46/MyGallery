@@ -23,6 +23,8 @@ public:
 	void invalidateMenuBarPosition();
 	void friendButtonCallback(Ref* pSender,
 			ui::Widget::TouchEventType eEventType);
+	void facebookConnectButtonCallback(Ref* pSender,
+				ui::Widget::TouchEventType eEventType);
 	void tradeButtonCallback(Ref* pSender,
 			ui::Widget::TouchEventType eEventType);
 	void settingButtonsCallback(Ref* pSender,
@@ -44,6 +46,7 @@ public:
 	void closeBlurLayer();
 	void invalidateProgressBar();
 	void onVideoAdsPlayed();
+	void setVisibilityViewsOfTradingFeature();
 
 	int currentStickers;
 	int maxStickers;
@@ -73,6 +76,9 @@ public:
 	Button* btnRewardedAds;
 	Button* btnIAP;
 	Button* btnContinue;
+	Button* btnFacebookConnect;
+	Button* btnFriend;
+	Button* btnTrade;
 	LoadingBar* progressBar;
 };
 

@@ -156,9 +156,41 @@ void HomeScene::initPacketButtons() {
 	this->addChild(btnFreePacketBottom);
 }
 
+void HomeScene::setVisibilityViewsOfTradingFeature() {
+	bool isFacebookLoggedIn = FacebookHandler::getInstance()->isFacebookLoggedIn();
+	btnFacebookConnect->setVisible(!isFacebookLoggedIn);
+	btnTrade->setVisible(isFacebookLoggedIn);
+	btnFriend->setVisible(isFacebookLoggedIn);
+}
+
 void HomeScene::initOtherViews() {
+	//Add btnFacebookConnect
+	btnFacebookConnect = Button::create(s_homescene_btn_facebook_connect);
+	btnFacebookConnect->setPosition(
+			Vec2(
+					winSize.width
+							- btnFacebookConnect->getContentSize().width / 2
+							- 5,
+					btnFacebookConnect->getContentSize().height / 2 + 10));
+	btnFacebookConnect->setTouchEnabled(true);
+	btnFacebookConnect->setPressedActionEnabled(true);
+	btnFacebookConnect->addTouchEventListener(
+			CC_CALLBACK_2(HomeScene::facebookConnectButtonCallback, this));
+	this->addChild(btnFacebookConnect);
+	Sprite* spriteFacebookConnect = Sprite::create(
+			s_homescene_sprite_facebook_connect);
+	spriteFacebookConnect->setAnchorPoint(Vec2::ANCHOR_TOP_RIGHT);
+	spriteFacebookConnect->setPosition(
+			btnFacebookConnect->getContentSize().width,
+			btnFacebookConnect->getContentSize().height);
+	btnFacebookConnect->addChild(spriteFacebookConnect);
+	spriteFacebookConnect->runAction(
+			RepeatForever::create(
+					Sequence::create(ScaleTo::create(0.5, 0.9),
+							ScaleTo::create(0.5, 1), nullptr)));
+
 	//Add btn friend
-	Button* btnFriend = Button::create(s_homescene_btn_friend);
+	btnFriend = Button::create(s_homescene_btn_friend);
 	btnFriend->setPosition(
 			Vec2(winSize.width - btnFriend->getContentSize().width / 2 - 10,
 					btnFriend->getContentSize().height / 2 + 10));
@@ -176,7 +208,7 @@ void HomeScene::initOtherViews() {
 	this->addChild(labelButtonFriend);
 
 	//Add btn trade
-	Button* btnTrade = Button::create(s_homescene_btn_trade);
+	btnTrade = Button::create(s_homescene_btn_trade);
 	btnTrade->setPosition(
 			Vec2(
 					winSize.width - btnTrade->getContentSize().width / 2
@@ -194,6 +226,9 @@ void HomeScene::initOtherViews() {
 	labelButtonTrade->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
 	labelButtonTrade->setColor(Color3B::BLACK);
 	this->addChild(labelButtonTrade);
+
+	//Set show btnFacebookConnect if user hasn't logged in Facebook, vice versa
+	setVisibilityViewsOfTradingFeature();
 
 	//Add btn rewarded ads
 	btnRewardedAds = Button::create(s_homescene_btn_rewarded_ads);
@@ -669,6 +704,14 @@ void HomeScene::tradeButtonCallback(Ref* pSender,
 }
 
 void HomeScene::friendButtonCallback(Ref* pSender,
+		ui::Widget::TouchEventType eEventType) {
+	if (eEventType == ui::Widget::TouchEventType::ENDED
+			&& !blurLayer->isVisible()) {
+		SocialPlugin::showToast("Doesn't support at the moment");
+	}
+}
+
+void HomeScene::facebookConnectButtonCallback(Ref* pSender,
 		ui::Widget::TouchEventType eEventType) {
 	if (eEventType == ui::Widget::TouchEventType::ENDED
 			&& !blurLayer->isVisible()) {

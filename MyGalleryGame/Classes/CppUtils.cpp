@@ -36,6 +36,20 @@ double CppUtils::stringToDouble(const string& inValue) {
 	return temp;
 }
 
+std::vector<std::string> CppUtils::splitStringByEveryCharacter(const std::string &st){
+	int i = st.length() / 2;
+	while (st.substr(i, 1) != " " && i < st.length())
+		i++;
+	if (i + 1 < st.length()) {
+		std::string result1 = st.substr(0, i);
+		std::string result2 = st.substr(i + 1);
+		std::vector<std::string> result = {result1, result2};
+
+		return result;
+	}
+	std::vector<std::string> result = {st, ""};
+	return result;
+}
 std::vector<std::string> CppUtils::splitStringByDelim(const std::string &s,
 		char delim) {
 	std::vector < std::string > elems;

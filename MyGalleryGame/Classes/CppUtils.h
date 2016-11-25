@@ -21,6 +21,7 @@ public:
 	static bool isFloatFloatEqual(float x1, float x2, float epsilon);
 	static std::vector<std::string> splitStringByDelim(const std::string& st,
 			char delim);
+	static std::vector<std::string> splitStringByEveryCharacter(const std::string &s);
 	static int randomBetween(int x1, int x2);
 };
 

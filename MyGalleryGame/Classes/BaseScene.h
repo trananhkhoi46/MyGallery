@@ -13,6 +13,9 @@
 #include "StickerHelper.h"
 #include "SocialPlugin.h"
 #include "BLabel.h"
+#include "Trading/FacebookHandler/FacebookHandler.h"
+#include "Trading/FirebaseHandler/FirebaseHandler.h"
+#include "Trading/Model/BUserInfor.h"
 #ifdef SDKBOX_ENABLED
 #include "PluginAdMob/PluginAdMob.h"
 #include "PluginChartboost/PluginChartboost.h"

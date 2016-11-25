@@ -404,10 +404,56 @@ obj/local/armeabi/objs-debug/MyGame_shared/__/__/Classes/StickerScene.o: \
  /Users/Kskull/Documents/Cocos2dx/ndk/sources/cxx-stl/gnu-libstdc++/4.9/include/iostream \
  /Users/Kskull/Documents/Cocos2dx/ndk/sources/cxx-stl/gnu-libstdc++/4.9/include/iterator \
  jni/../../Classes/StickerHelper.h jni/../../Classes/SocialPlugin.h \
- jni/../../Classes/BLabel.h jni/PluginAdMob/PluginAdMob.h \
- jni/PluginChartboost/PluginChartboost.h jni/PluginVungle/PluginVungle.h \
- jni/../../Classes/BScrollView.h jni/../../Classes/HomeScene.h \
- jni/../../Classes/AlbumScene.h
+ jni/../../Classes/BLabel.h \
+ jni/../../Classes/Trading/FacebookHandler/FacebookHandler.h \
+ jni/../../Classes/Trading/Model/BUserInfor.h \
+ /Users/Kskull/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/../cocos2d/external/flatbuffers/../json/writer.h \
+ /Users/Kskull/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/../cocos2d/external/flatbuffers/../json/rapidjson.h \
+ /Users/Kskull/Documents/Cocos2dx/ndk/sources/cxx-stl/gnu-libstdc++/4.9/include/cstring \
+ /Users/Kskull/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/../cocos2d/external/flatbuffers/../json/allocators.h \
+ /Users/Kskull/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/../cocos2d/external/flatbuffers/../json/encodings.h \
+ /Users/Kskull/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/../cocos2d/external/flatbuffers/../json/internal/stack.h \
+ /Users/Kskull/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/../cocos2d/external/flatbuffers/../json/internal/../rapidjson.h \
+ /Users/Kskull/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/../cocos2d/external/flatbuffers/../json/internal/strfunc.h \
+ /Users/Kskull/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/../cocos2d/external/flatbuffers/../json/internal/dtoa.h \
+ /Users/Kskull/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/../cocos2d/external/flatbuffers/../json/internal/itoa.h \
+ /Users/Kskull/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/../cocos2d/external/flatbuffers/../json/internal/diyfp.h \
+ /Users/Kskull/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/../cocos2d/external/flatbuffers/../json/internal/ieee754.h \
+ /Users/Kskull/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/../cocos2d/external/flatbuffers/../json/internal/itoa.h \
+ /Users/Kskull/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/../cocos2d/external/flatbuffers/../json/stringbuffer.h \
+ /Users/Kskull/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/../cocos2d/external/flatbuffers/../json/stringbuffer.h \
+ /Users/Kskull/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/../cocos2d/external/flatbuffers/../json/rapidjson.h \
+ /Users/Kskull/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/../cocos2d/external/flatbuffers/../json/reader.h \
+ /Users/Kskull/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/../cocos2d/external/flatbuffers/../json/internal/meta.h \
+ /Users/Kskull/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/../cocos2d/external/flatbuffers/../json/internal/strtod.h \
+ /Users/Kskull/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/../cocos2d/external/flatbuffers/../json/internal/biginteger.h \
+ /Users/Kskull/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/../cocos2d/external/flatbuffers/../json/internal/pow10.h \
+ /Users/Kskull/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/../cocos2d/external/flatbuffers/../json/error/error.h \
+ /Users/Kskull/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/../cocos2d/external/flatbuffers/../json/error/../rapidjson.h \
+ /Users/Kskull/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/../cocos2d/external/flatbuffers/../json/prettywriter.h \
+ /Users/Kskull/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/../cocos2d/external/flatbuffers/../json/writer.h \
+ /Users/Kskull/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/../cocos2d/external/flatbuffers/../json/filestream.h \
+ /Users/Kskull/Documents/Cocos2dx/ndk/sources/cxx-stl/gnu-libstdc++/4.9/include/cstdio \
+ /Users/Kskull/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/../cocos2d/external/flatbuffers/../json/document.h \
+ /Users/Kskull/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/../cocos2d/external/flatbuffers/../json/reader.h \
+ jni/../../Classes/Trading/BLeaderBoardContanst.h \
+ jni/PluginFacebook/PluginFacebook.h \
+ /Users/Kskull/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/../cocos2d/external/flatbuffers/../curl/include/ios/curl/curl.h \
+ /Users/Kskull/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/../cocos2d/external/flatbuffers/../curl/include/ios/curl/curlver.h \
+ /Users/Kskull/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/../cocos2d/external/flatbuffers/../curl/include/ios/curl/curlbuild.h \
+ /Users/Kskull/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/../cocos2d/external/flatbuffers/../curl/include/ios/curl/curlbuild-32.h \
+ /Users/Kskull/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/../cocos2d/external/flatbuffers/../curl/include/ios/curl/curlrules.h \
+ /Users/Kskull/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/../cocos2d/external/flatbuffers/../curl/include/ios/curl/easy.h \
+ /Users/Kskull/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/../cocos2d/external/flatbuffers/../curl/include/ios/curl/multi.h \
+ /Users/Kskull/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/../cocos2d/external/flatbuffers/../curl/include/ios/curl/curl.h \
+ /Users/Kskull/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/../cocos2d/external/flatbuffers/../curl/include/android/curl/curl.h \
+ jni/../../Classes/Trading/FirebaseHandler/FirebaseHandler.h \
+ /Users/Kskull/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/../cocos2d/extensions/../cocos/network/HttpResponse.h \
+ jni/../../Classes/Trading/FacebookHandler/FacebookHandler.h \
+ jni/../../Classes/Trading/Model/BUserInfor.h \
+ jni/PluginAdMob/PluginAdMob.h jni/PluginChartboost/PluginChartboost.h \
+ jni/PluginVungle/PluginVungle.h jni/../../Classes/BScrollView.h \
+ jni/../../Classes/HomeScene.h jni/../../Classes/AlbumScene.h
 
 jni/../../Classes/StickerScene.h:
 
@@ -1226,6 +1272,98 @@ jni/../../Classes/StickerHelper.h:
 jni/../../Classes/SocialPlugin.h:
 
 jni/../../Classes/BLabel.h:
+
+jni/../../Classes/Trading/FacebookHandler/FacebookHandler.h:
+
+jni/../../Classes/Trading/Model/BUserInfor.h:
+
+/Users/Kskull/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/../cocos2d/external/flatbuffers/../json/writer.h:
+
+/Users/Kskull/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/../cocos2d/external/flatbuffers/../json/rapidjson.h:
+
+/Users/Kskull/Documents/Cocos2dx/ndk/sources/cxx-stl/gnu-libstdc++/4.9/include/cstring:
+
+/Users/Kskull/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/../cocos2d/external/flatbuffers/../json/allocators.h:
+
+/Users/Kskull/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/../cocos2d/external/flatbuffers/../json/encodings.h:
+
+/Users/Kskull/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/../cocos2d/external/flatbuffers/../json/internal/stack.h:
+
+/Users/Kskull/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/../cocos2d/external/flatbuffers/../json/internal/../rapidjson.h:
+
+/Users/Kskull/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/../cocos2d/external/flatbuffers/../json/internal/strfunc.h:
+
+/Users/Kskull/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/../cocos2d/external/flatbuffers/../json/internal/dtoa.h:
+
+/Users/Kskull/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/../cocos2d/external/flatbuffers/../json/internal/itoa.h:
+
+/Users/Kskull/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/../cocos2d/external/flatbuffers/../json/internal/diyfp.h:
+
+/Users/Kskull/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/../cocos2d/external/flatbuffers/../json/internal/ieee754.h:
+
+/Users/Kskull/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/../cocos2d/external/flatbuffers/../json/internal/itoa.h:
+
+/Users/Kskull/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/../cocos2d/external/flatbuffers/../json/stringbuffer.h:
+
+/Users/Kskull/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/../cocos2d/external/flatbuffers/../json/stringbuffer.h:
+
+/Users/Kskull/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/../cocos2d/external/flatbuffers/../json/rapidjson.h:
+
+/Users/Kskull/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/../cocos2d/external/flatbuffers/../json/reader.h:
+
+/Users/Kskull/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/../cocos2d/external/flatbuffers/../json/internal/meta.h:
+
+/Users/Kskull/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/../cocos2d/external/flatbuffers/../json/internal/strtod.h:
+
+/Users/Kskull/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/../cocos2d/external/flatbuffers/../json/internal/biginteger.h:
+
+/Users/Kskull/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/../cocos2d/external/flatbuffers/../json/internal/pow10.h:
+
+/Users/Kskull/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/../cocos2d/external/flatbuffers/../json/error/error.h:
+
+/Users/Kskull/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/../cocos2d/external/flatbuffers/../json/error/../rapidjson.h:
+
+/Users/Kskull/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/../cocos2d/external/flatbuffers/../json/prettywriter.h:
+
+/Users/Kskull/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/../cocos2d/external/flatbuffers/../json/writer.h:
+
+/Users/Kskull/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/../cocos2d/external/flatbuffers/../json/filestream.h:
+
+/Users/Kskull/Documents/Cocos2dx/ndk/sources/cxx-stl/gnu-libstdc++/4.9/include/cstdio:
+
+/Users/Kskull/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/../cocos2d/external/flatbuffers/../json/document.h:
+
+/Users/Kskull/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/../cocos2d/external/flatbuffers/../json/reader.h:
+
+jni/../../Classes/Trading/BLeaderBoardContanst.h:
+
+jni/PluginFacebook/PluginFacebook.h:
+
+/Users/Kskull/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/../cocos2d/external/flatbuffers/../curl/include/ios/curl/curl.h:
+
+/Users/Kskull/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/../cocos2d/external/flatbuffers/../curl/include/ios/curl/curlver.h:
+
+/Users/Kskull/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/../cocos2d/external/flatbuffers/../curl/include/ios/curl/curlbuild.h:
+
+/Users/Kskull/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/../cocos2d/external/flatbuffers/../curl/include/ios/curl/curlbuild-32.h:
+
+/Users/Kskull/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/../cocos2d/external/flatbuffers/../curl/include/ios/curl/curlrules.h:
+
+/Users/Kskull/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/../cocos2d/external/flatbuffers/../curl/include/ios/curl/easy.h:
+
+/Users/Kskull/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/../cocos2d/external/flatbuffers/../curl/include/ios/curl/multi.h:
+
+/Users/Kskull/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/../cocos2d/external/flatbuffers/../curl/include/ios/curl/curl.h:
+
+/Users/Kskull/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/../cocos2d/external/flatbuffers/../curl/include/android/curl/curl.h:
+
+jni/../../Classes/Trading/FirebaseHandler/FirebaseHandler.h:
+
+/Users/Kskull/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/../cocos2d/extensions/../cocos/network/HttpResponse.h:
+
+jni/../../Classes/Trading/FacebookHandler/FacebookHandler.h:
+
+jni/../../Classes/Trading/Model/BUserInfor.h:
 
 jni/PluginAdMob/PluginAdMob.h:
 

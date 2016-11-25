@@ -1,0 +1,315 @@
+#include "FirebaseHandler.h"
+
+#include "BLeaderBoardContanst.h"
+#include <curl/include/ios/curl/curl.h>
+#include <json/rapidjson.h>
+#include <json/reader.h>
+#include <json/writer.h>
+#include <json/prettywriter.h>
+#include <json/filestream.h>
+#include <json/document.h>
+#include <json/stringbuffer.h>
+
+FirebaseHandler::FirebaseHandler() {
+	FacebookHandler::getInstance()->setFacebookDelegate(this);
+	scoreToSubmit = 0;
+}
+
+FirebaseHandler::~FirebaseHandler() {
+
+}
+
+FirebaseHandler* FirebaseHandler::getInstance() {
+	static FirebaseHandler* instance;
+	if (!instance) {
+		instance = new FirebaseHandler();
+
+	}
+	return instance;
+}
+
+void FirebaseHandler::checkFacebookIdExistOnFirebase() {
+	//query string
+	char query[200];
+	sprintf(query, "where={\"%s\":\"%s\"}", KEY_WORLD_ID,
+			FacebookHandler::getInstance()->getUserFacebookID().c_str());
+
+	//format url
+	char url[55500];
+	CURL *curl = curl_easy_init();
+	char * encodeUrl = curl_easy_escape(curl, query, 0);
+	sprintf(url, "%s?%s", classURL.c_str(), encodeUrl);
+
+	//Header for httprequest
+	std::vector < std::string > header;
+	header.push_back(appID);
+	header.push_back(restAPI);
+	header.push_back("Content-Type: application/json");
+
+	//Request http
+	HttpRequest* request = new HttpRequest();
+	request->setUrl(url);
+	request->setHeaders(header);
+	request->setRequestType(HttpRequest::Type::GET);
+	request->setResponseCallback(
+			CC_CALLBACK_2(FirebaseHandler::checkFacebookIdExistOnFirebaseCallBack,this));
+	HttpClient::getInstance()->send(request);
+	request->release();
+
+}
+void FirebaseHandler::checkFacebookIdExistOnFirebaseCallBack(HttpClient* client,
+		HttpResponse* response) {
+	if (response->isSucceed()) {
+		//Clear data (sometimes stranged characters be attached after the result)
+		std::vector<char> *buffer = response->getResponseData();
+		const char *data = reinterpret_cast<char *>(&(buffer->front()));
+		std::string clearData(data);
+		size_t pos = clearData.rfind("}");
+		clearData = clearData.substr(0, pos + 1);
+		if (clearData == "")
+			return;
+
+		//Process data
+		rapidjson::Document d;
+		d.Parse<0>(clearData.c_str());
+		const rapidjson::Value& mangJson = d["results"];
+		if (clearData.length() > 15) //User's already been added on Firebase
+		{
+			char* objectId = (char*) mangJson[0][KEY_WORLD_OJECTID].GetString();
+			//Save to UserDefault (your will need objectId when posting score on Firebase)
+			UserDefault::getInstance()->setStringForKey(KEY_WORLD_OJECTID,
+					objectId);
+			if (_firebaseDelegate != nullptr)
+				_firebaseDelegate->responseAftercheckFacebookIdExistOnFirebase(); //Respone to ranking scene
+		} else
+			FacebookHandler::getInstance()->getMyProfile();
+			//After getMyProfile, responseWhenGetMyInfoSuccessfully function will be called.
+
+	}
+}
+void FirebaseHandler::responseWhenGetMyInfoSuccessfully(BUserInfor* user) {
+	saveFacebookIdOnFirebase(user);
+}
+void FirebaseHandler::saveFacebookIdOnFirebase(BUserInfor* user) {
+	char url[55500];
+	sprintf(url, "%s", classURL.c_str());
+
+	//Header for httprequest
+	std::vector < std::string > header;
+	header.push_back(appID);
+	header.push_back(restAPI);
+	header.push_back("Content-Type: application/json");
+
+	//Request http
+	HttpRequest* request = new HttpRequest();
+	request->setUrl(url);
+	request->setHeaders(header);
+	request->setRequestData(user->serialize().c_str(),
+			user->serialize().size());
+	request->setRequestType(HttpRequest::Type::POST);
+	request->setResponseCallback(
+			CC_CALLBACK_2(FirebaseHandler::callBacksaveFacebookIdOnFirebase,this));
+	HttpClient::getInstance()->send(request);
+	request->release();
+}
+
+void FirebaseHandler::callBacksaveFacebookIdOnFirebase(HttpClient* client,
+		HttpResponse* response) {
+	if (response->isSucceed()) {
+		//Clear data (sometimes stranged characters be attached after the result)
+		std::vector<char> *buffer = response->getResponseData();
+		const char *data = reinterpret_cast<char *>(&(buffer->front()));
+		std::string clearData(data);
+		size_t pos = clearData.rfind("}");
+		clearData = clearData.substr(0, pos + 1);
+		if (clearData == "")
+			return;
+
+		//Process data
+		rapidjson::Document document;
+		document.Parse<0>(clearData.c_str());
+		const rapidjson::Value& jsonArray = document;
+		char* objectId = (char*) jsonArray[KEY_WORLD_OJECTID].GetString();
+		//Save to UserDefault (your will need objectId when posting score on Firebase)
+		UserDefault::getInstance()->setStringForKey(KEY_WORLD_OJECTID,
+				objectId);
+		if (_firebaseDelegate != nullptr)
+			_firebaseDelegate->responseAftercheckFacebookIdExistOnFirebase(); //Respone to ranking scene
+
+	}
+}
+
+void FirebaseHandler::fetchBUserInforAt(char* querry) {
+	char url[55500];
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+	sprintf(url, "%s?%s&order=-Score&limit=5",classURL.c_str(), querry);
+#endif
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+	//format url
+	CURL *curl = curl_easy_init();
+	char * encodeQuerry = curl_easy_escape(curl,querry, 0);
+	sprintf(url, "%s?%s&order=-Score&limit=5",classURL.c_str(), encodeQuerry);
+#endif
+
+	//Header for httprequest
+	std::vector < std::string > header;
+	header.push_back(appID);
+	header.push_back(restAPI);
+	header.push_back("Content-Type: application/json");
+
+	//Request http
+	HttpRequest* request = new HttpRequest();
+	request->setUrl(url);
+	request->setHeaders(header);
+	request->setRequestType(HttpRequest::Type::GET);
+	request->setResponseCallback(
+			CC_CALLBACK_2(FirebaseHandler::callBackFetchBUserInforAt,this));
+	HttpClient::getInstance()->send(request);
+	request->release();
+}
+
+void FirebaseHandler::callBackFetchBUserInforAt(HttpClient* client,
+		HttpResponse* response) {
+	std::string error = response->getErrorBuffer();
+	if (response->isSucceed() && error == "") {
+		//Clear old data
+		_friendList.clear();
+		_worldList.clear();
+
+		//Clear data that being got from Firebase (sometimes stranged characters be attached after the result)
+		std::vector<char> *buffer = response->getResponseData();
+		const char *data = reinterpret_cast<char *>(&(buffer->front()));
+		std::string clearData(data);
+		size_t pos = clearData.rfind("}");
+		clearData = clearData.substr(0, pos + 1);
+		if (clearData == "")
+			return;
+
+		//Process data
+		rapidjson::Document document;
+		document.Parse<0>(clearData.c_str());
+		if (!document["results"].IsArray())
+			return;
+		const rapidjson::Value& jsonArray = document["results"];
+		for (int k = 0; k < jsonArray.Size(); k++) {
+			BUserInfor* user = BUserInfor::parseUserFrom(jsonArray[k]);
+			switch (tag) {
+			case TAG_FRIEND:
+				_friendList.push_back(user);
+				break;
+			case TAG_WORLD:
+				_worldList.push_back(user);
+				break;
+			}
+		}
+	}
+	// Response to RankingScene
+	if (!_firebaseDelegate)
+		return;
+	switch (tag) {
+	case TAG_FRIEND:
+		_firebaseDelegate->responseForQuerryTopFriend(_friendList);
+		break;
+	case TAG_WORLD:
+		_firebaseDelegate->responseForQuerryTopWorld(_worldList);
+		break;
+	}
+}
+
+void FirebaseHandler::fetchTopFriend() {
+	FacebookHandler::getInstance()->getAllFriendsID();
+	//After get friends successfully responseWhenGetFriendsSuccessfully will be called.
+}
+void FirebaseHandler::responseWhenGetFriendsSuccessfully(string friendList) {
+	friendList += "\"" + FacebookHandler::getInstance()->getUserFacebookID()
+			+ "\""; //Attach my FacebookID to friendList
+
+	char querry[55500];
+	tag = TAG_FRIEND;
+	sprintf(querry, "where={\"FB_ID\":{\"$in\":[%s]}}", friendList.c_str());
+	fetchBUserInforAt(querry);
+}
+void FirebaseHandler::fetchTopWorld() {
+	tag = TAG_WORLD;
+	fetchBUserInforAt("");
+}
+void FirebaseHandler::fetchScoreFromServer() {
+	//query string
+	char query[200];
+	sprintf(query, "where={\"%s\":\"%s\"}", KEY_WORLD_ID,
+			FacebookHandler::getInstance()->getUserFacebookID().c_str());
+
+	//format url
+	char url[55500];
+	CURL *curl = curl_easy_init();
+	char * encodeUrl = curl_easy_escape(curl, query, 0);
+	sprintf(url, "%s?%s", classURL.c_str(), encodeUrl);
+
+	//Header for httprequest
+	std::vector < std::string > header;
+	header.push_back(appID);
+	header.push_back(restAPI);
+	header.push_back("Content-Type: application/json");
+
+	//Request http
+	HttpRequest* request = new HttpRequest();
+	request->setUrl(url);
+	request->setHeaders(header);
+	request->setRequestType(HttpRequest::Type::GET);
+	request->setResponseCallback([this](HttpClient* client,
+			HttpResponse* response) {
+		if (response->isSucceed()) {
+			//Clear data (sometimes stranged characters be attached after the result)
+			std::vector<char> *buffer = response->getResponseData();
+			const char *data = reinterpret_cast<char *>(&(buffer->front()));
+			std::string clearData(data);
+			size_t pos = clearData.rfind("}");
+			clearData = clearData.substr(0, pos + 1);
+			if (clearData == "")
+			return;
+
+			//Process data
+			rapidjson::Document d;
+			d.Parse<0>(clearData.c_str());
+			const rapidjson::Value& mangJson = d["results"];
+			if (clearData.length() > 15)//User's already been added on Firebase
+			{
+				int score = scoreToSubmit + mangJson[0][KEY_WORLD_SCORE].GetInt();
+				putScoreToSever(score);
+			}
+
+		}
+	});
+	HttpClient::getInstance()->send(request);
+	request->release();
+}
+void FirebaseHandler::putScoreToSever(int score) {
+	//Set url
+	char url[55500];
+	sprintf(url, "%s/%s", classURL.c_str(),
+			UserDefault::getInstance()->getStringForKey(KEY_WORLD_OJECTID, "").c_str());
+
+	//Set score data
+	char data[100];
+	sprintf(data, "{\"%s\":%d}", KEY_WORLD_SCORE, score);
+	string dataStr(data);
+
+	//Header for httprequest
+	std::vector < std::string > header;
+	header.push_back(appID);
+	header.push_back(restAPI);
+	header.push_back("Content-Type: application/json");
+
+	//Request http
+	HttpRequest* request = new HttpRequest();
+	request->setUrl(url);
+	request->setHeaders(header);
+	request->setRequestData(dataStr.c_str(), dataStr.size());
+	request->setRequestType(HttpRequest::Type::PUT);
+	HttpClient::getInstance()->send(request);
+	request->release();
+}
+void FirebaseHandler::submitScore(int score) {
+	scoreToSubmit = score;
+	fetchScoreFromServer();
+}

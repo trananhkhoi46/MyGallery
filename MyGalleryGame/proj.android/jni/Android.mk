@@ -13,6 +13,10 @@ LOCAL_MODULE := MyGame_shared
 LOCAL_MODULE_FILENAME := libMyGame
 
 LOCAL_SRC_FILES := hellocpp/main.cpp \
+../../Classes/Trading/TradingScene.cpp \
+../../Classes/Trading/FacebookHandler/FacebookHandler.cpp \
+../../Classes/Trading/FirebaseHandler/FirebaseHandler.cpp \
+../../Classes/Trading/Model/BUserInfor.cpp \
 ../../Classes/NDKHelper/NDKCallbackNode.cpp \
 ../../Classes/NDKHelper/NDKHelper.cpp \
 ../../Classes/jansson/dump.c \
@@ -43,6 +47,10 @@ LOCAL_LDLIBS := -landroid \
 -llog
 LOCAL_C_INCLUDES := $(LOCAL_PATH)/../../Classes
 LOCAL_C_INCLUDES += $(LOCAL_PATH)/../../Classes/NDKHelper
+LOCAL_C_INCLUDES += $(LOCAL_PATH)/../../Classes/Trading
+LOCAL_C_INCLUDES += $(LOCAL_PATH)/../../Classes/Trading/FacebookHandler
+LOCAL_C_INCLUDES += $(LOCAL_PATH)/../../Classes/Trading/FirebaseHandler
+LOCAL_C_INCLUDES += $(LOCAL_PATH)/../../Classes/Trading/Model
 LOCAL_C_INCLUDES += $(LOCAL_PATH)/../../Classes/jansson
 LOCAL_WHOLE_STATIC_LIBRARIES := PluginFacebook \
 sdkbox \
