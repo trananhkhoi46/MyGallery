@@ -1,7 +1,7 @@
 #ifndef __TRADING_SCENE_H__
 #define __TRADING_SCENE_H__
 
-#include "BaseScene.h";
+#include "BaseScene.h"
 
 class TradingScene: public BaseScene, public FacebookConnectDelegate, public FirebaseDelegate{
 public:
@@ -41,6 +41,6 @@ public:
 		virtual void responseWhenLoginOrLogoutFacebook(); //From FacebookHandler
 		virtual void responseForQuerryTopWorld(vector<BUserInfor*> worldList); //From FirebaseHandler
 		virtual void responseForQuerryTopFriend(vector<BUserInfor*> worldList); //From FirebaseHandler
-		virtual void responseAfterCheckFacebookIDExistOnFirebase(); //From FirebaseHandler
+		virtual void responseAfterCheckFacebookIdExistOnFirebase(); //From FirebaseHandler
 };
 #endif

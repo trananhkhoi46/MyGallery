@@ -1,11 +1,12 @@
-
 #ifndef __FacebookHandler__
 #define __FacebookHandler__
 
 #include "cocos2d.h"
 #include "cocos/ui/CocosGUI.h"
 #include "BUserInfor.h"
+#ifdef SDKBOX_ENABLED
 #include "PluginFacebook/PluginFacebook.h"
+#endif
 #include "cocos/network/HttpRequest.h"
 #include "cocos/network/HttpClient.h"
 #include "json/rapidjson.h"
@@ -19,46 +20,53 @@ using namespace std;
 using namespace rapidjson;
 using namespace cocos2d::ui;
 
-
-class FacebookDelegate{
+class FacebookDelegate {
 public:
-    virtual void responseWhenGetFriendsSuccessfully(string friendList){
-    };
-    virtual void responseWhenGetMyInfoSuccessfully(BUserInfor* user){
-	};
+	virtual void responseWhenGetFriendsSuccessfully(string friendList) {
+	}
+	;
+	virtual void responseWhenGetMyInfoSuccessfully(BUserInfor* user) {
+	}
+	;
 };
 
-class FacebookConnectDelegate{
+class FacebookConnectDelegate {
 public:
-    virtual void responseWhenLoginOrLogoutFacebook(){
-    };
+	virtual void responseWhenLoginOrLogoutFacebook() {
+	}
+	;
 };
 
-
-class FacebookHandler : public Node, sdkbox::FacebookListener{
+class FacebookHandler: public Node, sdkbox::FacebookListener {
 public:
-    FacebookHandler();
-    ~FacebookHandler();
-    static FacebookHandler* getInstance();
+	FacebookHandler();
+	~FacebookHandler();
+	static FacebookHandler* getInstance();
 
-    void loginFacebook();
-    void logoutFacebook();
-    bool isFacebookLoggedIn();
+	void loginFacebook();
+	void logoutFacebook();
+	bool isFacebookLoggedIn();
 
-    void getMyProfile();
-    void getAllFriendsID();
-    string getUserFacebookID();
-    CC_SYNTHESIZE(FacebookDelegate*,_facebookDelegate,FacebookDelegate);
-    CC_SYNTHESIZE(FacebookConnectDelegate*,_facebookConnectDelegate,FacebookConnectDelegate);
+	void getMyProfile();
+	void getAllFriendsID();
+	string getUserFacebookID();CC_SYNTHESIZE(FacebookDelegate*,_facebookDelegate,FacebookDelegate)
+	;CC_SYNTHESIZE(FacebookConnectDelegate*,_facebookConnectDelegate,FacebookConnectDelegate)
+	;
 
-    //Facebook callback
-    void onLogin(bool isLogin, const std::string& msg);
-     void onSharedSuccess(const std::string& message);
-     void onSharedFailed(const std::string& message);
-     void onSharedCancel();
-     void onAPI(const std::string& key, const std::string& jsonData);
-     void onPermission(bool isLogin, const std::string& msg);
-     void onFetchFriends(bool ok, const std::string& msg);
+	//Facebook callback
+	void onLogin(bool isLogin, const std::string& msg);
+	void onSharedSuccess(const std::string& message);
+	void onSharedFailed(const std::string& message);
+	void onSharedCancel();
+	void onAPI(const std::string& key, const std::string& jsonData);
+	void onPermission(bool isLogin, const std::string& msg);
+	void onFetchFriends(bool ok, const std::string& msg);
+	void onRequestInvitableFriends(
+			const sdkbox::FBInvitableFriendsInfo& friends);
+	void onInviteFriendsWithInviteIdsResult(bool result,
+			const std::string& msg);
+	void onInviteFriendsResult(bool result, const std::string& msg);
+	void onGetUserInfo(const sdkbox::FBGraphUser& userInfo);
 };
 
 #endif

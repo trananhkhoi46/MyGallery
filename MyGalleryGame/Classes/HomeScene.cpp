@@ -115,6 +115,9 @@ void HomeScene::initDefaultVariables() {
 			0.1f);
 	cut_animate = Animate::create(animation_cut);
 	cut_animate->retain();
+
+	//TODO get probability from Firebase
+	FirebaseHandler::getInstance()->getProbability();
 }
 
 void HomeScene::initPacketButtons() {
@@ -179,14 +182,14 @@ void HomeScene::initOtherViews() {
 	this->addChild(btnFacebookConnect);
 	Sprite* spriteFacebookConnect = Sprite::create(
 			s_homescene_sprite_facebook_connect);
-	spriteFacebookConnect->setAnchorPoint(Vec2::ANCHOR_TOP_RIGHT);
+	spriteFacebookConnect->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
 	spriteFacebookConnect->setPosition(
-			btnFacebookConnect->getContentSize().width,
-			btnFacebookConnect->getContentSize().height);
+			btnFacebookConnect->getContentSize().width - spriteFacebookConnect->getContentSize().width / 2,
+			btnFacebookConnect->getContentSize().height - spriteFacebookConnect->getContentSize().height / 2);
 	btnFacebookConnect->addChild(spriteFacebookConnect);
 	spriteFacebookConnect->runAction(
 			RepeatForever::create(
-					Sequence::create(ScaleTo::create(0.5, 0.9),
+					Sequence::create(ScaleTo::create(0.5, 0.95),
 							ScaleTo::create(0.5, 1), nullptr)));
 
 	//Add btn friend
@@ -202,10 +205,10 @@ void HomeScene::initOtherViews() {
 	Label* labelButtonFriend = Label::createWithTTF(configControlButton,
 			"FRIEND", TextHAlignment::CENTER);
 	labelButtonFriend->setPosition(
-			Vec2(btnFriend->getPositionX(), btnFriend->getPositionY() - 55));
+			Vec2(btnFriend->getContentSize().width / 2, btnFriend->getContentSize().height / 2 - 55));
 	labelButtonFriend->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
 	labelButtonFriend->setColor(Color3B::BLACK);
-	this->addChild(labelButtonFriend);
+	btnFriend->addChild(labelButtonFriend);
 
 	//Add btn trade
 	btnTrade = Button::create(s_homescene_btn_trade);
@@ -222,10 +225,10 @@ void HomeScene::initOtherViews() {
 	Label* labelButtonTrade = Label::createWithTTF(configControlButton, "TRADE",
 			TextHAlignment::CENTER);
 	labelButtonTrade->setPosition(
-			Vec2(btnTrade->getPositionX(), btnTrade->getPositionY() - 55));
+			Vec2(btnTrade->getContentSize().width / 2, btnTrade->getContentSize().height / 2 - 55));
 	labelButtonTrade->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
 	labelButtonTrade->setColor(Color3B::BLACK);
-	this->addChild(labelButtonTrade);
+	btnTrade->addChild(labelButtonTrade);
 
 	//Set show btnFacebookConnect if user hasn't logged in Facebook, vice versa
 	setVisibilityViewsOfTradingFeature();
@@ -715,7 +718,9 @@ void HomeScene::facebookConnectButtonCallback(Ref* pSender,
 		ui::Widget::TouchEventType eEventType) {
 	if (eEventType == ui::Widget::TouchEventType::ENDED
 			&& !blurLayer->isVisible()) {
-		SocialPlugin::showToast("Doesn't support at the moment");
+		sdkbox::PluginFacebook::inviteFriends(
+		  "https://fb.me/322164761287181",
+		  "http://www.cocos2d-x.org/attachments/801/cocos2dx_portrait.png");
 	}
 }
 

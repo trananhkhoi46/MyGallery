@@ -1,7 +1,7 @@
 #include "FirebaseHandler.h"
 
 #include "BLeaderBoardContanst.h"
-#include <curl/include/ios/curl/curl.h>
+
 #include <json/rapidjson.h>
 #include <json/reader.h>
 #include <json/writer.h>
@@ -27,7 +27,36 @@ FirebaseHandler* FirebaseHandler::getInstance() {
 	}
 	return instance;
 }
+void FirebaseHandler::getProbability() {
+	CCLog("bambi get Probability from Firebase - calling");
+	//Request http
+	HttpRequest* request = new HttpRequest();
+	request->setUrl(
+			"https://gallerygame-fab40.firebaseio.com/probability.json?auth=KKgD6eWhfoJC6KUCFwSwEGIJYzxkFAjnMOqNl6ir");
+	request->setRequestType(HttpRequest::Type::GET);
+	request->setResponseCallback(
+			CC_CALLBACK_2(
+					FirebaseHandler::getProbabilityCallBack,
+					this));
+	HttpClient::getInstance()->send(request);
+	request->release();
+}
 
+void FirebaseHandler::getProbabilityCallBack(HttpClient* client,
+		HttpResponse* response) {
+	CCLog("bambi get Probability from Firebase - responding: %s",
+			response->isSucceed() ? "success" : "failed");
+	if (response->isSucceed()) {
+		//Clear data (sometimes stranged characters be attached after the result)
+		std::vector<char> *buffer = response->getResponseData();
+		const char *data = reinterpret_cast<char *>(&(buffer->front()));
+		std::string clearData(data);
+		size_t pos = clearData.rfind("}");
+		clearData = clearData.substr(0, pos + 1);
+
+		CCLog("bambi get Probability from Firebase: %s", clearData.c_str());
+	}
+}
 void FirebaseHandler::checkFacebookIdExistOnFirebase() {
 	//query string
 	char query[200];
@@ -36,9 +65,7 @@ void FirebaseHandler::checkFacebookIdExistOnFirebase() {
 
 	//format url
 	char url[55500];
-	CURL *curl = curl_easy_init();
-	char * encodeUrl = curl_easy_escape(curl, query, 0);
-	sprintf(url, "%s?%s", classURL.c_str(), encodeUrl);
+	sprintf(url, "%s?%s", classURL.c_str(), query);
 
 	//Header for httprequest
 	std::vector < std::string > header;
@@ -52,7 +79,9 @@ void FirebaseHandler::checkFacebookIdExistOnFirebase() {
 	request->setHeaders(header);
 	request->setRequestType(HttpRequest::Type::GET);
 	request->setResponseCallback(
-			CC_CALLBACK_2(FirebaseHandler::checkFacebookIdExistOnFirebaseCallBack,this));
+			CC_CALLBACK_2(
+					FirebaseHandler::checkFacebookIdExistOnFirebaseCallBack,
+					this));
 	HttpClient::getInstance()->send(request);
 	request->release();
 
@@ -74,16 +103,16 @@ void FirebaseHandler::checkFacebookIdExistOnFirebaseCallBack(HttpClient* client,
 		d.Parse<0>(clearData.c_str());
 		const rapidjson::Value& mangJson = d["results"];
 		if (clearData.length() > 15) //User's already been added on Firebase
-		{
+				{
 			char* objectId = (char*) mangJson[0][KEY_WORLD_OJECTID].GetString();
 			//Save to UserDefault (your will need objectId when posting score on Firebase)
 			UserDefault::getInstance()->setStringForKey(KEY_WORLD_OJECTID,
 					objectId);
 			if (_firebaseDelegate != nullptr)
-				_firebaseDelegate->responseAftercheckFacebookIdExistOnFirebase(); //Respone to ranking scene
+				_firebaseDelegate->responseAfterCheckFacebookIdExistOnFirebase(); //Respone to ranking scene
 		} else
 			FacebookHandler::getInstance()->getMyProfile();
-			//After getMyProfile, responseWhenGetMyInfoSuccessfully function will be called.
+		//After getMyProfile, responseWhenGetMyInfoSuccessfully function will be called.
 
 	}
 }
@@ -108,7 +137,8 @@ void FirebaseHandler::saveFacebookIdOnFirebase(BUserInfor* user) {
 			user->serialize().size());
 	request->setRequestType(HttpRequest::Type::POST);
 	request->setResponseCallback(
-			CC_CALLBACK_2(FirebaseHandler::callBacksaveFacebookIdOnFirebase,this));
+			CC_CALLBACK_2(FirebaseHandler::callBacksaveFacebookIdOnFirebase,
+					this));
 	HttpClient::getInstance()->send(request);
 	request->release();
 }
@@ -134,22 +164,14 @@ void FirebaseHandler::callBacksaveFacebookIdOnFirebase(HttpClient* client,
 		UserDefault::getInstance()->setStringForKey(KEY_WORLD_OJECTID,
 				objectId);
 		if (_firebaseDelegate != nullptr)
-			_firebaseDelegate->responseAftercheckFacebookIdExistOnFirebase(); //Respone to ranking scene
+			_firebaseDelegate->responseAfterCheckFacebookIdExistOnFirebase(); //Respone to ranking scene
 
 	}
 }
 
 void FirebaseHandler::fetchBUserInforAt(char* querry) {
 	char url[55500];
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-	sprintf(url, "%s?%s&order=-Score&limit=5",classURL.c_str(), querry);
-#endif
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
-	//format url
-	CURL *curl = curl_easy_init();
-	char * encodeQuerry = curl_easy_escape(curl,querry, 0);
-	sprintf(url, "%s?%s&order=-Score&limit=5",classURL.c_str(), encodeQuerry);
-#endif
+	sprintf(url, "%s?%s&order=-Score&limit=5", classURL.c_str(), querry);
 
 	//Header for httprequest
 	std::vector < std::string > header;
@@ -163,7 +185,7 @@ void FirebaseHandler::fetchBUserInforAt(char* querry) {
 	request->setHeaders(header);
 	request->setRequestType(HttpRequest::Type::GET);
 	request->setResponseCallback(
-			CC_CALLBACK_2(FirebaseHandler::callBackFetchBUserInforAt,this));
+			CC_CALLBACK_2(FirebaseHandler::callBackFetchBUserInforAt, this));
 	HttpClient::getInstance()->send(request);
 	request->release();
 }
@@ -241,9 +263,7 @@ void FirebaseHandler::fetchScoreFromServer() {
 
 	//format url
 	char url[55500];
-	CURL *curl = curl_easy_init();
-	char * encodeUrl = curl_easy_escape(curl, query, 0);
-	sprintf(url, "%s?%s", classURL.c_str(), encodeUrl);
+	sprintf(url, "%s?%s", classURL.c_str(), query);
 
 	//Header for httprequest
 	std::vector < std::string > header;

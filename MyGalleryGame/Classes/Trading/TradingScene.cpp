@@ -126,7 +126,7 @@ bool TradingScene::init() {
 	updateUI(TAG_MODE_BUTTON);
 	updateUI(TAG_FACEBOOK_BUTTON);
 
-    //After load check facebook on Firebase responseAfterCheckFacebookIDExistOnFirebase function will be called
+    //After load check facebook on Firebase responseAfterCheckFacebookIdExistOnFirebase function will be called
 	if(FacebookHandler::getInstance()->isFacebookLoggedIn())
 		FirebaseHandler::getInstance()->checkFacebookIdExistOnFirebase();
 	else
@@ -210,17 +210,14 @@ void TradingScene::updateUI(int tag)
 void TradingScene::responseWhenLoginOrLogoutFacebook()
 {
 	updateUI(TAG_FACEBOOK_BUTTON);
-	//After load check facebook on Firebase responseAfterCheckFacebookIDExistOnFirebase function will be called
+	//After load check facebook on Firebase responseAfterCheckFacebookIdExistOnFirebase function will be called
 	if(FacebookHandler::getInstance()->isFacebookLoggedIn())
 		FirebaseHandler::getInstance()->checkFacebookIdExistOnFirebase();
 	else
 		resetTradingScene(); //Reset trading scene.
 }
-void TradingScene::responseAfterCheckFacebookIDExistOnFirebase()
+void TradingScene::responseAfterCheckFacebookIdExistOnFirebase()
 {
-    //Submit score at first time
-    submitScore(UserDefault::getInstance()->getIntegerForKey(CURRENT_STICKER,0));
-
 	loadLeaderboardData();
 }
 void TradingScene::loadLeaderboardData()

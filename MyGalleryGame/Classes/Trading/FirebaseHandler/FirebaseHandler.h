@@ -25,9 +25,9 @@ public:
     virtual void responseForQuerryTopWorld(vector<BUserInfor*> worldList){
 
     };
-    virtual void responseAfterCheckFacebookIDExistOnFirebase(){
+    virtual void responseAfterCheckFacebookIdExistOnFirebase(){
 
-      };
+    };
 };
 
 
@@ -55,6 +55,9 @@ public:
     void fetchTopFriend();
 
     void fetchTopWorld();
+
+    void getProbability();
+    void getProbabilityCallBack(HttpClient* client,HttpResponse* response);
 
     void submitScore(int score);
     void fetchScoreFromServer();
