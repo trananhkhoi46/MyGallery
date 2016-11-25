@@ -4,6 +4,7 @@
 #include "PluginFacebook/PluginFacebook.h"
 #include "PluginAdMob/PluginAdMob.h"
 #include "PluginChartboost/PluginChartboost.h"
+#include "PluginVungle/PluginVungle.h"
 #endif
 
 USING_NS_CC;
@@ -29,6 +30,7 @@ bool AppDelegate::applicationDidFinishLaunching() {
 	sdkbox::PluginFacebook::init();
 	sdkbox::PluginAdMob::init();
 	sdkbox::PluginChartboost::init();
+	sdkbox::PluginVungle::init();
 #endif
 	// initialize director
 	auto director = Director::getInstance();

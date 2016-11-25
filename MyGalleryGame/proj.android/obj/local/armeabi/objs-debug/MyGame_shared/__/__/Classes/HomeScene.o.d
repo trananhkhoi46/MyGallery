@@ -405,9 +405,9 @@ obj/local/armeabi/objs-debug/MyGame_shared/__/__/Classes/HomeScene.o: \
  /Users/Kskull/Documents/Cocos2dx/ndk/sources/cxx-stl/gnu-libstdc++/4.9/include/iterator \
  jni/../../Classes/StickerHelper.h jni/../../Classes/SocialPlugin.h \
  jni/../../Classes/BLabel.h jni/PluginAdMob/PluginAdMob.h \
- jni/PluginChartboost/PluginChartboost.h jni/../../Classes/SettingScene.h \
- jni/../../Classes/StickerScene.h jni/../../Classes/BScrollView.h \
- jni/../../Classes/AlbumScene.h
+ jni/PluginChartboost/PluginChartboost.h jni/PluginVungle/PluginVungle.h \
+ jni/../../Classes/SettingScene.h jni/../../Classes/StickerScene.h \
+ jni/../../Classes/BScrollView.h jni/../../Classes/AlbumScene.h
 
 jni/../../Classes/HomeScene.h:
 
@@ -1230,6 +1230,8 @@ jni/../../Classes/BLabel.h:
 jni/PluginAdMob/PluginAdMob.h:
 
 jni/PluginChartboost/PluginChartboost.h:
+
+jni/PluginVungle/PluginVungle.h:
 
 jni/../../Classes/SettingScene.h:
 

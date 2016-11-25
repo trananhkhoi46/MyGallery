@@ -16,6 +16,7 @@
 #ifdef SDKBOX_ENABLED
 #include "PluginAdMob/PluginAdMob.h"
 #include "PluginChartboost/PluginChartboost.h"
+#include "PluginVungle/PluginVungle.h"
 #endif
 
 using namespace cocos2d::network;

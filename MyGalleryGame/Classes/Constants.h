@@ -4,7 +4,10 @@
 //Admob key (corresponding with .json file in Resources)
 #define kAdmobInstitialAds "fullscreen_ads"
 #define kChartboostInstitialAds "fullscreen_ads"
+#define kVungleInstitialAds "video"
+
 #define kChartboostRewardedAds "rewarded_ads"
+#define kVungleRewardedAds "reward"
 
 //Global KEY
 #define SOUND "sound"

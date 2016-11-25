@@ -363,6 +363,7 @@ void HomeScene::initControlButtons() {
 			auto transition = TransitionFade::create(1.0, newScene);
 			Director *pDirector = Director::getInstance();
 			pDirector->replaceScene(transition);
+			instance = nullptr;
 		}});
 	this->addChild(btnStickerScene);
 	Label* labelButtonSticker = Label::createWithTTF(configControlButton,
@@ -392,6 +393,7 @@ void HomeScene::initControlButtons() {
 			auto transition = TransitionFade::create(1.0, newScene);
 			Director *pDirector = Director::getInstance();
 			pDirector->replaceScene(transition);
+			instance = nullptr;
 		}});
 	this->addChild(btnAlbumScene);
 	Label* labelButtonAlbum = Label::createWithTTF(configControlButton, "ALBUM",
@@ -630,8 +632,6 @@ void HomeScene::packetButtonsCallback(Ref* pSender,
 
 		}
 
-		//Cut animation
-
 		auto funcResetScheduleGetFreeSticker = CallFunc::create([=]() {
 			earn3RandomStickers();
 		});
@@ -701,6 +701,7 @@ void HomeScene::settingButtonsCallback(Ref* pSender,
 			auto transition = TransitionFade::create(1.0, newScene);
 			Director *pDirector = Director::getInstance();
 			pDirector->replaceScene(transition);
+			instance = nullptr;
 		}
 			break;
 		default:

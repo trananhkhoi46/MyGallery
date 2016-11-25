@@ -40,70 +40,113 @@ public:
 };
 class IChartboostListener : public sdkbox::ChartboostListener {
 public:
-public:
 	virtual void onChartboostCached(const std::string& name)
 	{
-		CCLog("bambi admob onChartboostCached %s: ", name.c_str());
+		CCLog("bambi chartboost onChartboostCached %s: ", name.c_str());
 	}
 	virtual bool onChartboostShouldDisplay(const std::string& name)
 	{
-		CCLog("bambi admob onChartboostShouldDisplay %s: ", name.c_str());
+		CCLog("bambi chartboost onChartboostShouldDisplay %s: ", name.c_str());
 	}
 	virtual void onChartboostDisplay(const std::string& name)
 	{
-		CCLog("bambi admob onChartboostDisplay %s: ", name.c_str());
+		CCLog("bambi chartboost onChartboostDisplay %s: ", name.c_str());
 	}
 	virtual void onChartboostDismiss(const std::string& name)
 	{
-		CCLog("bambi admob onChartboostDismiss %s: ", name.c_str());
+		CCLog("bambi chartboost onChartboostDismiss %s: ", name.c_str());
 	}
 	virtual void onChartboostClose(const std::string& name)
 	{
-		CCLog("bambi admob onChartboostClose %s: ", name.c_str());
+		CCLog("bambi chartboost onChartboostClose %s: ", name.c_str());
 	}
 	virtual void onChartboostClick(const std::string& name)
 	{
-		CCLog("bambi admob onChartboostClick %s: ", name.c_str());
+		CCLog("bambi chartboost onChartboostClick %s: ", name.c_str());
 	}
 	virtual void onChartboostReward(const std::string& name, int reward)
 	{
-		CCLog("bambi admob onChartboostReward %s: ", name.c_str());
+		CCLog("bambi chartboost onChartboostReward %s: ", name.c_str());
 
 		//TODO return to the listener
 		HomeScene::getInstance()->onVideoAdsPlayed();
 	}
 	virtual void onChartboostFailedToLoad(const std::string& name, sdkbox::CB_LoadError e)
 	{
-		CCLog("bambi admob onChartboostFailedToLoad %s: ", name.c_str());
+		CCLog("bambi chartboost onChartboostFailedToLoad %s: ", name.c_str());
 	}
 	virtual void onChartboostFailToRecordClick(const std::string& name, sdkbox::CB_ClickError e)
 	{
-		CCLog("bambi admob onChartboostFailToRecordClick %s: ", name.c_str());
+		CCLog("bambi chartboost onChartboostFailToRecordClick %s: ", name.c_str());
 	}
 	virtual void onChartboostConfirmation()
 	{
-		CCLog("bambi admob onChartboostConfirmation");
+		CCLog("bambi chartboost onChartboostConfirmation");
 	}
 	virtual void onChartboostCompleteStore()
 	{
-		CCLog("bambi admob onChartboostCompleteStore");
+		CCLog("bambi chartboost onChartboostCompleteStore");
+	}
+};
+class IVungleListener : public sdkbox::VungleListener, public Ref
+{
+public:
+	virtual void onVungleCacheAvailable()
+	{
+		CCLog("bambi vungle onVungleCacheAvailable");
+	}
+	virtual void onVungleStarted()
+	{
+		CCLog("bambi vungle onVungleStarted");
+	}
+	virtual void onVungleFinished()
+	{
+		CCLog("bambi vungle onVungleFinished");
+	}
+	virtual void onVungleAdViewed(bool isComplete)
+	{
+		CCLog("bambi vungle onVungleAdViewed - isComplete: %s",isComplete?"true":"false");
+	}
+	virtual void onVungleAdReward(const std::string& name) {
+		cocos2d::Director::getInstance()->getScheduler()->performFunctionInCocosThread([=]() {
+					HomeScene::getInstance()->onVideoAdsPlayed();
+					CCLog("bambi vungle onVungleAdReward - name: %s",name.c_str());
+				});
 	}
 };
 #endif
 void BaseScene::showFullscreenAds() {
+	CCLog("bambi showFullscreenAds in 3 seconds");
+	auto funcShowAds = CallFunc::create([=]() {
 #ifdef SDKBOX_ENABLED
-	if(CppUtils::randomBetween(1,2) == 1)
-	{
-		sdkbox::PluginChartboost::show(kChartboostInstitialAds);
-	} else {
-		sdkbox::PluginAdMob::show(kAdmobInstitialAds);
-	}
+			int random = CppUtils::randomBetween(1,3);
+			if(random == 1)
+			{
+				sdkbox::PluginChartboost::show(kChartboostInstitialAds);
+			} else if(random == 2) {
+				sdkbox::PluginAdMob::show(kAdmobInstitialAds);
+			} else {
+				sdkbox::PluginVungle::show(kVungleInstitialAds);
+			}
 #endif
+		});
+	this->runAction(
+			Sequence::create(DelayTime::create(3), funcShowAds, nullptr));
 }
 void BaseScene::showRewardedAds() {
+	CCLog("bambi showRewardedAds in 3 seconds");
+	auto funcShowAds = CallFunc::create([=]() {
 #ifdef SDKBOX_ENABLED
-	sdkbox::PluginChartboost::show(kChartboostRewardedAds);
+			if(CppUtils::randomBetween(1,2) == 1) {
+				sdkbox::PluginChartboost::show(kChartboostRewardedAds);
+			} else {
+				sdkbox::PluginVungle::show(kVungleRewardedAds);
+			}
 #endif
+		});
+	this->runAction(
+			Sequence::create(DelayTime::create(3), funcShowAds, nullptr));
+
 }
 // on "init" you need to initialize your instance
 bool BaseScene::init() {
@@ -125,6 +168,8 @@ bool BaseScene::init() {
 #ifdef SDKBOX_ENABLED
 	sdkbox::PluginAdMob::setListener(new IAdmobListener());
 	sdkbox::PluginChartboost::setListener(new IChartboostListener());
+	sdkbox::PluginVungle::setListener(new IVungleListener());
+	sdkbox::PluginVungle::setDebug(true);
 #endif
 	return true;
 }

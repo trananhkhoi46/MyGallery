@@ -43,6 +43,7 @@
 /Users/Kskull/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/bin/dexedLibs/PluginAdMob-3ba97fc9346baccdb4fcc9728a6bbb6b.jar \
 /Users/Kskull/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/bin/dexedLibs/PluginFacebook-ccf6f59d70e0adb126ab96e9e9712120.jar \
 /Users/Kskull/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/bin/dexedLibs/android-support-v4-d2e156e2e6a3f0b1a521a06458d58780.jar \
+/Users/Kskull/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/bin/dexedLibs/nineoldandroids-2.4.0-9d990bd507d068bca28a551204539284.jar \
 /Users/Kskull/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/bin/dexedLibs/facebook-android-4.12.1-acfe7e52d577f6d453bbc87f6b1f6eaf.jar \
 /Users/Kskull/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/bin/dexedLibs/google-play-services-676f60f18d41a532f13a980d5594b931.jar \
 /Users/Kskull/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/bin/dexedLibs/com.android.vending.expansion.zipfile-558963c4238b1874efdea58bb7f7a498.jar \
@@ -50,5 +51,9 @@
 /Users/Kskull/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/bin/dexedLibs/httpclient-4.4.1.1-8840352c08c7a5cf645364979f845c05.jar \
 /Users/Kskull/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/bin/dexedLibs/PluginChartboost-450cd39b7722f726bec9f7195fd066af.jar \
 /Users/Kskull/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/bin/dexedLibs/android-async-http-1.4.9-efb90e526d7be59d7358b17e0f540412.jar \
+/Users/Kskull/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/bin/dexedLibs/javax.inject-1-253986b65b5c3b82cb91dc18d74054f6.jar \
 /Users/Kskull/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/bin/dexedLibs/bolts-android-1.1.2-2762c97d57199802f32759fc3836a08b.jar \
+/Users/Kskull/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/bin/dexedLibs/dagger-2.1-c9bab76c50a4b6847975f96e6ee31171.jar \
+/Users/Kskull/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/bin/dexedLibs/PluginVungle-67864b3375ade60ca45a9614fd8ab20f.jar \
+/Users/Kskull/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/bin/dexedLibs/vungle-publisher-adaptive-id-3.3.5-43b38a64e207bfa0584e73516541a52d.jar \
 /Users/Kskull/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/bin/dexedLibs/chartboost-afcd730f55f1c1547cd50cd03d332051.jar \
