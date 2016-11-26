@@ -47,6 +47,7 @@ public:
 	void invalidateProgressBar();
 	void onVideoAdsPlayed();
 	void setVisibilityViewsOfTradingFeature();
+	void openStickerDetailLayer(Sticker* sticker);
 
 	int currentStickers;
 	int maxStickers;
@@ -56,6 +57,7 @@ public:
 	Vec2 menuBarVisiblePosition;
 	Vec2 menuBarInvisiblePosition;
 
+	LayerColor* backgroundLayer;
 	Layer* blurLayer;
 	Label* labelSticker;
 	Label* labelTimeToGetFreeSticker;

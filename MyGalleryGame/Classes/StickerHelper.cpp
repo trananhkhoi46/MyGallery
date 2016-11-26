@@ -69,6 +69,17 @@ void StickerHelper::saveToMyStickerList(int stickerId) {
 	saveToMyStickerList(CppUtils::doubleToString(stickerId));
 }
 
+void StickerHelper::saveToMyGluedStickerList(string stickerIdString) {
+	UserDefault::getInstance()->setStringForKey(STICKED_STICKER,
+			UserDefault::getInstance()->getStringForKey(STICKED_STICKER, "")
+					+ "," + stickerIdString);
+	CCLog("bambi saveToMyStickerList - after saving successfully: %s",
+			UserDefault::getInstance()->getStringForKey(STICKED_STICKER).c_str());
+}
+void StickerHelper::saveToMyGluedStickerList(int stickerId) {
+	saveToMyGluedStickerList(CppUtils::doubleToString(stickerId));
+}
+
 int StickerHelper::getStickerQuantityInMyList(int stickerId) {
 	int quantity = 0;
 	vector < string > vtCurrentSticker = CppUtils::splitStringByDelim(

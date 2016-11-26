@@ -28,6 +28,7 @@ bool AlbumScene::init() {
 	menuBarVisiblePosition = Vec2(winSize.width / 2, 148);
 	menuBarInvisiblePosition = Vec2(winSize.width / 2, -28);
 	isMenuBarShowing = false;
+	currentPage = 0;
 
 	//Add background
 	Sprite* background = Sprite::create(s_albumscene_background);
@@ -38,12 +39,6 @@ bool AlbumScene::init() {
 	//Init views
 	initPageView();
 	initControlButtons();
-
-	//Handling touch event
-	auto listener = EventListenerTouchOneByOne::create();
-	listener->setSwallowTouches(true);
-	listener->onTouchBegan = CC_CALLBACK_2(AlbumScene::onTouchBegan, this);
-	_eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
 
 	//Keyboard handling
 	auto keyboardListener = EventListenerKeyboard::create();
@@ -98,68 +93,113 @@ void AlbumScene::initPageView() {
 		vector<Sticker*> vt_available_sticker_to_be_glued_of_this_page =
 				StickerHelper::getStickerAvailableToGlueOfPage(stickerPage);
 
+		vector<Sprite*> vtSpritesHolderInThisPage;
 		for (Sticker* sticker : vt_sticker_of_this_page) {
 			Sprite* stickerHolder = Sprite::create(sticker->sticker_image);
 			stickerHolder->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
 			stickerHolder->setPosition(sticker->position);
-			stickerHolder->setColor(Color3B(0, 0, 0));
+			if (StickerHelper::isStickerHasNotSticked(sticker->sticker_id)) {
+				stickerHolder->setColor(Color3B(0, 0, 0));
+			}
+			stickerHolder->setTag(sticker->sticker_id);
 			page->addChild(stickerHolder);
+			vtSpritesHolderInThisPage.push_back(stickerHolder);
 		}
+		vtStickerSpritesHolderAllPages.push_back(vtSpritesHolderInThisPage);
 
 		int index = 0;
+		vector<Sprite*> vtSpritesInThisPage;
 		for (Sticker* sticker : vt_available_sticker_to_be_glued_of_this_page) {
 			Sprite* stickerSprite = Sprite::create(sticker->sticker_image);
 			stickerSprite->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
-			stickerSprite->setPosition(100 + 50 * index,
+			stickerSprite->setPosition(100 + 150 * index,
 					stickerSprite->getContentSize().height / 2 - 20);
+			stickerSprite->setTag(sticker->sticker_id);
 			page->addChild(stickerSprite);
+			vtSpritesInThisPage.push_back(stickerSprite);
 
 			index++;
 		}
+		vtStickerSpritesAllPages.push_back(vtSpritesInThisPage);
+
+		//Handling touch event
+		auto listener = EventListenerTouchOneByOne::create();
+		listener->onTouchBegan = CC_CALLBACK_2(AlbumScene::onTouchBegan, this);
+		listener->onTouchMoved = CC_CALLBACK_2(AlbumScene::onTouchMoved, this);
+		listener->onTouchEnded = CC_CALLBACK_2(AlbumScene::onTouchEnded, this);
+		_eventDispatcher->addEventListenerWithSceneGraphPriority(listener,
+				page);
 
 		pageView->insertPage(page, i);
 	}
 
 	//Btn menu bar bottom
-	btnMenuBar = Button::create(s_albumscene_menu_bottom);
-	btnMenuBar->setPosition(
+	spriteMenuBarBottom = Sprite::create(s_albumscene_menu_bottom_bottom);
+	spriteMenuBarBottom->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
+	spriteMenuBarBottom->setPosition(
 			isMenuBarShowing ?
 					menuBarVisiblePosition : menuBarInvisiblePosition);
-	btnMenuBar->setTouchEnabled(true);
-	btnMenuBar->setPressedActionEnabled(true);
-	btnMenuBar->setZoomScale(0);
-	btnMenuBar->addTouchEventListener([this](Ref *pSender,
+	this->addChild(spriteMenuBarBottom);
+
+	btnMenuBarTop = Button::create(s_albumscene_menu_bottom_top);
+	btnMenuBarTop->setPosition(
+			isMenuBarShowing ?
+					Vec2(
+							winSize.width
+									- btnMenuBarTop->getContentSize().width / 2,
+							menuBarVisiblePosition.y) :
+					Vec2(
+							winSize.width
+									- btnMenuBarTop->getContentSize().width / 2,
+							menuBarInvisiblePosition.y));
+	btnMenuBarTop->setTouchEnabled(true);
+	btnMenuBarTop->setPressedActionEnabled(true);
+	btnMenuBarTop->setZoomScale(0);
+	btnMenuBarTop->addTouchEventListener([this](Ref *pSender,
 			Widget::TouchEventType type) {
 		if (type == cocos2d::ui::Widget::TouchEventType::ENDED)
 		{
 			isMenuBarShowing = !isMenuBarShowing;
 			setVisibilityMenuBar();
 		}});
-	this->addChild(btnMenuBar);
+	this->addChild(btnMenuBarTop);
 
 	spriteArrowUpDown = Sprite::create(s_albumscene_sprite_arrow);
 	spriteArrowUpDown->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
-	spriteArrowUpDown->setPosition(Vec2(1000, 225));
-	btnMenuBar->addChild(spriteArrowUpDown);
+	spriteArrowUpDown->setPosition(Vec2(282, 225));
+	btnMenuBarTop->addChild(spriteArrowUpDown);
 
 	setVisibilityMenuBar();
 
-	pageView->addEventListener(
-			[](Ref* sender, PageView::EventType type) {
-				if(type == PageView::EventType::TURNING)
-				{
-					PageView* pageViewInCallback = dynamic_cast<PageView*>(sender);
-					CCLog("bambi pageview index: %d", pageViewInCallback->getCurrentPageIndex());
-				}
-			});
+	pageView->addEventListener([this](Ref* sender, PageView::EventType type) {
+		if(type == PageView::EventType::TURNING)
+		{
+			PageView* pageViewInCallback = dynamic_cast<PageView*>(sender);
+			currentPage = pageViewInCallback->getCurrentPageIndex();
+		}
+	});
 }
 
 void AlbumScene::setVisibilityMenuBar() {
 	CCLog("bambi setVisibilityMenuBar, %s",
 			isMenuBarShowing ? "visible" : "invisible");
-	if (btnMenuBar->numberOfRunningActions() == 0
+	if (spriteMenuBarBottom->numberOfRunningActions() == 0
+			&& btnMenuBarTop->numberOfRunningActions() == 0
 			&& spriteArrowUpDown->numberOfRunningActions() == 0) {
-		btnMenuBar->runAction(
+		btnMenuBarTop->runAction(
+				MoveTo::create(0.3,
+						isMenuBarShowing ?
+								Vec2(
+										winSize.width
+												- btnMenuBarTop->getContentSize().width
+														/ 2,
+										menuBarVisiblePosition.y) :
+								Vec2(
+										winSize.width
+												- btnMenuBarTop->getContentSize().width
+														/ 2,
+										menuBarInvisiblePosition.y)));
+		spriteMenuBarBottom->runAction(
 				MoveTo::create(0.3,
 						isMenuBarShowing ?
 								menuBarVisiblePosition :
@@ -252,7 +292,78 @@ void AlbumScene::initControlButtons() {
 }
 
 bool AlbumScene::onTouchBegan(Touch* touch, Event* event) {
+	CCLog("bambi, ontouch began, x: %f, y: %f, currentpage: %d",
+			touch->getLocation().x, touch->getLocation().y, currentPage);
+	getTouchingSprite(touch->getLocation());
 	return true;
+}
+
+void AlbumScene::getTouchingSprite(Vec2 touchingLocation) {
+	if (currentPage < vtStickerSpritesAllPages.size()) {
+		vector<Sprite*> vtSprite = vtStickerSpritesAllPages.at(currentPage);
+		if (vtSprite.size() > 0) {
+			for (int i = vtSprite.size() - 1; i >= 0; i--) {
+				Sprite* sprite = vtSprite.at(i);
+				CCLog("bambi, getTouchingSprite, vt_sprite box - x: %f, y: %d",
+						sprite->getBoundingBox().origin.x,
+						sprite->getBoundingBox().origin.y);
+				if (sprite->getBoundingBox().containsPoint(touchingLocation)
+						&& sprite->getTag() != -1) {
+					touchingSprite = sprite;
+					pageView->setTouchEnabled(false);
+					touchingOffset = touchingLocation - sprite->getPosition();
+					return;
+				}
+			}
+		}
+	}
+}
+
+void AlbumScene::tryToGlueSticker() {
+	if (touchingSprite != nullptr) {
+		if (currentPage < vtStickerSpritesHolderAllPages.size()) {
+			vector<Sprite*> vtSpriteHolder = vtStickerSpritesHolderAllPages.at(
+					currentPage);
+			for (Sprite* spriteHolder : vtSpriteHolder) {
+				if (spriteHolder->getBoundingBox().containsPoint(
+						touchingSprite->getPosition())) {
+					if (touchingSprite->getTag() == spriteHolder->getTag()) {
+						touchingSprite->runAction(
+								MoveTo::create(0.2f,
+										spriteHolder->getPosition()));
+						StickerHelper::saveToMyGluedStickerList(
+								touchingSprite->getTag());
+
+						touchingSprite->setTag(-1); //To disable touching on this sprite
+					} else {
+						touchingSprite->runAction(
+								MoveTo::create(0.2f,
+										Vec2(
+												touchingSprite->getContentSize().width
+														/ 2,
+												touchingSprite->getContentSize().height
+														/ 2)));
+					}
+
+					return;
+				}
+			}
+		}
+	}
+}
+
+void AlbumScene::onTouchMoved(Touch* touch, Event* event) {
+	if (touchingSprite != nullptr) {
+		touchingSprite->setPosition(touch->getLocation() - touchingOffset);
+	}
+}
+void AlbumScene::onTouchEnded(Touch* touch, Event* event) {
+	CCLog("bambi, ontouch ended, x: %f, y: %f", touch->getLocation().x,
+			touch->getLocation().y);
+	tryToGlueSticker();
+
+	touchingSprite = nullptr;
+	pageView->setTouchEnabled(true);
 }
 
 bool firstClickInAlbumScene = true;

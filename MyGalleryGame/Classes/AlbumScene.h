@@ -15,15 +15,25 @@ public:
 	void initControlButtons();
 	void onKeyReleased(EventKeyboard::KeyCode keycode, Event* event);
 	bool onTouchBegan(Touch* touch, Event* event);
+	void onTouchMoved(Touch* touch, Event* event);
+	void onTouchEnded(Touch* touch, Event* event);
 	void initPageView();
 	void setVisibilityMenuBar();
+	void getTouchingSprite(Vec2 touchingLocation);
+	void tryToGlueSticker();
 
+	int currentPage;
 	bool isMenuBarShowing;
 	Vec2 menuBarVisiblePosition;
 	Vec2 menuBarInvisiblePosition;
+	Vec2 touchingOffset;
 	PageView* pageView;
 	Sprite* spriteArrowUpDown;
-	Button* btnMenuBar;
+	Button* btnMenuBarTop;
+	Sprite* spriteMenuBarBottom;
+	vector<vector<Sprite*>> vtStickerSpritesAllPages;
+	vector<vector<Sprite*>> vtStickerSpritesHolderAllPages;
+	Sprite* touchingSprite;
 };
 
 

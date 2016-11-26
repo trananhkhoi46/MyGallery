@@ -580,9 +580,18 @@ void HomeScene::earn3Stickers(STICKER_RARITY rarity) {
 			Sticker * sticker = vt_stickers.at(
 					CppUtils::randomBetween(0, vt_stickers.size() - 1));
 
-			Sprite* stickerSprite = Sprite::create(sticker->sticker_image);
-			stickerSprite->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
-			stickerSprite->setTag(kTagNewSticker);
+			//Add btn sticker
+			Button* stickerBtn = Button::create(sticker->sticker_image);
+			stickerBtn->setTouchEnabled(true);
+			stickerBtn->setZoomScale(0);
+			stickerBtn->setPressedActionEnabled(true);
+			stickerBtn->addTouchEventListener([this, sticker](Ref *pSender,
+					Widget::TouchEventType type) {
+				if (type == cocos2d::ui::Widget::TouchEventType::ENDED)
+				{
+					openStickerDetailLayer(sticker);
+				}});
+			stickerBtn->setTag(kTagNewSticker);
 
 			//Add sprite_new if needed
 			if (!StickerHelper::isStickerHasAlreadyExisted(
@@ -591,12 +600,12 @@ void HomeScene::earn3Stickers(STICKER_RARITY rarity) {
 				newSprite->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
 				newSprite->setPosition(
 						Vec2(
-								stickerSprite->getContentSize().width
+								stickerBtn->getContentSize().width
 										- newSprite->getContentSize().width / 2,
-								stickerSprite->getContentSize().height
+								stickerBtn->getContentSize().height
 										- newSprite->getContentSize().height
 												/ 2));
-				stickerSprite->addChild(newSprite);
+				stickerBtn->addChild(newSprite);
 			}
 
 			//Add a light below the sticker if type != common
@@ -615,8 +624,8 @@ void HomeScene::earn3Stickers(STICKER_RARITY rarity) {
 										ScaleTo::create(0.5, 1), nullptr)));
 			}
 
-			stickerSprite->setPosition(position);
-			blurLayer->addChild(stickerSprite);
+			stickerBtn->setPosition(position);
+			blurLayer->addChild(stickerBtn);
 
 			stickerIdString += CppUtils::doubleToString(sticker->sticker_id);
 			if (i < 2) {
@@ -629,6 +638,94 @@ void HomeScene::earn3Stickers(STICKER_RARITY rarity) {
 
 	invalidateProgressBar();
 }
+
+void HomeScene::openStickerDetailLayer(Sticker* sticker) {
+	if (backgroundLayer != nullptr && backgroundLayer->isVisible()) {
+		return;
+	}
+
+	CCLog("bambi openStickerDetailLayer");
+	TTFConfig configStickerDetailLabel(s_font, 100 * s_font_ratio);
+
+	//Add blur layer
+	backgroundLayer = LayerColor::create(Color4B(0, 0, 0, 255));
+	backgroundLayer->setContentSize(winSize);
+	backgroundLayer->setPosition(Vec2::ZERO);
+	backgroundLayer->setAnchorPoint(Vec2(0.0f, 0.0f));
+	this->addChild(backgroundLayer);
+
+	//Add sticker sprite at center of the screen
+	Sprite* stickerSprite = Sprite::create(sticker->sticker_image);
+	stickerSprite->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
+	stickerSprite->setPosition(winSize.width / 2, winSize.height / 2);
+	stickerSprite->setScale(1.5f);
+	backgroundLayer->addChild(stickerSprite);
+
+	//Add sticker id label
+	BLabel* labelStickerId = BLabel::createWithTTF(configStickerDetailLabel,
+			String::createWithFormat("#%d", sticker->sticker_id)->getCString(),
+			TextHAlignment::CENTER);
+	labelStickerId->setPosition(
+			Vec2(winSize.width / 2,
+					winSize.height - labelStickerId->getContentSize().height));
+	labelStickerId->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
+	labelStickerId->setColor(Color3B::WHITE);
+	backgroundLayer->addChild(labelStickerId);
+
+	//Add sticker name label
+	BLabel* labelStickerName = BLabel::createWithTTF(configStickerDetailLabel,
+			sticker->sticker_name, TextHAlignment::CENTER);
+	labelStickerName->setPosition(
+			Vec2(winSize.width / 2,
+					labelStickerId->getPositionY()
+							- labelStickerName->getContentSize().height));
+	labelStickerName->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
+	labelStickerName->setColor(Color3B::YELLOW);
+	backgroundLayer->addChild(labelStickerName);
+
+	//Add sticker glued info label
+	int stickerTotalNumber = StickerHelper::getStickerQuantityInMyList(
+			sticker->sticker_id);
+	int gluedNumber =
+			StickerHelper::isStickerHasNotSticked(sticker->sticker_id) ? 0 : 1;
+	int leftNumber = stickerTotalNumber - gluedNumber;
+	BLabel* labelStickerGluedInfo = BLabel::createWithTTF(
+			configStickerDetailLabel,
+			String::createWithFormat("(%d glued, %d left)", gluedNumber,
+					leftNumber)->getCString(), TextHAlignment::CENTER);
+	labelStickerGluedInfo->setPosition(
+			Vec2(winSize.width / 2,
+					labelStickerName->getPositionY()
+							- labelStickerGluedInfo->getContentSize().height));
+	labelStickerGluedInfo->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
+	labelStickerGluedInfo->setColor(Color3B::GRAY);
+	backgroundLayer->addChild(labelStickerGluedInfo);
+
+	//Add sticker page name label
+	BLabel* labelStickerPageName =
+			BLabel::createWithTTF(configStickerDetailLabel,
+					StickerHelper::getStickerPageFromId(
+							sticker->sticker_page_id)->sticker_page_name,
+					TextHAlignment::CENTER);
+	labelStickerPageName->setPosition(
+			Vec2(winSize.width / 2, winSize.height * 0.2));
+	labelStickerPageName->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
+	labelStickerPageName->setColor(Color3B::WHITE);
+	backgroundLayer->addChild(labelStickerPageName);
+
+	//Add sticker rarity label
+	BLabel* labelStickerRarity = BLabel::createWithTTF(configStickerDetailLabel,
+			StickerHelper::getRarityString(sticker->rarity),
+			TextHAlignment::CENTER);
+	labelStickerRarity->setPosition(
+			Vec2(winSize.width / 2,
+					labelStickerPageName->getPositionY()
+							- labelStickerRarity->getContentSize().height));
+	labelStickerRarity->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
+	labelStickerRarity->setColor(Color3B::WHITE);
+	backgroundLayer->addChild(labelStickerRarity);
+}
+
 //---------------------------------------------------------------------End of game logic methods
 //---------------------------------------------------------------------Callback methods
 void HomeScene::packetButtonsCallback(Ref* pSender,
@@ -780,7 +877,11 @@ bool HomeScene::onTouchBegan(Touch* touch, Event* event) {
 	if (rect.containsPoint(touch->getLocation())) {
 		isMenuBarShowing = !isMenuBarShowing;
 		invalidateMenuBarPosition();
+	} else if (backgroundLayer != nullptr && backgroundLayer->isVisible()) {
+		this->removeChild(backgroundLayer, false);
+		backgroundLayer = nullptr;
 	}
+
 	return true;
 }
 
