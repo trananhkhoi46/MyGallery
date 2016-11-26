@@ -88,23 +88,23 @@ static vector<string> s_sticker_image_5_animation = {
 static vector<Sticker*> vt_stickers = {
 //
 		Sticker::create("Jaguar","sticker/page1/sticker_1_1.png",
-				s_sticker_image_1_animation, Vec2(100, 200),
+				s_sticker_image_1_animation, Vec2(250, 1350),
 				"sticker/page1/sound_1.ogg", STICKER_RARITY::COMMON, 1, 1),
 //
 		Sticker::create("Tom","sticker/page1/sticker_2_1.png",
-				s_sticker_image_2_animation, Vec2(200, 200),
+				s_sticker_image_2_animation, Vec2(950, 1350),
 				"sticker/page1/sound_2.ogg", STICKER_RARITY::UNCOMMON, 2, 1),
 //
 		Sticker::create("Jerry","sticker/page1/sticker_3_1.png",
-				s_sticker_image_3_animation, Vec2(300, 200),
+				s_sticker_image_3_animation, Vec2(300, 875),
 				"sticker/page1/sound_3.ogg", STICKER_RARITY::RARE, 3, 1),
 //
 		Sticker::create("Harry","sticker/page1/sticker_4_1.png",
-				s_sticker_image_4_animation, Vec2(400, 200),
+				s_sticker_image_4_animation, Vec2(900, 875),
 				"sticker/page1/sound_4.ogg", STICKER_RARITY::VERYRARE, 4, 1),
 //
 		Sticker::create("Monster","sticker/page1/sticker_5_1.png",
-				s_sticker_image_5_animation, Vec2(500, 200),
+				s_sticker_image_5_animation, Vec2(600, 400),
 				"sticker/page1/sound_5.ogg", STICKER_RARITY::RAREST, 5, 1),
 //
 		};

@@ -92,6 +92,31 @@ void AlbumScene::initPageView() {
 		labelButtonSticker->setColor(Color3B::BLACK);
 		spriteLabel->addChild(labelButtonSticker);
 
+		//Show sticker in the page
+		vector<Sticker*> vt_sticker_of_this_page =
+				StickerHelper::getStickerOfPage(stickerPage);
+		vector<Sticker*> vt_available_sticker_to_be_glued_of_this_page =
+				StickerHelper::getStickerAvailableToGlueOfPage(stickerPage);
+
+		for (Sticker* sticker : vt_sticker_of_this_page) {
+			Sprite* stickerHolder = Sprite::create(sticker->sticker_image);
+			stickerHolder->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
+			stickerHolder->setPosition(sticker->position);
+			stickerHolder->setColor(Color3B(0, 0, 0));
+			page->addChild(stickerHolder);
+		}
+
+		int index = 0;
+		for (Sticker* sticker : vt_available_sticker_to_be_glued_of_this_page) {
+			Sprite* stickerSprite = Sprite::create(sticker->sticker_image);
+			stickerSprite->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
+			stickerSprite->setPosition(100 + 50 * index,
+					stickerSprite->getContentSize().height / 2 - 20);
+			page->addChild(stickerSprite);
+
+			index++;
+		}
+
 		pageView->insertPage(page, i);
 	}
 
@@ -114,7 +139,7 @@ void AlbumScene::initPageView() {
 
 	spriteArrowUpDown = Sprite::create(s_albumscene_sprite_arrow);
 	spriteArrowUpDown->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
-	spriteArrowUpDown->setPosition(Vec2(1000, 210));
+	spriteArrowUpDown->setPosition(Vec2(1000, 225));
 	btnMenuBar->addChild(spriteArrowUpDown);
 
 	setVisibilityMenuBar();

@@ -42,19 +42,18 @@ StickerPage* StickerHelper::getStickerPageFromId(int stickerPageId) {
 	return nullptr;
 }
 
-string StickerHelper::getRarityString(STICKER_RARITY rarity)
-{
+string StickerHelper::getRarityString(STICKER_RARITY rarity) {
 	switch (rarity) {
-		case COMMON:
-			return "Common";
-		case UNCOMMON:
-			return "Uncommon";
-		case RARE:
-			return "Rare";
-		case VERYRARE:
-				return "Very rare";
-		case RAREST:
-				return "Rarest";
+	case COMMON:
+		return "Common";
+	case UNCOMMON:
+		return "Uncommon";
+	case RARE:
+		return "Rare";
+	case VERYRARE:
+		return "Very rare";
+	case RAREST:
+		return "Rarest";
 	}
 	return "";
 }
@@ -96,6 +95,31 @@ int StickerHelper::getCurrentExistStickerNumber(bool withUniqueElements) {
 	} else {
 		return vtCurrentSticker.size();
 	}
+}
+
+vector<Sticker*> StickerHelper::getStickerOfPage(StickerPage* page) {
+	vector<Sticker*> result;
+	for(Sticker* sticker:vt_stickers)
+	{
+		if(sticker->sticker_page_id == page->sticker_page_id)
+		{
+			result.push_back(sticker);
+		}
+	}
+	return result;
+}
+
+vector<Sticker*> StickerHelper::getStickerAvailableToGlueOfPage(StickerPage* page) {
+	vector<Sticker*> result;
+	vector<Sticker*> vt_exist_sticker = getCurrentExistSticker(true);
+	for(Sticker* sticker:vt_exist_sticker)
+	{
+		if(sticker->sticker_page_id == page->sticker_page_id && isStickerHasNotSticked(sticker->sticker_id))
+		{
+			result.push_back(sticker);
+		}
+	}
+	return result;
 }
 
 vector<Sticker*> StickerHelper::getCurrentExistSticker(
