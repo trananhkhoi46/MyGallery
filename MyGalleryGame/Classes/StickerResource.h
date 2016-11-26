@@ -7,7 +7,7 @@ using namespace cocos2d;
 
 //Enum
 enum STICKER_RARITY {
-	COMMON, UNCOMMON, RARE
+	UNKNOWN, COMMON, UNCOMMON, RARE, VERYRARE, RAREST
 };
 
 class StickerPage {
@@ -101,11 +101,11 @@ static vector<Sticker*> vt_stickers = {
 //
 		Sticker::create("Harry","sticker/page1/sticker_4_1.png",
 				s_sticker_image_4_animation, Vec2(400, 200),
-				"sticker/page1/sound_4.ogg", STICKER_RARITY::UNCOMMON, 4, 1),
+				"sticker/page1/sound_4.ogg", STICKER_RARITY::VERYRARE, 4, 1),
 //
 		Sticker::create("Monster","sticker/page1/sticker_5_1.png",
 				s_sticker_image_5_animation, Vec2(500, 200),
-				"sticker/page1/sound_5.ogg", STICKER_RARITY::COMMON, 5, 1),
+				"sticker/page1/sound_5.ogg", STICKER_RARITY::RAREST, 5, 1),
 //
 		};
 //

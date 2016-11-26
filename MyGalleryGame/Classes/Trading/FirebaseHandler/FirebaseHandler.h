@@ -5,11 +5,16 @@
 #include <cocos/network/HttpResponse.h>
 #include "BUserInfor.h"
 #include "FacebookHandler.h"
+#include "Constants.h"
+#include "Resources.h"
+#include "StickerResource.h"
+#include "StickerHelper.h"
 #include <iostream>
 
 USING_NS_CC;
 using namespace cocos2d::network;
 using namespace std;
+
 enum TAG{
     TAG_FRIEND,TAG_WORLD
 };
@@ -56,8 +61,8 @@ public:
 
     void fetchTopWorld();
 
-    void getProbability();
-    void getProbabilityCallBack(HttpClient* client,HttpResponse* response);
+    void getProbabilityFreePacket();
+    void getProbability(string url, vector<string> probabilityKeys, STICKER_RARITY rarity);
 
     void submitScore(int score);
     void fetchScoreFromServer();

@@ -42,7 +42,7 @@ public:
 	void initDefaultVariables();
 	void setVisibilityFreePacket();
 	void earn3RandomStickers();
-	void earn3Stickers(STICKER_RARITY rarity, bool isRandom);
+	void earn3Stickers(STICKER_RARITY rarity);
 	void closeBlurLayer();
 	void invalidateProgressBar();
 	void onVideoAdsPlayed();

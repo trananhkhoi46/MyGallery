@@ -450,6 +450,8 @@ obj/local/armeabi/objs-debug/MyGame_shared/__/__/Classes/HomeScene.o: \
  jni/../../Classes/Trading/FirebaseHandler/FirebaseHandler.h \
  /Users/Kskull/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/../cocos2d/extensions/../cocos/network/HttpResponse.h \
  jni/../../Classes/Trading/FacebookHandler/FacebookHandler.h \
+ jni/../../Classes/Constants.h jni/../../Classes/Resources.h \
+ jni/../../Classes/StickerResource.h jni/../../Classes/StickerHelper.h \
  jni/../../Classes/Trading/Model/BUserInfor.h \
  jni/PluginAdMob/PluginAdMob.h jni/PluginChartboost/PluginChartboost.h \
  jni/PluginVungle/PluginVungle.h jni/../../Classes/SettingScene.h \
@@ -1363,6 +1365,14 @@ jni/../../Classes/Trading/FirebaseHandler/FirebaseHandler.h:
 /Users/Kskull/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/../cocos2d/extensions/../cocos/network/HttpResponse.h:
 
 jni/../../Classes/Trading/FacebookHandler/FacebookHandler.h:
+
+jni/../../Classes/Constants.h:
+
+jni/../../Classes/Resources.h:
+
+jni/../../Classes/StickerResource.h:
+
+jni/../../Classes/StickerHelper.h:
 
 jni/../../Classes/Trading/Model/BUserInfor.h:
 

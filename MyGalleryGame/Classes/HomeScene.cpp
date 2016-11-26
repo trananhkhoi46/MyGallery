@@ -117,7 +117,7 @@ void HomeScene::initDefaultVariables() {
 	cut_animate->retain();
 
 	//TODO get probability from Firebase
-	FirebaseHandler::getInstance()->getProbability();
+	FirebaseHandler::getInstance()->getProbabilityFreePacket();
 }
 
 void HomeScene::initPacketButtons() {
@@ -160,7 +160,8 @@ void HomeScene::initPacketButtons() {
 }
 
 void HomeScene::setVisibilityViewsOfTradingFeature() {
-	bool isFacebookLoggedIn = FacebookHandler::getInstance()->isFacebookLoggedIn();
+	bool isFacebookLoggedIn =
+			FacebookHandler::getInstance()->isFacebookLoggedIn();
 	btnFacebookConnect->setVisible(!isFacebookLoggedIn);
 	btnTrade->setVisible(isFacebookLoggedIn);
 	btnFriend->setVisible(isFacebookLoggedIn);
@@ -184,8 +185,10 @@ void HomeScene::initOtherViews() {
 			s_homescene_sprite_facebook_connect);
 	spriteFacebookConnect->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
 	spriteFacebookConnect->setPosition(
-			btnFacebookConnect->getContentSize().width - spriteFacebookConnect->getContentSize().width / 2,
-			btnFacebookConnect->getContentSize().height - spriteFacebookConnect->getContentSize().height / 2);
+			btnFacebookConnect->getContentSize().width
+					- spriteFacebookConnect->getContentSize().width / 2,
+			btnFacebookConnect->getContentSize().height
+					- spriteFacebookConnect->getContentSize().height / 2);
 	btnFacebookConnect->addChild(spriteFacebookConnect);
 	spriteFacebookConnect->runAction(
 			RepeatForever::create(
@@ -205,7 +208,8 @@ void HomeScene::initOtherViews() {
 	Label* labelButtonFriend = Label::createWithTTF(configControlButton,
 			"FRIEND", TextHAlignment::CENTER);
 	labelButtonFriend->setPosition(
-			Vec2(btnFriend->getContentSize().width / 2, btnFriend->getContentSize().height / 2 - 55));
+			Vec2(btnFriend->getContentSize().width / 2,
+					btnFriend->getContentSize().height / 2 - 55));
 	labelButtonFriend->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
 	labelButtonFriend->setColor(Color3B::BLACK);
 	btnFriend->addChild(labelButtonFriend);
@@ -225,7 +229,8 @@ void HomeScene::initOtherViews() {
 	Label* labelButtonTrade = Label::createWithTTF(configControlButton, "TRADE",
 			TextHAlignment::CENTER);
 	labelButtonTrade->setPosition(
-			Vec2(btnTrade->getContentSize().width / 2, btnTrade->getContentSize().height / 2 - 55));
+			Vec2(btnTrade->getContentSize().width / 2,
+					btnTrade->getContentSize().height / 2 - 55));
 	labelButtonTrade->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
 	labelButtonTrade->setColor(Color3B::BLACK);
 	btnTrade->addChild(labelButtonTrade);
@@ -538,13 +543,26 @@ void HomeScene::earn3RandomStickers() {
 	setVisibilityFreePacket();
 	schedule(schedule_selector(HomeScene::timer), 1);
 
-	earn3Stickers(STICKER_RARITY::COMMON, true);
+	earn3Stickers(STICKER_RARITY::UNKNOWN);
 }
 
-void HomeScene::earn3Stickers(STICKER_RARITY rarity, bool isRandom) {
+void HomeScene::earn3Stickers(STICKER_RARITY rarity) {
 	blurLayer->setVisible(true);
 
-	if (isRandom) {
+	switch (rarity) {
+	case STICKER_RARITY::COMMON: {
+		CCLog("bambi earn3Stickers common");
+	}
+		break;
+	case STICKER_RARITY::UNCOMMON: {
+		CCLog("bambi earn3Stickers uncommon");
+	}
+		break;
+	case STICKER_RARITY::RARE: {
+		CCLog("bambi earn3Stickers rare");
+	}
+		break;
+	case STICKER_RARITY::UNKNOWN: {
 		string stickerIdString = "";
 		for (int i = 0; i < 3; i++) {
 			//Determine position of the sticker
@@ -606,21 +624,7 @@ void HomeScene::earn3Stickers(STICKER_RARITY rarity, bool isRandom) {
 			}
 		}
 		StickerHelper::saveToMyStickerList(stickerIdString);
-	} else {
-		switch (rarity) {
-		case STICKER_RARITY::COMMON: {
-			CCLog("bambi earn3Stickers common");
-		}
-			break;
-		case STICKER_RARITY::UNCOMMON: {
-			CCLog("bambi earn3Stickers uncommon");
-		}
-			break;
-		case STICKER_RARITY::RARE: {
-			CCLog("bambi earn3Stickers rare");
-		}
-			break;
-		}
+	}
 	}
 
 	invalidateProgressBar();
@@ -718,9 +722,8 @@ void HomeScene::facebookConnectButtonCallback(Ref* pSender,
 		ui::Widget::TouchEventType eEventType) {
 	if (eEventType == ui::Widget::TouchEventType::ENDED
 			&& !blurLayer->isVisible()) {
-		sdkbox::PluginFacebook::inviteFriends(
-		  "https://fb.me/322164761287181",
-		  "http://www.cocos2d-x.org/attachments/801/cocos2dx_portrait.png");
+		sdkbox::PluginFacebook::inviteFriends("https://fb.me/322164761287181",
+				"http://www.cocos2d-x.org/attachments/801/cocos2dx_portrait.png");
 	}
 }
 

@@ -51,6 +51,10 @@ string StickerHelper::getRarityString(STICKER_RARITY rarity)
 			return "Uncommon";
 		case RARE:
 			return "Rare";
+		case VERYRARE:
+				return "Very rare";
+		case RAREST:
+				return "Rarest";
 	}
 	return "";
 }

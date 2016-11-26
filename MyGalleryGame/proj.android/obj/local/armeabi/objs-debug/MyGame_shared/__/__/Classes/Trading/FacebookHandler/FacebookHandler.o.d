@@ -442,6 +442,10 @@ obj/local/armeabi/objs-debug/MyGame_shared/__/__/Classes/Trading/FacebookHandler
  jni/../../Classes/Trading/FacebookHandler/../FirebaseHandler/FirebaseHandler.h \
  /Users/Kskull/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/../cocos2d/extensions/../cocos/network/HttpResponse.h \
  jni/../../Classes/Trading/FacebookHandler/FacebookHandler.h \
+ jni/../../Classes/Constants.h jni/../../Classes/Resources.h \
+ jni/../../Classes/StickerResource.h jni/../../Classes/StickerHelper.h \
+ jni/../../Classes/StickerResource.h jni/../../Classes/Constants.h \
+ jni/../../Classes/CppUtils.h \
  /Users/Kskull/Documents/Cocos2dx/ndk/sources/cxx-stl/gnu-libstdc++/4.9/include/iostream
 
 jni/../../Classes/Trading/FacebookHandler/FacebookHandler.h:
@@ -1327,5 +1331,19 @@ jni/../../Classes/Trading/FacebookHandler/../FirebaseHandler/FirebaseHandler.h:
 /Users/Kskull/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/../cocos2d/extensions/../cocos/network/HttpResponse.h:
 
 jni/../../Classes/Trading/FacebookHandler/FacebookHandler.h:
+
+jni/../../Classes/Constants.h:
+
+jni/../../Classes/Resources.h:
+
+jni/../../Classes/StickerResource.h:
+
+jni/../../Classes/StickerHelper.h:
+
+jni/../../Classes/StickerResource.h:
+
+jni/../../Classes/Constants.h:
+
+jni/../../Classes/CppUtils.h:
 
 /Users/Kskull/Documents/Cocos2dx/ndk/sources/cxx-stl/gnu-libstdc++/4.9/include/iostream:

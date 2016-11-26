@@ -440,6 +440,10 @@ obj/local/armeabi/objs-debug/MyGame_shared/__/__/Classes/Trading/FirebaseHandler
  /Users/Kskull/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/../cocos2d/external/flatbuffers/../curl/include/ios/curl/multi.h \
  /Users/Kskull/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/../cocos2d/external/flatbuffers/../curl/include/ios/curl/curl.h \
  /Users/Kskull/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/../cocos2d/external/flatbuffers/../curl/include/android/curl/curl.h \
+ jni/../../Classes/Constants.h jni/../../Classes/Resources.h \
+ jni/../../Classes/StickerResource.h jni/../../Classes/StickerHelper.h \
+ jni/../../Classes/StickerResource.h jni/../../Classes/Constants.h \
+ jni/../../Classes/CppUtils.h \
  /Users/Kskull/Documents/Cocos2dx/ndk/sources/cxx-stl/gnu-libstdc++/4.9/include/iostream
 
 jni/../../Classes/Trading/FirebaseHandler/FirebaseHandler.h:
@@ -1321,5 +1325,19 @@ jni/PluginFacebook/PluginFacebook.h:
 /Users/Kskull/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/../cocos2d/external/flatbuffers/../curl/include/ios/curl/curl.h:
 
 /Users/Kskull/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/../cocos2d/external/flatbuffers/../curl/include/android/curl/curl.h:
+
+jni/../../Classes/Constants.h:
+
+jni/../../Classes/Resources.h:
+
+jni/../../Classes/StickerResource.h:
+
+jni/../../Classes/StickerHelper.h:
+
+jni/../../Classes/StickerResource.h:
+
+jni/../../Classes/Constants.h:
+
+jni/../../Classes/CppUtils.h:
 
 /Users/Kskull/Documents/Cocos2dx/ndk/sources/cxx-stl/gnu-libstdc++/4.9/include/iostream:

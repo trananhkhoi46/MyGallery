@@ -27,36 +27,55 @@ FirebaseHandler* FirebaseHandler::getInstance() {
 	}
 	return instance;
 }
-void FirebaseHandler::getProbability() {
+
+void FirebaseHandler::getProbability(string url,
+		vector<string> probabilityKeys, STICKER_RARITY rarity) {
 	CCLog("bambi get Probability from Firebase - calling");
+
 	//Request http
 	HttpRequest* request = new HttpRequest();
-	request->setUrl(
-			"https://gallerygame-fab40.firebaseio.com/probability.json?auth=KKgD6eWhfoJC6KUCFwSwEGIJYzxkFAjnMOqNl6ir");
+	request->setUrl(url);
 	request->setRequestType(HttpRequest::Type::GET);
-	request->setResponseCallback(
-			CC_CALLBACK_2(
-					FirebaseHandler::getProbabilityCallBack,
-					this));
+	request->setResponseCallback([this, probabilityKeys, rarity](HttpClient* client,
+			HttpResponse* response) {
+		CCLog("bambi get Probability from Firebase - responding: %s",
+				response->isSucceed() ? "success" : "failed");
+		if (response->isSucceed()) {
+			//Clear data (sometimes stranged characters be attached after the result)
+			std::vector<char> *buffer = response->getResponseData();
+			const char *data = reinterpret_cast<char *>(&(buffer->front()));
+			std::string clearData(data);
+			size_t pos = clearData.rfind("}");
+			clearData = clearData.substr(0, pos + 1);
+			CCLog("bambi get Probability from Firebase: %s", clearData.c_str());
+			if (clearData == "")
+			return;
+
+			//Process data
+			rapidjson::Document d;
+			d.Parse<0>(clearData.c_str());
+			for(string key : probabilityKeys)
+			{
+				if(d.HasMember(key.c_str()))
+				{
+					string userdefaultKey = StickerHelper::getRarityString(rarity) + key;
+					UserDefault::getInstance()->setIntegerForKey(userdefaultKey.c_str(), d[key.c_str()].GetInt());
+				}
+			}
+		}
+	});
 	HttpClient::getInstance()->send(request);
 	request->release();
 }
 
-void FirebaseHandler::getProbabilityCallBack(HttpClient* client,
-		HttpResponse* response) {
-	CCLog("bambi get Probability from Firebase - responding: %s",
-			response->isSucceed() ? "success" : "failed");
-	if (response->isSucceed()) {
-		//Clear data (sometimes stranged characters be attached after the result)
-		std::vector<char> *buffer = response->getResponseData();
-		const char *data = reinterpret_cast<char *>(&(buffer->front()));
-		std::string clearData(data);
-		size_t pos = clearData.rfind("}");
-		clearData = clearData.substr(0, pos + 1);
-
-		CCLog("bambi get Probability from Firebase: %s", clearData.c_str());
-	}
+void FirebaseHandler::getProbabilityFreePacket() {
+	string url = String::createWithFormat(firebaseURL.c_str(),
+			firebaseQuerry_Probability_Freepacket.c_str())->getCString();
+	vector<string> probabilityKeys = {KEY_PROBABILITY_FREEPACKET_COMMON, KEY_PROBABILITY_FREEPACKET_UNCOMMON,
+		KEY_PROBABILITY_FREEPACKET_RARE, KEY_PROBABILITY_FREEPACKET_VERYRARE, KEY_PROBABILITY_FREEPACKET_RAREST};
+	FirebaseHandler::getProbability(url, probabilityKeys, STICKER_RARITY::UNKNOWN);
 }
+
 void FirebaseHandler::checkFacebookIdExistOnFirebase() {
 	//query string
 	char query[200];
