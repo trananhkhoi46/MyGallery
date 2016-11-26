@@ -121,6 +121,7 @@ static vector<StickerPage*> vt_sticker_pages = {
 //
 		StickerPage::create("Jungle 1","sticker/page1/bg_1.png", 1),
 		StickerPage::create("Jungle 2","sticker/page2/bg_2.png", 2),
+		StickerPage::create("Jungle 3","sticker/page3/bg_3.png", 3),
 //
 		};
 #endif
