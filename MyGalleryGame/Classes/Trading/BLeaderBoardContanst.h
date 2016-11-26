@@ -30,5 +30,10 @@ static const string restAPI="X-Parse-REST-API-Key: D1IPNshGLcQTRmnwktdjFnyyJsnTF
 static const string classURL="https://api.parse.com/1/classes/BUser";
 static const string firebaseURL = "https://gallerygame-fab40.firebaseio.com/json/%s.json?auth=KKgD6eWhfoJC6KUCFwSwEGIJYzxkFAjnMOqNl6ir";
 static const string firebaseQuerry_Probability_Freepacket = "probability_freepacket";
+static const string firebaseQuerry_Probability_Commonpacket = "probability_commonpacket";
+static const string firebaseQuerry_Probability_Uncommonpacket = "probability_uncommonpacket";
+static const string firebaseQuerry_Probability_Rarepacket = "probability_rarepacket";
+static const string firebaseQuerry_Probability_Veryrarepacket = "probability_veryrarepacket";
+static const string firebaseQuerry_Probability_Rarestpacket = "probability_rarestpacket";
 
 #endif

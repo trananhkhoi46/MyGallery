@@ -73,6 +73,11 @@ static const char s_albumscene_background[] = "albumscene/bg_album.png";
 static const char s_albumscene_btn_sticker[] = "albumscene/btn_sticker.png";
 static const char s_albumscene_btn_home[] = "albumscene/btn_home.png";
 static const char s_albumscene_btn_album[] = "albumscene/btn_album.png";
+static const char s_albumscene_btn_left[] = "albumscene/btn_left.png";
+static const char s_albumscene_btn_right[] = "albumscene/btn_right.png";
+static const char s_albumscene_menu_bottom[] = "albumscene/menu_bottom.png";
+static const char s_albumscene_sprite_arrow[] = "albumscene/sprite_arrow.png";
+static const char s_albumscene_sprite_label[] = "albumscene/sprite_label.png";
 
 
 //Sound

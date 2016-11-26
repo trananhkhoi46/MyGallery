@@ -13,8 +13,17 @@ public:
 	static cocos2d::Scene* scene();
 	CREATE_FUNC(AlbumScene)
 	void initControlButtons();
-	void addAllStickersToScrollView();
 	void onKeyReleased(EventKeyboard::KeyCode keycode, Event* event);
+	bool onTouchBegan(Touch* touch, Event* event);
+	void initPageView();
+	void setVisibilityMenuBar();
+
+	bool isMenuBarShowing;
+	Vec2 menuBarVisiblePosition;
+	Vec2 menuBarInvisiblePosition;
+	PageView* pageView;
+	Sprite* spriteArrowUpDown;
+	Button* btnMenuBar;
 };
 
 

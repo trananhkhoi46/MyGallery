@@ -24,7 +24,10 @@ bool AlbumScene::init() {
 		return false;
 	}
 
-	TTFConfig config(s_font, 120 * s_font_ratio);
+	//Init default variables
+	menuBarVisiblePosition = Vec2(winSize.width / 2, 148);
+	menuBarInvisiblePosition = Vec2(winSize.width / 2, -28);
+	isMenuBarShowing = false;
 
 	//Add background
 	Sprite* background = Sprite::create(s_albumscene_background);
@@ -33,7 +36,14 @@ bool AlbumScene::init() {
 	this->addChild(background);
 
 	//Init views
+	initPageView();
 	initControlButtons();
+
+	//Handling touch event
+	auto listener = EventListenerTouchOneByOne::create();
+	listener->setSwallowTouches(true);
+	listener->onTouchBegan = CC_CALLBACK_2(AlbumScene::onTouchBegan, this);
+	_eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
 
 	//Keyboard handling
 	auto keyboardListener = EventListenerKeyboard::create();
@@ -44,6 +54,96 @@ bool AlbumScene::init() {
 
 	return result;
 }
+
+void AlbumScene::initPageView() {
+	TTFConfig configPageLabel(s_font, 90 * s_font_ratio);
+	pageView = PageView::create();
+	pageView->setContentSize(Size(winSize.width, winSize.height));
+	pageView->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
+	pageView->setPosition(Vec2(winSize.width / 2, winSize.height / 2));
+	this->addChild(pageView);
+
+	for (int i = 0; i < vt_sticker_pages.size(); i++) {
+		StickerPage* stickerPage = vt_sticker_pages.at(i);
+		Layout* page = Layout::create();
+		page->setContentSize(pageView->getContentSize());
+
+		//Background
+		Sprite* background = Sprite::create(stickerPage->background_image);
+		background->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
+		background->setPosition(pageView->getContentSize().width / 2,
+				pageView->getContentSize().height / 2);
+		page->addChild(background);
+
+		//Sprite label
+		Sprite* spriteLabel = Sprite::create(s_albumscene_sprite_label);
+		spriteLabel->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
+		spriteLabel->setPosition(pageView->getContentSize().width / 2,
+				pageView->getContentSize().height - 300);
+		page->addChild(spriteLabel);
+
+		//Label page name
+		Label* labelButtonSticker = Label::createWithTTF(configPageLabel,
+				stickerPage->sticker_page_name.c_str(), TextHAlignment::CENTER);
+		labelButtonSticker->setPosition(
+				Vec2(spriteLabel->getContentSize().width / 2,
+						spriteLabel->getContentSize().height / 2 + 5));
+		labelButtonSticker->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
+		labelButtonSticker->setColor(Color3B::BLACK);
+		spriteLabel->addChild(labelButtonSticker);
+
+		pageView->insertPage(page, i);
+	}
+
+	//Btn menu bar bottom
+	btnMenuBar = Button::create(s_albumscene_menu_bottom);
+	btnMenuBar->setPosition(
+			isMenuBarShowing ?
+					menuBarVisiblePosition : menuBarInvisiblePosition);
+	btnMenuBar->setTouchEnabled(true);
+	btnMenuBar->setPressedActionEnabled(true);
+	btnMenuBar->setZoomScale(0);
+	btnMenuBar->addTouchEventListener([this](Ref *pSender,
+			Widget::TouchEventType type) {
+		if (type == cocos2d::ui::Widget::TouchEventType::ENDED)
+		{
+			isMenuBarShowing = !isMenuBarShowing;
+			setVisibilityMenuBar();
+		}});
+	this->addChild(btnMenuBar);
+
+	spriteArrowUpDown = Sprite::create(s_albumscene_sprite_arrow);
+	spriteArrowUpDown->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
+	spriteArrowUpDown->setPosition(Vec2(1000, 210));
+	btnMenuBar->addChild(spriteArrowUpDown);
+
+	setVisibilityMenuBar();
+
+	pageView->addEventListener(
+			[](Ref* sender, PageView::EventType type) {
+				if(type == PageView::EventType::TURNING)
+				{
+					PageView* pageViewInCallback = dynamic_cast<PageView*>(sender);
+					CCLog("bambi pageview index: %d", pageViewInCallback->getCurrentPageIndex());
+				}
+			});
+}
+
+void AlbumScene::setVisibilityMenuBar() {
+	CCLog("bambi setVisibilityMenuBar, %s",
+			isMenuBarShowing ? "visible" : "invisible");
+	if (btnMenuBar->numberOfRunningActions() == 0
+			&& spriteArrowUpDown->numberOfRunningActions() == 0) {
+		btnMenuBar->runAction(
+				MoveTo::create(0.3,
+						isMenuBarShowing ?
+								menuBarVisiblePosition :
+								menuBarInvisiblePosition));
+		spriteArrowUpDown->runAction(
+				RotateTo::create(0.3, isMenuBarShowing ? 0 : 180));
+	}
+}
+
 void AlbumScene::initControlButtons() {
 	TTFConfig configControlButton(s_font, 65 * s_font_ratio);
 	//Add btn sticker
@@ -125,34 +225,9 @@ void AlbumScene::initControlButtons() {
 	labelButtonHome->setColor(Color3B::BLACK);
 	this->addChild(labelButtonHome);
 }
-void AlbumScene::addAllStickersToScrollView() {
-	//Scrollview configuration
-	int numberOfItems = 20;
-	float itemMargin = 125;
-	Size scrollFrameSize = Size(500, 650);
 
-	//Create scrollview
-	BScrollView* scrollview = BScrollView::createVertical(numberOfItems,
-			itemMargin, scrollFrameSize);
-	scrollview->setPosition(Vec2(winSize.width / 2, winSize.height / 2));
-	scrollview->setBackGroundColorType(Layout::BackGroundColorType::SOLID); //Background
-	scrollview->setBackGroundColor(Color3B(200, 200, 200)); //Background
-	this->addChild(scrollview);
-
-	//Add sth to scroll view
-	float positionX = scrollview->leftPosition;
-	float positionY = scrollview->topPosition;
-	for (int i = 0; i < numberOfItems; i++) {
-		//Item background button
-		Sprite* itemSprite = Sprite::create(s_sticker_image_1_animation.at(0));
-		itemSprite->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
-		itemSprite->setPosition(
-				Vec2(positionX + scrollFrameSize.width / 2 - itemMargin / 2,
-						positionY));
-		scrollview->addChild(itemSprite);
-
-		positionY -= itemMargin;
-	}
+bool AlbumScene::onTouchBegan(Touch* touch, Event* event) {
+	return true;
 }
 
 bool firstClickInAlbumScene = true;
