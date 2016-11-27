@@ -124,13 +124,10 @@ void AlbumScene::initScrollView() {
 }
 
 void AlbumScene::scrollToPageIndex(int index) {
-	if (index != pageView->getCurrentPageIndex()) {
-		currentPage = index;
-		scrollview->scrollToPercentHorizontal(
-				(index > 0 ? (index + 1) : index) * 100.0f
-						/ (vt_sticker_pages.size() - 1), 0.5f, true);
-		pageView->scrollToPage(index);
-	}
+	CCLog("bambi scrollToPageIndex: %d", index);
+	scrollview->scrollToPercentHorizontal(
+			(index > 0 ? (index + 1) : index) * 100.0f
+					/ (vt_sticker_pages.size() - 1), 0.5f, true);
 
 	for (Button* buttonIcon : vtPagesIconButtons) {
 		buttonIcon->setScale(0.7f);
@@ -138,6 +135,11 @@ void AlbumScene::scrollToPageIndex(int index) {
 	}
 	vtPagesIconButtons.at(index)->setScale(1.1f);
 	vtPagesIconButtons.at(index)->setOpacity(255);
+
+	if (index != pageView->getCurrentPageIndex()) {
+		currentPage = index;
+		pageView->scrollToPage(index);
+	}
 }
 
 void AlbumScene::initPageView() {
@@ -227,8 +229,10 @@ void AlbumScene::initPageView() {
 		if(type == PageView::EventType::TURNING)
 		{
 			PageView* pageViewInCallback = dynamic_cast<PageView*>(sender);
-			scrollToPageIndex(pageViewInCallback->getCurrentPageIndex());
-		}
+			if(currentPage != pageViewInCallback->getCurrentPageIndex())
+			{
+				scrollToPageIndex(pageViewInCallback->getCurrentPageIndex());
+			}}
 	});
 }
 
@@ -344,8 +348,6 @@ void AlbumScene::initControlButtons() {
 }
 
 bool AlbumScene::onTouchBegan(Touch* touch, Event* event) {
-	CCLog("bambi, ontouch began, x: %f, y: %f, currentpage: %d",
-			touch->getLocation().x, touch->getLocation().y, currentPage);
 	getTouchingSprite(touch->getLocation());
 	return true;
 }
@@ -356,9 +358,6 @@ void AlbumScene::getTouchingSprite(Vec2 touchingLocation) {
 		if (vtSprite.size() > 0) {
 			for (int i = vtSprite.size() - 1; i >= 0; i--) {
 				Sprite* sprite = vtSprite.at(i);
-				CCLog("bambi, getTouchingSprite, vt_sprite box - x: %f, y: %d",
-						sprite->getBoundingBox().origin.x,
-						sprite->getBoundingBox().origin.y);
 				if (sprite->getBoundingBox().containsPoint(touchingLocation)
 						&& sprite->getTag() != -1) {
 					touchingSprite = sprite;
@@ -410,8 +409,6 @@ void AlbumScene::onTouchMoved(Touch* touch, Event* event) {
 	}
 }
 void AlbumScene::onTouchEnded(Touch* touch, Event* event) {
-	CCLog("bambi, ontouch ended, x: %f, y: %f", touch->getLocation().x,
-			touch->getLocation().y);
 	tryToGlueSticker();
 
 	touchingSprite = nullptr;
