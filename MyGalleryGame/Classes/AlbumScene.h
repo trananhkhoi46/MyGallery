@@ -24,6 +24,7 @@ public:
 	void tryToGlueSticker();
 	void scrollToPageIndex(int index);
 	void setVisibilityBtnLeftRight();
+	void timer(float interval);
 
 	int currentPage;
 	bool isMenuBarShowing;

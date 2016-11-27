@@ -48,9 +48,13 @@ bool AlbumScene::init() {
 	_eventDispatcher->addEventListenerWithSceneGraphPriority(keyboardListener,
 			this);
 
+	schedule(schedule_selector(AlbumScene::timer), 1);
 	return result;
 }
 
+void AlbumScene::timer(float interval) {
+	setVisibilityBtnLeftRight();
+}
 void AlbumScene::initScrollView() {
 
 	//Btn menu bar bottom
@@ -90,6 +94,7 @@ void AlbumScene::initScrollView() {
 	scrollview = BScrollView::createHorizontal(numberOfItems, itemMargin,
 			scrollFrameSize);
 	scrollview->setScrollBarEnabled(false);
+	scrollview->setBounceEnabled(false);
 	scrollview->setPosition(
 			Vec2(winSize.width / 2, scrollFrameSize.height / 2));
 	spriteMenuBarBottom->addChild(scrollview);
@@ -380,13 +385,14 @@ void AlbumScene::initControlButtons() {
 	btnRight->setTouchEnabled(true);
 	btnRight->setPressedActionEnabled(true);
 	btnRight->setScale(1.2f);
-	btnRight->addTouchEventListener([this](Ref *pSender,
-			Widget::TouchEventType type) {
-		if (type == cocos2d::ui::Widget::TouchEventType::ENDED)
-		{
-			CCLog("bambi, currentPageIndex: %d",pageView->getCurrentPageIndex());
-			scrollToPageIndex(pageView->getCurrentPageIndex() + 1);
-		}});
+	btnRight->addTouchEventListener(
+			[this](Ref *pSender,
+					Widget::TouchEventType type) {
+				if (type == cocos2d::ui::Widget::TouchEventType::ENDED)
+				{
+					CCLog("bambi, currentPageIndex: %d",pageView->getCurrentPageIndex());
+					scrollToPageIndex(pageView->getCurrentPageIndex() + 1);
+				}});
 	this->addChild(btnRight);
 }
 void AlbumScene::setVisibilityBtnLeftRight() {
