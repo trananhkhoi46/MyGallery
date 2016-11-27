@@ -18,9 +18,11 @@ public:
 	void onTouchMoved(Touch* touch, Event* event);
 	void onTouchEnded(Touch* touch, Event* event);
 	void initPageView();
+	void initScrollView();
 	void setVisibilityMenuBar();
 	void getTouchingSprite(Vec2 touchingLocation);
 	void tryToGlueSticker();
+	void scrollToPageIndex(int index);
 
 	int currentPage;
 	bool isMenuBarShowing;
@@ -28,11 +30,13 @@ public:
 	Vec2 menuBarInvisiblePosition;
 	Vec2 touchingOffset;
 	PageView* pageView;
+	BScrollView* scrollview;
 	Sprite* spriteArrowUpDown;
 	Button* btnMenuBarTop;
 	Sprite* spriteMenuBarBottom;
 	vector<vector<Sprite*>> vtStickerSpritesAllPages;
 	vector<vector<Sprite*>> vtStickerSpritesHolderAllPages;
+	vector<Button*> vtPagesIconButtons;
 	Sprite* touchingSprite;
 };
 

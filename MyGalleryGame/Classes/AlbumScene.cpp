@@ -39,6 +39,7 @@ bool AlbumScene::init() {
 	//Init views
 	initPageView();
 	initControlButtons();
+	initScrollView();
 
 	//Keyboard handling
 	auto keyboardListener = EventListenerKeyboard::create();
@@ -48,6 +49,95 @@ bool AlbumScene::init() {
 			this);
 
 	return result;
+}
+
+void AlbumScene::initScrollView() {
+
+	//Btn menu bar bottom
+	spriteMenuBarBottom = Sprite::create(s_albumscene_menu_bottom_bottom);
+	spriteMenuBarBottom->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
+	spriteMenuBarBottom->setPosition(
+			isMenuBarShowing ?
+					menuBarVisiblePosition : menuBarInvisiblePosition);
+	this->addChild(spriteMenuBarBottom);
+
+	btnMenuBarTop = Button::create(s_albumscene_menu_bottom_top);
+	btnMenuBarTop->setTouchEnabled(true);
+	btnMenuBarTop->setPressedActionEnabled(true);
+	btnMenuBarTop->setZoomScale(0);
+	btnMenuBarTop->addTouchEventListener([this](Ref *pSender,
+			Widget::TouchEventType type) {
+		if (type == cocos2d::ui::Widget::TouchEventType::ENDED)
+		{
+			isMenuBarShowing = !isMenuBarShowing;
+			setVisibilityMenuBar();
+		}});
+	this->addChild(btnMenuBarTop);
+
+	spriteArrowUpDown = Sprite::create(s_albumscene_sprite_arrow);
+	spriteArrowUpDown->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
+	spriteArrowUpDown->setPosition(Vec2(280, 50));
+	btnMenuBarTop->addChild(spriteArrowUpDown);
+
+	setVisibilityMenuBar();
+
+	//Scrollview config
+	int numberOfItems = vt_sticker_pages.size();
+	float itemMargin = 220;
+	Size scrollFrameSize = Size(winSize.width, 190);
+
+	//Create scrollview
+	scrollview = BScrollView::createHorizontal(numberOfItems, itemMargin,
+			scrollFrameSize);
+	scrollview->setScrollBarEnabled(false);
+	scrollview->setPosition(
+			Vec2(winSize.width / 2, scrollFrameSize.height / 2));
+	spriteMenuBarBottom->addChild(scrollview);
+
+	//Add sth to scroll view
+	float positionX = scrollview->leftPosition;
+	float positionY = scrollview->topPosition;
+	for (int i = 0; i < numberOfItems; i++) {
+		StickerPage* sticker_page = vt_sticker_pages.at(i);
+
+		//Add btn sticker
+		Button* btnStickerPageIcon = Button::create(sticker_page->icon_image);
+		btnStickerPageIcon->setPosition(Vec2(positionX, positionY));
+		btnStickerPageIcon->setTouchEnabled(true);
+		btnStickerPageIcon->setPressedActionEnabled(true);
+		btnStickerPageIcon->setTag(i);
+		btnStickerPageIcon->setScale(i == 0 ? 1.1f : 0.7f);
+		btnStickerPageIcon->setOpacity(i == 0 ? 255 : 123);
+		btnStickerPageIcon->addTouchEventListener([this](Ref *pSender,
+				Widget::TouchEventType type) {
+			if (type == cocos2d::ui::Widget::TouchEventType::ENDED)
+			{
+				int tag = (int) dynamic_cast<Button*>(pSender)->getTag();
+				scrollToPageIndex(tag);
+
+			}});
+		vtPagesIconButtons.push_back(btnStickerPageIcon);
+		scrollview->addChild(btnStickerPageIcon);
+
+		positionX += itemMargin;
+	}
+}
+
+void AlbumScene::scrollToPageIndex(int index) {
+	if (index != pageView->getCurrentPageIndex()) {
+		currentPage = index;
+		scrollview->scrollToPercentHorizontal(
+				(index > 0 ? (index + 1) : index) * 100.0f
+						/ (vt_sticker_pages.size() - 1), 0.5f, true);
+		pageView->scrollToPage(index);
+	}
+
+	for (Button* buttonIcon : vtPagesIconButtons) {
+		buttonIcon->setScale(0.7f);
+		buttonIcon->setOpacity(123);
+	}
+	vtPagesIconButtons.at(index)->setScale(1.1f);
+	vtPagesIconButtons.at(index)->setOpacity(255);
 }
 
 void AlbumScene::initPageView() {
@@ -133,49 +223,11 @@ void AlbumScene::initPageView() {
 		pageView->insertPage(page, i);
 	}
 
-	//Btn menu bar bottom
-	spriteMenuBarBottom = Sprite::create(s_albumscene_menu_bottom_bottom);
-	spriteMenuBarBottom->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
-	spriteMenuBarBottom->setPosition(
-			isMenuBarShowing ?
-					menuBarVisiblePosition : menuBarInvisiblePosition);
-	this->addChild(spriteMenuBarBottom);
-
-	btnMenuBarTop = Button::create(s_albumscene_menu_bottom_top);
-	btnMenuBarTop->setPosition(
-			isMenuBarShowing ?
-					Vec2(
-							winSize.width
-									- btnMenuBarTop->getContentSize().width / 2,
-							menuBarVisiblePosition.y) :
-					Vec2(
-							winSize.width
-									- btnMenuBarTop->getContentSize().width / 2,
-							menuBarInvisiblePosition.y));
-	btnMenuBarTop->setTouchEnabled(true);
-	btnMenuBarTop->setPressedActionEnabled(true);
-	btnMenuBarTop->setZoomScale(0);
-	btnMenuBarTop->addTouchEventListener([this](Ref *pSender,
-			Widget::TouchEventType type) {
-		if (type == cocos2d::ui::Widget::TouchEventType::ENDED)
-		{
-			isMenuBarShowing = !isMenuBarShowing;
-			setVisibilityMenuBar();
-		}});
-	this->addChild(btnMenuBarTop);
-
-	spriteArrowUpDown = Sprite::create(s_albumscene_sprite_arrow);
-	spriteArrowUpDown->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
-	spriteArrowUpDown->setPosition(Vec2(282, 225));
-	btnMenuBarTop->addChild(spriteArrowUpDown);
-
-	setVisibilityMenuBar();
-
 	pageView->addEventListener([this](Ref* sender, PageView::EventType type) {
 		if(type == PageView::EventType::TURNING)
 		{
 			PageView* pageViewInCallback = dynamic_cast<PageView*>(sender);
-			currentPage = pageViewInCallback->getCurrentPageIndex();
+			scrollToPageIndex(pageViewInCallback->getCurrentPageIndex());
 		}
 	});
 }
@@ -193,12 +245,12 @@ void AlbumScene::setVisibilityMenuBar() {
 										winSize.width
 												- btnMenuBarTop->getContentSize().width
 														/ 2,
-										menuBarVisiblePosition.y) :
+										menuBarVisiblePosition.y + 88) :
 								Vec2(
 										winSize.width
 												- btnMenuBarTop->getContentSize().width
 														/ 2,
-										menuBarInvisiblePosition.y)));
+										menuBarInvisiblePosition.y + 88)));
 		spriteMenuBarBottom->runAction(
 				MoveTo::create(0.3,
 						isMenuBarShowing ?

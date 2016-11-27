@@ -12,14 +12,16 @@ enum STICKER_RARITY {
 
 class StickerPage {
 public:
-	inline static StickerPage* create(string sticker_page_name, string background_image,
+	inline static StickerPage* create(string sticker_page_name, string background_image, string icon_image,
 			int sticker_page_id) {
 		StickerPage* result = new StickerPage();
 		result->background_image = background_image;
 		result->sticker_page_id = sticker_page_id;
 		result->sticker_page_name = sticker_page_name;
+		result->icon_image = icon_image;
 		return result;
 	}
+	string icon_image;
 	string background_image;
 	string sticker_page_name;
 	int sticker_page_id;
@@ -119,9 +121,15 @@ static vector<Sticker*> vt_stickers = {
 //
 static vector<StickerPage*> vt_sticker_pages = {
 //
-		StickerPage::create("Jungle 1","sticker/page1/bg_1.png", 1),
-		StickerPage::create("Jungle 2","sticker/page2/bg_2.png", 2),
-		StickerPage::create("Jungle 3","sticker/page3/bg_3.png", 3),
+		StickerPage::create("Jungle 1","sticker/page1/bg_1.png","sticker/page1/icon_1.png", 1),
+		StickerPage::create("Jungle 2","sticker/page2/bg_2.png","sticker/page2/icon_2.png", 2),
+		StickerPage::create("Jungle 3","sticker/page3/bg_3.png","sticker/page3/icon_3.png", 3),
+		StickerPage::create("Jungle 1","sticker/page1/bg_1.png","sticker/page1/icon_1.png", 1),
+		StickerPage::create("Jungle 2","sticker/page2/bg_2.png","sticker/page2/icon_2.png", 2),
+		StickerPage::create("Jungle 3","sticker/page3/bg_3.png","sticker/page3/icon_3.png", 3),
+		StickerPage::create("Jungle 1","sticker/page1/bg_1.png","sticker/page1/icon_1.png", 1),
+		StickerPage::create("Jungle 2","sticker/page2/bg_2.png","sticker/page2/icon_2.png", 2),
+		StickerPage::create("Jungle 3","sticker/page3/bg_3.png","sticker/page3/icon_3.png", 3),
 //
 		};
 #endif
