@@ -114,6 +114,7 @@ void AlbumScene::initScrollView() {
 			{
 				int tag = (int) dynamic_cast<Button*>(pSender)->getTag();
 				scrollToPageIndex(tag);
+				setVisibilityBtnLeftRight();
 
 			}});
 		vtPagesIconButtons.push_back(btnStickerPageIcon);
@@ -139,10 +140,11 @@ void AlbumScene::scrollToPageIndex(int index) {
 
 		if (index != pageView->getCurrentPageIndex()) {
 			pageView->scrollToPage(index);
+		} else {
+			setVisibilityBtnLeftRight();
 		}
 
 		currentPage = index;
-		setVisibilityBtnLeftRight();
 	}
 }
 
@@ -228,6 +230,8 @@ void AlbumScene::initPageView() {
 
 		pageView->insertPage(page, i);
 	}
+
+	pageView->setCurrentPageIndex(0);
 
 	pageView->addEventListener([this](Ref* sender, PageView::EventType type) {
 		if(type == PageView::EventType::TURNING)
@@ -364,7 +368,6 @@ void AlbumScene::initControlButtons() {
 		if (type == cocos2d::ui::Widget::TouchEventType::ENDED)
 		{
 			scrollToPageIndex(pageView->getCurrentPageIndex() - 1);
-
 		}});
 	this->addChild(btnLeft);
 	btnLeft->setVisible(false);
@@ -381,6 +384,7 @@ void AlbumScene::initControlButtons() {
 			Widget::TouchEventType type) {
 		if (type == cocos2d::ui::Widget::TouchEventType::ENDED)
 		{
+			CCLog("bambi, currentPageIndex: %d",pageView->getCurrentPageIndex());
 			scrollToPageIndex(pageView->getCurrentPageIndex() + 1);
 		}});
 	this->addChild(btnRight);
@@ -391,8 +395,7 @@ void AlbumScene::setVisibilityBtnLeftRight() {
 		btnRight->setVisible(
 				pageView->getCurrentPageIndex() < vt_sticker_pages.size() - 1);
 	});
-	this->runAction(
-			Sequence::create(DelayTime::create(1), func, nullptr));
+	this->runAction(Sequence::create(DelayTime::create(0.5f), func, nullptr));
 }
 
 bool AlbumScene::onTouchBegan(Touch* touch, Event* event) {
