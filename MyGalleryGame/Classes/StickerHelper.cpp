@@ -110,23 +110,21 @@ int StickerHelper::getCurrentExistStickerNumber(bool withUniqueElements) {
 
 vector<Sticker*> StickerHelper::getStickerOfPage(StickerPage* page) {
 	vector<Sticker*> result;
-	for(Sticker* sticker:vt_stickers)
-	{
-		if(sticker->sticker_page_id == page->sticker_page_id)
-		{
+	for (Sticker* sticker : vt_stickers) {
+		if (sticker->sticker_page_id == page->sticker_page_id) {
 			result.push_back(sticker);
 		}
 	}
 	return result;
 }
 
-vector<Sticker*> StickerHelper::getStickerAvailableToGlueOfPage(StickerPage* page) {
+vector<Sticker*> StickerHelper::getStickerAvailableToGlueOfPage(
+		StickerPage* page) {
 	vector<Sticker*> result;
 	vector<Sticker*> vt_exist_sticker = getCurrentExistSticker(true);
-	for(Sticker* sticker:vt_exist_sticker)
-	{
-		if(sticker->sticker_page_id == page->sticker_page_id && isStickerHasNotSticked(sticker->sticker_id))
-		{
+	for (Sticker* sticker : vt_exist_sticker) {
+		if (sticker->sticker_page_id == page->sticker_page_id
+				&& isStickerHasNotSticked(sticker->sticker_id)) {
 			result.push_back(sticker);
 		}
 	}
@@ -135,6 +133,10 @@ vector<Sticker*> StickerHelper::getStickerAvailableToGlueOfPage(StickerPage* pag
 
 vector<Sticker*> StickerHelper::getCurrentExistSticker(
 		bool withUniqueElements) {
+	return getCurrentExistSticker(withUniqueElements, false);
+}
+vector<Sticker*> StickerHelper::getCurrentExistSticker(bool withUniqueElements,
+		bool getHasNotGluedStickersOnly) {
 	vector<Sticker*> result;
 	vector < string > vtCurrentSticker = CppUtils::splitStringByDelim(
 			UserDefault::getInstance()->getStringForKey(CURRENT_STICKER), ',');
@@ -147,7 +149,12 @@ vector<Sticker*> StickerHelper::getCurrentExistSticker(
 			for (int i = 0; i < vt_stickers.size(); i++) {
 				if (vt_stickers.at(i)->sticker_id
 						== (int) CppUtils::stringToDouble(element)) {
-					result.push_back(vt_stickers.at(i));
+					if (!getHasNotGluedStickersOnly
+							|| (getHasNotGluedStickersOnly
+									&& isStickerHasNotSticked(
+											vt_stickers.at(i)->sticker_id))) {
+						result.push_back(vt_stickers.at(i));
+					}
 					break;
 				}
 			}
@@ -158,7 +165,12 @@ vector<Sticker*> StickerHelper::getCurrentExistSticker(
 			for (int i = 0; i < vt_stickers.size(); i++) {
 				if (vt_stickers.at(i)->sticker_id
 						== (int) CppUtils::stringToDouble(element)) {
-					result.push_back(vt_stickers.at(i));
+					if (!getHasNotGluedStickersOnly
+							|| (getHasNotGluedStickersOnly
+									&& isStickerHasNotSticked(
+											vt_stickers.at(i)->sticker_id))) {
+						result.push_back(vt_stickers.at(i));
+					}
 					break;
 				}
 			}

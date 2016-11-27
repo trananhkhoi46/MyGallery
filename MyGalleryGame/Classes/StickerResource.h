@@ -124,12 +124,13 @@ static vector<StickerPage*> vt_sticker_pages = {
 		StickerPage::create("Jungle 1","sticker/page1/bg_1.png","sticker/page1/icon_1.png", 1),
 		StickerPage::create("Jungle 2","sticker/page2/bg_2.png","sticker/page2/icon_2.png", 2),
 		StickerPage::create("Jungle 3","sticker/page3/bg_3.png","sticker/page3/icon_3.png", 3),
-		StickerPage::create("Jungle 1","sticker/page1/bg_1.png","sticker/page1/icon_1.png", 1),
-		StickerPage::create("Jungle 2","sticker/page2/bg_2.png","sticker/page2/icon_2.png", 2),
-		StickerPage::create("Jungle 3","sticker/page3/bg_3.png","sticker/page3/icon_3.png", 3),
-		StickerPage::create("Jungle 1","sticker/page1/bg_1.png","sticker/page1/icon_1.png", 1),
-		StickerPage::create("Jungle 2","sticker/page2/bg_2.png","sticker/page2/icon_2.png", 2),
-		StickerPage::create("Jungle 3","sticker/page3/bg_3.png","sticker/page3/icon_3.png", 3),
+		StickerPage::create("Jungle 4","sticker/page1/bg_1.png","sticker/page1/icon_1.png", 4),
+		StickerPage::create("Jungle 5","sticker/page2/bg_2.png","sticker/page2/icon_2.png", 5),
+		StickerPage::create("Jungle 6","sticker/page3/bg_3.png","sticker/page3/icon_3.png", 6),
+		StickerPage::create("Jungle 7","sticker/page1/bg_1.png","sticker/page1/icon_1.png", 7),
+		StickerPage::create("Jungle 8","sticker/page2/bg_2.png","sticker/page2/icon_2.png", 8),
+		StickerPage::create("Jungle 9","sticker/page3/bg_3.png","sticker/page3/icon_3.png", 9),
+
 //
 		};
 #endif

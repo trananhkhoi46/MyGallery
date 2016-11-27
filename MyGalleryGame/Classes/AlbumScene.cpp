@@ -125,20 +125,24 @@ void AlbumScene::initScrollView() {
 
 void AlbumScene::scrollToPageIndex(int index) {
 	CCLog("bambi scrollToPageIndex: %d", index);
-	scrollview->scrollToPercentHorizontal(
-			(index > 0 ? (index + 1) : index) * 100.0f
-					/ (vt_sticker_pages.size() - 1), 0.5f, true);
+	if (index >= 0 && index < vt_sticker_pages.size()) {
+		scrollview->scrollToPercentHorizontal(
+				(index > 0 ? (index + 1) : index) * 100.0f
+						/ (vt_sticker_pages.size() - 1), 0.5f, true);
 
-	for (Button* buttonIcon : vtPagesIconButtons) {
-		buttonIcon->setScale(0.7f);
-		buttonIcon->setOpacity(123);
-	}
-	vtPagesIconButtons.at(index)->setScale(1.1f);
-	vtPagesIconButtons.at(index)->setOpacity(255);
+		for (Button* buttonIcon : vtPagesIconButtons) {
+			buttonIcon->setScale(0.7f);
+			buttonIcon->setOpacity(123);
+		}
+		vtPagesIconButtons.at(index)->setScale(1.1f);
+		vtPagesIconButtons.at(index)->setOpacity(255);
 
-	if (index != pageView->getCurrentPageIndex()) {
+		if (index != pageView->getCurrentPageIndex()) {
+			pageView->scrollToPage(index);
+		}
+
 		currentPage = index;
-		pageView->scrollToPage(index);
+		setVisibilityBtnLeftRight();
 	}
 }
 
@@ -232,7 +236,9 @@ void AlbumScene::initPageView() {
 			if(currentPage != pageViewInCallback->getCurrentPageIndex())
 			{
 				scrollToPageIndex(pageViewInCallback->getCurrentPageIndex());
-			}}
+			}
+			setVisibilityBtnLeftRight();
+		}
 	});
 }
 
@@ -345,6 +351,48 @@ void AlbumScene::initControlButtons() {
 	labelButtonHome->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
 	labelButtonHome->setColor(Color3B::BLACK);
 	this->addChild(labelButtonHome);
+
+	//Btn left
+	btnLeft = Button::create(s_albumscene_btn_left);
+	btnLeft->setPosition(
+			Vec2(btnLeft->getContentSize().width, winSize.height / 2));
+	btnLeft->setTouchEnabled(true);
+	btnLeft->setPressedActionEnabled(true);
+	btnLeft->setScale(1.2f);
+	btnLeft->addTouchEventListener([this](Ref *pSender,
+			Widget::TouchEventType type) {
+		if (type == cocos2d::ui::Widget::TouchEventType::ENDED)
+		{
+			scrollToPageIndex(pageView->getCurrentPageIndex() - 1);
+
+		}});
+	this->addChild(btnLeft);
+	btnLeft->setVisible(false);
+
+	//Btn right
+	btnRight = Button::create(s_albumscene_btn_right);
+	btnRight->setPosition(
+			Vec2(winSize.width - btnLeft->getContentSize().width,
+					winSize.height / 2));
+	btnRight->setTouchEnabled(true);
+	btnRight->setPressedActionEnabled(true);
+	btnRight->setScale(1.2f);
+	btnRight->addTouchEventListener([this](Ref *pSender,
+			Widget::TouchEventType type) {
+		if (type == cocos2d::ui::Widget::TouchEventType::ENDED)
+		{
+			scrollToPageIndex(pageView->getCurrentPageIndex() + 1);
+		}});
+	this->addChild(btnRight);
+}
+void AlbumScene::setVisibilityBtnLeftRight() {
+	auto func = CallFunc::create([=]() {
+		btnLeft->setVisible(pageView->getCurrentPageIndex() > 0);
+		btnRight->setVisible(
+				pageView->getCurrentPageIndex() < vt_sticker_pages.size() - 1);
+	});
+	this->runAction(
+			Sequence::create(DelayTime::create(1), func, nullptr));
 }
 
 bool AlbumScene::onTouchBegan(Touch* touch, Event* event) {

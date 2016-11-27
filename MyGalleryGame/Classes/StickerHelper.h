@@ -19,6 +19,7 @@ public:
 	static void saveToMyGluedStickerList(int stickerId);
 	static void saveToMyGluedStickerList(string stickerIdString);
 	static int getCurrentExistStickerNumber(bool withUniqueElements);
+	static vector<Sticker*> getCurrentExistSticker(bool withUniqueElements, bool getHasNotGluedStickersOnly);
 	static vector<Sticker*> getCurrentExistSticker(bool withUniqueElements);
 	static vector<Sticker*> getStickerOfPage(StickerPage* page);
 	static vector<Sticker*> getStickerAvailableToGlueOfPage(StickerPage* page);

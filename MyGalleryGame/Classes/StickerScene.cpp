@@ -3,7 +3,30 @@
 #include "AlbumScene.h"
 #include <math.h>
 
+#define SEARCH_TYPE_ALL 0
+#define SEARCH_TYPE_STICK 1
+#define SEARCH_TYPE_SELL 2
 Scene* StickerScene::scene() {
+	return scene(SEARCH_TYPE_ALL);
+}
+
+int searchingType;
+vector<Sticker*> vt_stickers_searching;
+Scene* StickerScene::scene(int searchType) {
+	searchingType = searchType;
+	if (searchType == SEARCH_TYPE_ALL) //Type search all
+	{
+		vt_stickers_searching = StickerHelper::getCurrentExistSticker(
+				true);
+	}else if (searchType == SEARCH_TYPE_STICK) //Type search stick
+	{
+		vt_stickers_searching = StickerHelper::getCurrentExistSticker(
+				true, true);
+	}else if (searchType == SEARCH_TYPE_SELL) //Type sell
+	{
+	}
+
+
 	// 'scene' is an autorelease object
 	Scene *scene = Scene::create();
 
@@ -35,6 +58,7 @@ bool StickerScene::init() {
 
 	//Init views
 	initControlButtons();
+	initMenuBottom();
 
 	//Add all stickers to scrollview
 	addAllStickersToScrollView();
@@ -52,6 +76,85 @@ bool StickerScene::init() {
 	_eventDispatcher->addEventListenerWithSceneGraphPriority(keyboardListener,
 			this);
 	return result;
+}
+void StickerScene::initMenuBottom() {
+	//Menu bottom background
+	Sprite* spriteMenuBottom = Sprite::create(s_stickerscene_menu_bottom);
+	spriteMenuBottom->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
+	spriteMenuBottom->setPosition(winSize.width / 2,
+			spriteMenuBottom->getContentSize().height / 2);
+	this->addChild(spriteMenuBottom);
+
+	//Sprite search
+	Sprite* spriteSearch = Sprite::create(s_stickerscene_sprite_search);
+	spriteSearch->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
+	spriteSearch->setPosition(100,
+			spriteMenuBottom->getContentSize().height / 2 - 10);
+	this->addChild(spriteSearch);
+
+	//Add btn search all
+	Button* btnSearchAll = Button::create(s_stickerscene_btn_all);
+	btnSearchAll->setPosition(
+			Vec2(400, spriteMenuBottom->getContentSize().height / 2 - 10));
+	btnSearchAll->setTouchEnabled(true);
+	btnSearchAll->setPressedActionEnabled(true);
+	btnSearchAll->setOpacity(123);
+	btnSearchAll->addTouchEventListener([this](Ref *pSender,
+			Widget::TouchEventType type) {
+		if (type == cocos2d::ui::Widget::TouchEventType::ENDED)
+		{
+			auto *newScene = StickerScene::scene(SEARCH_TYPE_ALL);
+			auto transition = TransitionFade::create(1.0, newScene);
+			Director *pDirector = Director::getInstance();
+			pDirector->replaceScene(transition);
+		}});
+	this->addChild(btnSearchAll);
+	if (searchingType == SEARCH_TYPE_ALL) {
+		btnSearchAll->setOpacity(255);
+	}
+
+	//Add btn search stick
+	Button* btnSearchStick = Button::create(s_stickerscene_btn_stick);
+	btnSearchStick->setPosition(
+			Vec2(700, spriteMenuBottom->getContentSize().height / 2 - 10));
+	btnSearchStick->setTouchEnabled(true);
+	btnSearchStick->setPressedActionEnabled(true);
+	btnSearchStick->setOpacity(123);
+	btnSearchStick->addTouchEventListener([this](Ref *pSender,
+			Widget::TouchEventType type) {
+		if (type == cocos2d::ui::Widget::TouchEventType::ENDED)
+		{
+			auto *newScene = StickerScene::scene(SEARCH_TYPE_STICK);
+			auto transition = TransitionFade::create(1.0, newScene);
+			Director *pDirector = Director::getInstance();
+			pDirector->replaceScene(transition);
+		}});
+	this->addChild(btnSearchStick);
+	if (searchingType == SEARCH_TYPE_STICK) {
+		btnSearchStick->setOpacity(255);
+	}
+
+	//Add btn sell
+	Button* btnSell = Button::create(s_stickerscene_btn_sell);
+	btnSell->setPosition(
+			Vec2(1000, spriteMenuBottom->getContentSize().height / 2 - 10));
+	btnSell->setTouchEnabled(true);
+	btnSell->setPressedActionEnabled(true);
+	btnSell->setOpacity(123);
+	btnSell->addTouchEventListener([this](Ref *pSender,
+			Widget::TouchEventType type) {
+		if (type == cocos2d::ui::Widget::TouchEventType::ENDED)
+		{
+//			auto *newScene = StickerScene::scene(SEARCH_TYPE_SELL);
+//			auto transition = TransitionFade::create(1.0, newScene);
+//			Director *pDirector = Director::getInstance();
+//			pDirector->replaceScene(transition);
+			SocialPlugin::showToast("Isn't supported this feature");
+		}});
+	this->addChild(btnSell);
+	if (searchingType == SEARCH_TYPE_SELL) {
+		btnSell->setOpacity(255);
+	}
 }
 void StickerScene::initControlButtons() {
 	TTFConfig configControlButton(s_font, 65 * s_font_ratio);
@@ -138,13 +241,12 @@ void StickerScene::addAllStickersToScrollView() {
 	TTFConfig configStickerDetailLabel(s_font, 65 * s_font_ratio);
 
 	//Scrollview configuration
-	vector<Sticker*> vt_current_exist_sticker =
-			StickerHelper::getCurrentExistSticker(true);
-	int numberOfItems = vt_current_exist_sticker.size();
+	int numberOfItems = vt_stickers_searching.size();
 	int scrollviewMarginTop = 150;
+	int scrollviewMarginBottom = 122;
 	float itemMargin = 600;
 	Size scrollFrameSize = Size(winSize.width,
-			winSize.height - scrollviewMarginTop);
+			winSize.height - scrollviewMarginTop - scrollviewMarginBottom);
 
 	//Create scrollview
 	scrollview = BScrollView::createVertical(ceil(numberOfItems / 2.0f),
@@ -158,7 +260,7 @@ void StickerScene::addAllStickersToScrollView() {
 	float positionX = scrollview->leftPosition;
 	float positionY = scrollview->topPosition + 30;
 	for (int i = 0; i < numberOfItems; i++) {
-		Sticker* sticker = vt_current_exist_sticker.at(i);
+		Sticker* sticker = vt_stickers_searching.at(i);
 
 		//Add btn sticker
 		Button* btnStickerScene = Button::create(sticker->sticker_image);
@@ -220,7 +322,7 @@ void StickerScene::addAllStickersToScrollView() {
 		itemDetailSprite->addChild(labelStickerQuantity);
 
 		//Stick sprite if needed
-		if (StickerHelper::isStickerHasNotSticked(1)) {
+		if (StickerHelper::isStickerHasNotSticked(sticker->sticker_id)) {
 			Sprite* stickerStick = Sprite::create(s_stickerscene_sprite_stick);
 			stickerStick->setAnchorPoint(Vec2::ANCHOR_TOP_LEFT);
 			stickerStick->setPosition(

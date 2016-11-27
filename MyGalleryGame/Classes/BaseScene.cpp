@@ -118,15 +118,15 @@ public:
 void BaseScene::showFullscreenAds() {
 	CCLog("bambi showFullscreenAds");
 #ifdef SDKBOX_ENABLED
-	int random = CppUtils::randomBetween(1,3);
-	if(random == 1)
-	{
-		sdkbox::PluginChartboost::show(kChartboostInstitialAds);
-	} else if(random == 2) {
-		sdkbox::PluginAdMob::show(kAdmobInstitialAds);
-	} else {
-		sdkbox::PluginVungle::show(kVungleInstitialAds);
-	}
+//	int random = CppUtils::randomBetween(1,3);
+//	if(random == 1)
+//	{
+//		sdkbox::PluginChartboost::show(kChartboostInstitialAds);
+//	} else if(random == 2) {
+//		sdkbox::PluginAdMob::show(kAdmobInstitialAds);
+//	} else {
+//		sdkbox::PluginVungle::show(kVungleInstitialAds);
+//	}
 #endif
 }
 void BaseScene::showRewardedAds() {

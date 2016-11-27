@@ -23,6 +23,7 @@ public:
 	void getTouchingSprite(Vec2 touchingLocation);
 	void tryToGlueSticker();
 	void scrollToPageIndex(int index);
+	void setVisibilityBtnLeftRight();
 
 	int currentPage;
 	bool isMenuBarShowing;
@@ -38,6 +39,8 @@ public:
 	vector<vector<Sprite*>> vtStickerSpritesHolderAllPages;
 	vector<Button*> vtPagesIconButtons;
 	Sprite* touchingSprite;
+	Button* btnLeft;
+	Button* btnRight;
 };
 
 

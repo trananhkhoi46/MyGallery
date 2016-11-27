@@ -11,8 +11,10 @@ public:
 
 	// there's no 'id' in cpp, so we recommend returning the class instance pointer
 	static cocos2d::Scene* scene();
+	static cocos2d::Scene* scene(int searchType);
 	CREATE_FUNC(StickerScene)
 	void initControlButtons();
+	void initMenuBottom();
 	void addAllStickersToScrollView();
 	void onKeyReleased(EventKeyboard::KeyCode keycode, Event* event);
 	bool onTouchBegan(Touch* touch, Event* event);
