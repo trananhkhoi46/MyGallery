@@ -358,8 +358,8 @@ obj/local/armeabi/objs-debug/MyGame_shared/__/__/Classes/SocialPlugin.o: \
  /Users/Kskull/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/../cocos2d/cocos/3d/../renderer/ccGLStateCache.h \
  jni/../../Classes/NDKHelper/NDKHelper.h \
  /Users/Kskull/Documents/Cocos2dx/ndk/sources/cxx-stl/gnu-libstdc++/4.9/include/iostream \
- jni/../../Classes/jansson/jansson.h \
- jni/../../Classes/jansson/jansson_config.h \
+ jni/../../Classes/NDKHelper/../jansson/jansson.h \
+ jni/../../Classes/NDKHelper/../jansson/jansson_config.h \
  jni/../../Classes/NDKHelper/NDKCallbackNode.h
 
 jni/../../Classes/SocialPlugin.h:
@@ -1080,8 +1080,8 @@ jni/../../Classes/NDKHelper/NDKHelper.h:
 
 /Users/Kskull/Documents/Cocos2dx/ndk/sources/cxx-stl/gnu-libstdc++/4.9/include/iostream:
 
-jni/../../Classes/jansson/jansson.h:
+jni/../../Classes/NDKHelper/../jansson/jansson.h:
 
-jni/../../Classes/jansson/jansson_config.h:
+jni/../../Classes/NDKHelper/../jansson/jansson_config.h:
 
 jni/../../Classes/NDKHelper/NDKCallbackNode.h:

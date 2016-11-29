@@ -3,12 +3,12 @@
 #define __FirebaseHandler__
 #include <cocos/network/HttpClient.h>
 #include <cocos/network/HttpResponse.h>
-#include "BUserInfor.h"
-#include "FacebookHandler.h"
-#include "Constants.h"
-#include "Resources.h"
-#include "StickerResource.h"
-#include "StickerHelper.h"
+#include "../Model/BUserInfor.h"
+#include "../FacebookHandler/FacebookHandler.h"
+#include "../../Constants.h"
+#include "../../Resources.h"
+#include "../../StickerResource.h"
+#include "../../StickerHelper.h"
 #include <iostream>
 
 USING_NS_CC;

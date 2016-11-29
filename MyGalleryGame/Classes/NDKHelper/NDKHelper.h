@@ -13,7 +13,7 @@
 #include "cocos2d.h"
 #include <string>
 #include <vector>
-#include "jansson.h"
+#include "../jansson/jansson.h"
 #include "NDKCallbackNode.h"
 USING_NS_CC;
 using namespace std;

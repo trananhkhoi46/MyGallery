@@ -3,7 +3,7 @@
 
 #include "cocos2d.h"
 #include "cocos/ui/CocosGUI.h"
-#include "BUserInfor.h"
+#include "../Model/BUserInfor.h"
 #ifdef SDKBOX_ENABLED
 #include "PluginFacebook/PluginFacebook.h"
 #endif

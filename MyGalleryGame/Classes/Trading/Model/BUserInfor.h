@@ -9,7 +9,7 @@
 #include <json/prettywriter.h>
 #include <json/filestream.h>
 #include <json/document.h>
-#include "BLeaderBoardContanst.h"
+#include "../BLeaderBoardContanst.h"
 using namespace rapidjson;
 using namespace std;
 class BUserInfor{

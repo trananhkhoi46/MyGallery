@@ -35,7 +35,7 @@ obj/local/armeabi/objs-debug/MyGame_shared/__/__/Classes/Trading/Model/BUserInfo
  /Users/Kskull/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/../cocos2d/external/flatbuffers/../json/document.h \
  /Users/Kskull/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/../cocos2d/external/flatbuffers/../json/reader.h \
  /Users/Kskull/Documents/Cocos2dx/ndk/sources/cxx-stl/gnu-libstdc++/4.9/include/iterator \
- jni/../../Classes/Trading/BLeaderBoardContanst.h \
+ jni/../../Classes/Trading/Model/../BLeaderBoardContanst.h \
  /Users/Kskull/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/../cocos2d/cocos/3d/../cocos2d.h \
  /Users/Kskull/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/../cocos2d/cocos/3d/../base/ccConfig.h \
  /Users/Kskull/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/../cocos2d/cocos/3d/../platform/CCPlatformConfig.h \
@@ -462,7 +462,7 @@ jni/../../Classes/Trading/Model/BUserInfor.h:
 
 /Users/Kskull/Documents/Cocos2dx/ndk/sources/cxx-stl/gnu-libstdc++/4.9/include/iterator:
 
-jni/../../Classes/Trading/BLeaderBoardContanst.h:
+jni/../../Classes/Trading/Model/../BLeaderBoardContanst.h:
 
 /Users/Kskull/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/../cocos2d/cocos/3d/../cocos2d.h:
 

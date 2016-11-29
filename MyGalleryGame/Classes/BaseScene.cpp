@@ -88,6 +88,7 @@ public:
 		CCLog("bambi chartboost onChartboostCompleteStore");
 	}
 };
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
 class IVungleListener : public sdkbox::VungleListener, public Ref
 {
 public:
@@ -115,9 +116,11 @@ public:
 	}
 };
 #endif
+#endif
 void BaseScene::showFullscreenAds() {
 	CCLog("bambi showFullscreenAds");
 #ifdef SDKBOX_ENABLED
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
 	int random = CppUtils::randomBetween(1,3);
 	if(random == 1)
 	{
@@ -127,16 +130,30 @@ void BaseScene::showFullscreenAds() {
 	} else {
 		sdkbox::PluginVungle::show(kVungleInstitialAds);
 	}
+#else
+	int random = CppUtils::randomBetween(1,2);
+	if(random == 1)
+	{
+		sdkbox::PluginChartboost::show(kChartboostInstitialAds);
+	} else {
+		sdkbox::PluginAdMob::show(kAdmobInstitialAds);
+	}
+#endif
 #endif
 }
 void BaseScene::showRewardedAds() {
 	CCLog("bambi showRewardedAds");
 #ifdef SDKBOX_ENABLED
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
 	if(CppUtils::randomBetween(1,2) == 1) {
 		sdkbox::PluginChartboost::show(kChartboostRewardedAds);
 	} else {
 		sdkbox::PluginVungle::show(kVungleRewardedAds);
 	}
+#else
+	sdkbox::PluginChartboost::show(kChartboostRewardedAds);
+#endif
+
 #endif
 }
 // on "init" you need to initialize your instance
@@ -159,8 +176,10 @@ bool BaseScene::init() {
 #ifdef SDKBOX_ENABLED
 	sdkbox::PluginAdMob::setListener(new IAdmobListener());
 	sdkbox::PluginChartboost::setListener(new IChartboostListener());
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
 	sdkbox::PluginVungle::setListener(new IVungleListener());
 	sdkbox::PluginVungle::setDebug(true);
+#endif
 #endif
 	return true;
 }

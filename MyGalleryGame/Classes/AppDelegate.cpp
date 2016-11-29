@@ -4,7 +4,9 @@
 #include "PluginFacebook/PluginFacebook.h"
 #include "PluginAdMob/PluginAdMob.h"
 #include "PluginChartboost/PluginChartboost.h"
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
 #include "PluginVungle/PluginVungle.h"
+#endif
 #endif
 
 USING_NS_CC;
@@ -30,7 +32,9 @@ bool AppDelegate::applicationDidFinishLaunching() {
 	sdkbox::PluginFacebook::init();
 	sdkbox::PluginAdMob::init();
 	sdkbox::PluginChartboost::init();
-	sdkbox::PluginVungle::init();
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+		sdkbox::PluginVungle::init();
+#endif
 #endif
 	// initialize director
 	auto director = Director::getInstance();

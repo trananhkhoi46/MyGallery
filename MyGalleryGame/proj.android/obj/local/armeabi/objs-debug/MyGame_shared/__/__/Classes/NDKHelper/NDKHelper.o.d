@@ -358,8 +358,8 @@ obj/local/armeabi/objs-debug/MyGame_shared/__/__/Classes/NDKHelper/NDKHelper.o: 
  /Users/Kskull/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/../cocos2d/cocos/3d/../platform/android/CCApplication-android.h \
  /Users/Kskull/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/../cocos2d/cocos/3d/../renderer/CCGLProgramCache.h \
  /Users/Kskull/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/../cocos2d/cocos/3d/../renderer/ccGLStateCache.h \
- jni/../../Classes/jansson/jansson.h \
- jni/../../Classes/jansson/jansson_config.h \
+ jni/../../Classes/NDKHelper/../jansson/jansson.h \
+ jni/../../Classes/NDKHelper/../jansson/jansson_config.h \
  jni/../../Classes/NDKHelper/NDKCallbackNode.h
 
 jni/../../Classes/NDKHelper/NDKHelper.h:
@@ -1078,8 +1078,8 @@ jni/../../Classes/NDKHelper/NDKHelper.h:
 
 /Users/Kskull/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/../cocos2d/cocos/3d/../renderer/ccGLStateCache.h:
 
-jni/../../Classes/jansson/jansson.h:
+jni/../../Classes/NDKHelper/../jansson/jansson.h:
 
-jni/../../Classes/jansson/jansson_config.h:
+jni/../../Classes/NDKHelper/../jansson/jansson_config.h:
 
 jni/../../Classes/NDKHelper/NDKCallbackNode.h:

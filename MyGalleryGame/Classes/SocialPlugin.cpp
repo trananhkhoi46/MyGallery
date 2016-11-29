@@ -1,5 +1,5 @@
 #include "SocialPlugin.h"
-#include "NDKHelper.h"
+#include "NDKHelper/NDKHelper.h"
 using namespace std;
 
 void SocialPlugin::showToast(std::string messageToShow) {

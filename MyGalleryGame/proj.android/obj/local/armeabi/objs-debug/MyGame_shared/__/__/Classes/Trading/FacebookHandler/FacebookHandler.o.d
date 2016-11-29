@@ -392,7 +392,7 @@ obj/local/armeabi/objs-debug/MyGame_shared/__/__/Classes/Trading/FacebookHandler
  /Users/Kskull/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/../cocos2d/cocos/3d/../ui/UILayoutComponent.h \
  /Users/Kskull/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/../cocos2d/cocos/3d/../ui/UITabControl.h \
  /Users/Kskull/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/../cocos2d/cocos/3d/../editor-support/cocostudio/CocosStudioExtension.h \
- jni/../../Classes/Trading/Model/BUserInfor.h \
+ jni/../../Classes/Trading/FacebookHandler/../Model/BUserInfor.h \
  /Users/Kskull/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/../cocos2d/external/flatbuffers/../json/writer.h \
  /Users/Kskull/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/../cocos2d/external/flatbuffers/../json/rapidjson.h \
  /Users/Kskull/Documents/Cocos2dx/ndk/sources/cxx-stl/gnu-libstdc++/4.9/include/cstring \
@@ -423,7 +423,7 @@ obj/local/armeabi/objs-debug/MyGame_shared/__/__/Classes/Trading/FacebookHandler
  /Users/Kskull/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/../cocos2d/external/flatbuffers/../json/document.h \
  /Users/Kskull/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/../cocos2d/external/flatbuffers/../json/reader.h \
  /Users/Kskull/Documents/Cocos2dx/ndk/sources/cxx-stl/gnu-libstdc++/4.9/include/iterator \
- jni/../../Classes/Trading/BLeaderBoardContanst.h \
+ jni/../../Classes/Trading/FacebookHandler/../Model/../BLeaderBoardContanst.h \
  jni/PluginFacebook/PluginFacebook.h \
  /Users/Kskull/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/../cocos2d/extensions/../cocos/network/HttpRequest.h \
  /Users/Kskull/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/../cocos2d/extensions/../cocos/network/HttpClient.h \
@@ -441,12 +441,18 @@ obj/local/armeabi/objs-debug/MyGame_shared/__/__/Classes/Trading/FacebookHandler
  /Users/Kskull/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/../cocos2d/external/flatbuffers/../curl/include/android/curl/curl.h \
  jni/../../Classes/Trading/FacebookHandler/../FirebaseHandler/FirebaseHandler.h \
  /Users/Kskull/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/../cocos2d/extensions/../cocos/network/HttpResponse.h \
- jni/../../Classes/Trading/FacebookHandler/FacebookHandler.h \
- jni/../../Classes/Constants.h jni/../../Classes/Resources.h \
- jni/../../Classes/StickerResource.h jni/../../Classes/StickerHelper.h \
- jni/../../Classes/StickerResource.h jni/../../Classes/Constants.h \
- jni/../../Classes/CppUtils.h \
- /Users/Kskull/Documents/Cocos2dx/ndk/sources/cxx-stl/gnu-libstdc++/4.9/include/iostream
+ jni/../../Classes/Trading/FacebookHandler/../FirebaseHandler/../Model/BUserInfor.h \
+ jni/../../Classes/Trading/FacebookHandler/../FirebaseHandler/../FacebookHandler/FacebookHandler.h \
+ jni/../../Classes/Trading/FacebookHandler/../FirebaseHandler/../../Constants.h \
+ jni/../../Classes/Trading/FacebookHandler/../FirebaseHandler/../../Resources.h \
+ jni/../../Classes/Trading/FacebookHandler/../FirebaseHandler/../../StickerResource.h \
+ jni/../../Classes/Trading/FacebookHandler/../FirebaseHandler/../../StickerHelper.h \
+ jni/../../Classes/Trading/FacebookHandler/../FirebaseHandler/../../StickerResource.h \
+ jni/../../Classes/Trading/FacebookHandler/../FirebaseHandler/../../Constants.h \
+ jni/../../Classes/Trading/FacebookHandler/../FirebaseHandler/../../CppUtils.h \
+ /Users/Kskull/Documents/Cocos2dx/ndk/sources/cxx-stl/gnu-libstdc++/4.9/include/iostream \
+ jni/../../Classes/Trading/BLeaderBoardContanst.h \
+ jni/../../Classes/Trading/Model/BUserInfor.h
 
 jni/../../Classes/Trading/FacebookHandler/FacebookHandler.h:
 
@@ -1232,7 +1238,7 @@ jni/../../Classes/Trading/FacebookHandler/FacebookHandler.h:
 
 /Users/Kskull/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/../cocos2d/cocos/3d/../editor-support/cocostudio/CocosStudioExtension.h:
 
-jni/../../Classes/Trading/Model/BUserInfor.h:
+jni/../../Classes/Trading/FacebookHandler/../Model/BUserInfor.h:
 
 /Users/Kskull/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/../cocos2d/external/flatbuffers/../json/writer.h:
 
@@ -1294,7 +1300,7 @@ jni/../../Classes/Trading/Model/BUserInfor.h:
 
 /Users/Kskull/Documents/Cocos2dx/ndk/sources/cxx-stl/gnu-libstdc++/4.9/include/iterator:
 
-jni/../../Classes/Trading/BLeaderBoardContanst.h:
+jni/../../Classes/Trading/FacebookHandler/../Model/../BLeaderBoardContanst.h:
 
 jni/PluginFacebook/PluginFacebook.h:
 
@@ -1330,20 +1336,26 @@ jni/../../Classes/Trading/FacebookHandler/../FirebaseHandler/FirebaseHandler.h:
 
 /Users/Kskull/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/../cocos2d/extensions/../cocos/network/HttpResponse.h:
 
-jni/../../Classes/Trading/FacebookHandler/FacebookHandler.h:
+jni/../../Classes/Trading/FacebookHandler/../FirebaseHandler/../Model/BUserInfor.h:
 
-jni/../../Classes/Constants.h:
+jni/../../Classes/Trading/FacebookHandler/../FirebaseHandler/../FacebookHandler/FacebookHandler.h:
 
-jni/../../Classes/Resources.h:
+jni/../../Classes/Trading/FacebookHandler/../FirebaseHandler/../../Constants.h:
 
-jni/../../Classes/StickerResource.h:
+jni/../../Classes/Trading/FacebookHandler/../FirebaseHandler/../../Resources.h:
 
-jni/../../Classes/StickerHelper.h:
+jni/../../Classes/Trading/FacebookHandler/../FirebaseHandler/../../StickerResource.h:
 
-jni/../../Classes/StickerResource.h:
+jni/../../Classes/Trading/FacebookHandler/../FirebaseHandler/../../StickerHelper.h:
 
-jni/../../Classes/Constants.h:
+jni/../../Classes/Trading/FacebookHandler/../FirebaseHandler/../../StickerResource.h:
 
-jni/../../Classes/CppUtils.h:
+jni/../../Classes/Trading/FacebookHandler/../FirebaseHandler/../../Constants.h:
+
+jni/../../Classes/Trading/FacebookHandler/../FirebaseHandler/../../CppUtils.h:
 
 /Users/Kskull/Documents/Cocos2dx/ndk/sources/cxx-stl/gnu-libstdc++/4.9/include/iostream:
+
+jni/../../Classes/Trading/BLeaderBoardContanst.h:
+
+jni/../../Classes/Trading/Model/BUserInfor.h:

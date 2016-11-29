@@ -19,7 +19,9 @@
 #ifdef SDKBOX_ENABLED
 #include "PluginAdMob/PluginAdMob.h"
 #include "PluginChartboost/PluginChartboost.h"
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
 #include "PluginVungle/PluginVungle.h"
+#endif
 #endif
 
 using namespace cocos2d::network;
