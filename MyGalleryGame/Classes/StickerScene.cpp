@@ -16,16 +16,14 @@ Scene* StickerScene::scene(int searchType) {
 	searchingType = searchType;
 	if (searchType == SEARCH_TYPE_ALL) //Type search all
 	{
-		vt_stickers_searching = StickerHelper::getCurrentExistSticker(
-				true);
-	}else if (searchType == SEARCH_TYPE_STICK) //Type search stick
+		vt_stickers_searching = StickerHelper::getCurrentExistSticker(true);
+	} else if (searchType == SEARCH_TYPE_STICK) //Type search stick
 	{
-		vt_stickers_searching = StickerHelper::getCurrentExistSticker(
-				true, true);
-	}else if (searchType == SEARCH_TYPE_SELL) //Type sell
+		vt_stickers_searching = StickerHelper::getCurrentExistSticker(true,
+				true);
+	} else if (searchType == SEARCH_TYPE_SELL) //Type sell
 	{
 	}
-
 
 	// 'scene' is an autorelease object
 	Scene *scene = Scene::create();
@@ -253,8 +251,12 @@ void StickerScene::addAllStickersToScrollView() {
 			itemMargin, scrollFrameSize);
 	scrollview->setPosition(
 			Vec2(winSize.width / 2,
-					winSize.height / 2 - scrollviewMarginTop / 2 + scrollviewMarginBottom / 2));
+					winSize.height / 2 - scrollviewMarginTop / 2
+							+ scrollviewMarginBottom / 2));
 	scrollview->setScrollBarEnabled(false);
+	if (scrollview->getInnerContainerSize().height < scrollFrameSize.height) {
+		scrollview->setBounceEnabled(false);
+	}
 	this->addChild(scrollview);
 
 	//Add sth to scroll view

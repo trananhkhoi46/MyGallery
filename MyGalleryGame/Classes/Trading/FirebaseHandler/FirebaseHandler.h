@@ -27,9 +27,6 @@ public:
     virtual void responseForQuerryTopFriend(vector<BUserInfor*> friendList){
 
     };
-    virtual void responseForQuerryTopWorld(vector<BUserInfor*> worldList){
-
-    };
     virtual void responseAfterCheckFacebookIdExistOnFirebase(){
 
     };
@@ -58,8 +55,6 @@ public:
     void callBackFetchBUserInforAt(HttpClient* client,HttpResponse* response);
 
     void fetchTopFriend();
-
-    void fetchTopWorld();
 
     void getProbabilityFreePacket();
     void getProbability(string url, vector<string> probabilityKeys, STICKER_RARITY rarity);

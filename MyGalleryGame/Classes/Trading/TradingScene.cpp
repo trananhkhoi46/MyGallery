@@ -228,9 +228,9 @@ void TradingScene::loadLeaderboardData()
 		isGettingData = true;
 		labelError->setVisible(false);
 		loadingSprite->setVisible(true);
-		if(isWorldMode)
-			FirebaseHandler::getInstance()->fetchTopWorld();
-		else
+//		if(isWorldMode)
+//			FirebaseHandler::getInstance()->fetchTopWorld();
+//		else
 			FirebaseHandler::getInstance()->fetchTopFriend();
 		//After fetch data responseForQuerryTopWorld or responseForQuerryTopFriend will be called.
 	}else
@@ -291,12 +291,12 @@ void TradingScene::showScoreOnScreen(vector<BUserInfor*> listUser) {
 
 
 		//Label score (at the right side)
-		auto lScore = Label::createWithTTF(configUser,
-				CppUtils::doubleToString(listUser[i]->getScore()),
-				TextHAlignment::CENTER);
-		lScore->setPosition(board->getContentSize().width * 0.85f,positionYBegin - eachUserMargin * i);
-		lScore->setColor(Color3B(255,255,255));
-		board->addChild(lScore);
+//		auto lScore = Label::createWithTTF(configUser,
+//				CppUtils::doubleToString(listUser[i]->getScore()),
+//				TextHAlignment::CENTER);
+//		lScore->setPosition(board->getContentSize().width * 0.85f,positionYBegin - eachUserMargin * i);
+//		lScore->setColor(Color3B(255,255,255));
+//		board->addChild(lScore);
 	}
 }
 

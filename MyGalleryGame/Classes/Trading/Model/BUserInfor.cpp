@@ -15,10 +15,9 @@ BUserInfor* BUserInfor::parseUserFrom(const rapidjson::Value& json) //Parse the 
 {
     BUserInfor* user=new BUserInfor();
     user->setName(json[KEY_WORLD_NAME].GetString());
-    user->setObjectId(json[KEY_WORLD_OJECTID].GetString());
-    user->setScore(json[KEY_WORLD_SCORE].GetInt());
     user->setId(json[KEY_WORLD_ID].GetString());
-    user->setLocation(json[KEY_WORLD_LOCATION].GetString());
+    user->setAllStickers(json[KEY_WORLD_ALL_STICKERS].GetString());
+
     return user;
 }
 
@@ -31,7 +30,6 @@ BUserInfor* BUserInfor::parseUserFrom(string message) //Parse the message from F
 
     user->setName(document["name"].GetString());
     user->setId(document["id"].GetString());
-    user->setLocation(document["locale"].GetString());
     return user;
 }
 

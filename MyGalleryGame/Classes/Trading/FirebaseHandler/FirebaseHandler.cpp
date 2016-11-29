@@ -77,6 +77,14 @@ void FirebaseHandler::getProbabilityFreePacket() {
 }
 
 void FirebaseHandler::checkFacebookIdExistOnFirebase() {
+
+
+	CCLog("bambi inside FirebaseHandler->checkFacebookIdExistOnFirebase ");
+	//FIXME
+	return;
+
+
+
 	//query string
 	char query[200];
 	sprintf(query, "where={\"%s\":\"%s\"}", KEY_WORLD_ID,
@@ -139,6 +147,11 @@ void FirebaseHandler::responseWhenGetMyInfoSuccessfully(BUserInfor* user) {
 	saveFacebookIdOnFirebase(user);
 }
 void FirebaseHandler::saveFacebookIdOnFirebase(BUserInfor* user) {
+
+	CCLog("bambi saveFacebookIdOnFirebase");
+	//FIXME
+	return;
+
 	char url[55500];
 	sprintf(url, "%s", classURL.c_str());
 
@@ -251,9 +264,6 @@ void FirebaseHandler::callBackFetchBUserInforAt(HttpClient* client,
 	case TAG_FRIEND:
 		_firebaseDelegate->responseForQuerryTopFriend(_friendList);
 		break;
-	case TAG_WORLD:
-		_firebaseDelegate->responseForQuerryTopWorld(_worldList);
-		break;
 	}
 }
 
@@ -270,10 +280,7 @@ void FirebaseHandler::responseWhenGetFriendsSuccessfully(string friendList) {
 	sprintf(querry, "where={\"FB_ID\":{\"$in\":[%s]}}", friendList.c_str());
 	fetchBUserInforAt(querry);
 }
-void FirebaseHandler::fetchTopWorld() {
-	tag = TAG_WORLD;
-	fetchBUserInforAt("");
-}
+
 void FirebaseHandler::fetchScoreFromServer() {
 	//query string
 	char query[200];

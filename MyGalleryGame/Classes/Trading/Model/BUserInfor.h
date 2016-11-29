@@ -20,12 +20,6 @@ public:
         writer.String(_name.c_str());
         writer.String(KEY_WORLD_ID);
         writer.String(_id.c_str());
-		writer.String(KEY_WORLD_LOCATION);
-        writer.String(_location.c_str());
-        writer.String(KEY_WORLD_SCORE);
-        writer.Int(_score);
-        writer.String(KEY_WORLD_INSTALLED_GAMES);
-        writer.String("BoredNinja");
         writer.EndObject();
     }
     std::string serialize(){
@@ -38,10 +32,7 @@ public:
     ~BUserInfor();
     CC_SYNTHESIZE(string,_name,Name);
     CC_SYNTHESIZE(string,_id,Id);
-    CC_SYNTHESIZE(string,_email,Email);
-    CC_SYNTHESIZE(string,_objectId,ObjectId);
-    CC_SYNTHESIZE(string,_location,Location);
-    CC_SYNTHESIZE(int,_score,Score);
+    CC_SYNTHESIZE(string,_allStickers,AllStickers);
     static BUserInfor* getMyInfor();
     static BUserInfor* parseUserFrom(const rapidjson::Value& json);
     static BUserInfor* parseUserFrom(string message);

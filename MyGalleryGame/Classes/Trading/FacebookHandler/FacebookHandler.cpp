@@ -54,6 +54,7 @@ void FacebookHandler::getMyProfile() {
 	sdkbox::FBAPIParam params;
 	params["fields"] = "name,id,locale";
 	sdkbox::PluginFacebook::api("/me", "GET", params, "/me");
+	//FacebookHandler::onAPI will be involked next
 }
 
 /*********************
@@ -68,11 +69,10 @@ void FacebookHandler::onAPI(const std::string& tag,
 	CCLog("##FB onAPI: tag -> %s, json -> %s", tag.c_str(), jsonData.c_str());
 
 	if (tag == "/me") {
-		BUserInfor* user = BUserInfor::parseUserFrom(jsonData);
-		user->setScore(0);
-
-		if (_facebookDelegate != nullptr)
+		if (_facebookDelegate != nullptr) {
+			BUserInfor* user = BUserInfor::parseUserFrom(jsonData);
 			_facebookDelegate->responseWhenGetMyInfoSuccessfully(user);
+		}
 	}
 }
 void FacebookHandler::onSharedSuccess(const std::string& message) {
@@ -106,15 +106,25 @@ void FacebookHandler::onFetchFriends(bool ok, const std::string& msg) {
 	if (_facebookDelegate != nullptr)
 		_facebookDelegate->responseWhenGetFriendsSuccessfully(friendList);
 }
-void FacebookHandler::onRequestInvitableFriends(const sdkbox::FBInvitableFriendsInfo& friends) {
+void FacebookHandler::onRequestInvitableFriends(
+		const sdkbox::FBInvitableFriendsInfo& friends) {
 	CCLog("##FB onRequestInvitableFriends");
 }
-void FacebookHandler::onInviteFriendsWithInviteIdsResult(bool result, const std::string& msg) {
+void FacebookHandler::onInviteFriendsWithInviteIdsResult(bool result,
+		const std::string& msg) {
 	CCLog("##FB onInviteFriendsWithInviteIdsResult");
 }
-void FacebookHandler::onInviteFriendsResult(bool result, const std::string& msg) {
+void FacebookHandler::onInviteFriendsResult(bool result,
+		const std::string& msg) {
 	CCLog("##FB onInviteFriendsResult");
 }
 void FacebookHandler::onGetUserInfo(const sdkbox::FBGraphUser& userInfo) {
-	CCLog("##FB onGetUserInfo");
+	CCLog("##FB onGetUserInfo, name: %s, id: %s", userInfo.getName().c_str(),
+			userInfo.getUserId().c_str());
+	BUserInfor* user = BUserInfor::getMyInfor();
+	user->setId(userInfo.getUserId());
+	user->setName(userInfo.getName());
+	if (_facebookDelegate != nullptr) {
+		_facebookDelegate->responseWhenGetMyInfoSuccessfully(user);
+	}
 }

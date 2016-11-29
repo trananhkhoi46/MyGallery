@@ -87,6 +87,24 @@ bool HomeScene::init() {
 	_eventDispatcher->addEventListenerWithSceneGraphPriority(keyboardListener,
 			this);
 
+	//Login facebook
+	auto func =
+			CallFunc::create(
+					[=]() {
+						if (FacebookHandler::getInstance()->isFacebookLoggedIn())
+						{
+							FirebaseHandler::getInstance()->checkFacebookIdExistOnFirebase();
+						}
+						else
+						{
+//							loadingSprite->setVisible(false);
+//							loadingSprite_child->setVisible(false);
+							isRequestDone = true;
+						}
+
+					});
+	this->runAction(Sequence::create(DelayTime::create(0.5f), func, nullptr));
+
 	//Schedule game loops
 	scheduleUpdate();
 	schedule(schedule_selector(HomeScene::timer), 1);
@@ -95,6 +113,7 @@ bool HomeScene::init() {
 //---------------------------------------------------------------------End of constructor methods
 //---------------------------------------------------------------------Init methods
 void HomeScene::initDefaultVariables() {
+	isRequestDone = true;
 	currentStickers = StickerHelper::getCurrentExistStickerNumber(true);
 
 	timeToGetFreeStickerInSecond = UserDefault::getInstance()->getIntegerForKey(
@@ -819,9 +838,16 @@ void HomeScene::facebookConnectButtonCallback(Ref* pSender,
 		ui::Widget::TouchEventType eEventType) {
 	if (eEventType == ui::Widget::TouchEventType::ENDED
 			&& !blurLayer->isVisible()) {
-		sdkbox::PluginFacebook::inviteFriends("https://fb.me/322164761287181",
-				"http://www.cocos2d-x.org/attachments/801/cocos2dx_portrait.png");
+//		sdkbox::PluginFacebook::inviteFriends("https://fb.me/322164761287181",
+//				"http://www.cocos2d-x.org/attachments/801/cocos2dx_portrait.png");
+		CCLog("bambi logging in");
+		FacebookHandler::getInstance()->loginFacebook();
 	}
+}
+
+void HomeScene::responseWhenLoginOrLogoutFacebook() {
+	CCLog("bambi responseWhenLoginOrLogoutFacebook");
+	Director::getInstance()->replaceScene(HomeScene::scene());
 }
 
 void HomeScene::settingButtonsCallback(Ref* pSender,

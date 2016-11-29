@@ -5,7 +5,7 @@
 
 
 
-class HomeScene: public BaseScene{
+class HomeScene: public BaseScene, FacebookConnectDelegate{
 private:
 	static HomeScene* instance;
 public:
@@ -54,6 +54,7 @@ public:
 	int timeToGetFreeStickerInSecond;
 	bool isMenuBarShowing;
 	bool isFreePacketAvailable;
+	bool isRequestDone;
 	Vec2 menuBarVisiblePosition;
 	Vec2 menuBarInvisiblePosition;
 
@@ -82,6 +83,9 @@ public:
 	Button* btnFriend;
 	Button* btnTrade;
 	LoadingBar* progressBar;
+
+	//FacebookConnectDelegate response
+	virtual void responseWhenLoginOrLogoutFacebook();
 };
 
 #endif // __HOME_SCENE_H__
