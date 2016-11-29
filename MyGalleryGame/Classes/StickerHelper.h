@@ -10,7 +10,7 @@ USING_NS_CC;
 using namespace std;
 class StickerHelper {
 public:
-	StickerHelper() = delete; //Ghi vay compiler ko khoi tao constructor
+	StickerHelper() = delete; //Compiler will not compile constructor -> for optimizing point
 
 	static bool isStickerHasAlreadyExisted(int stickerId);
 	static bool isStickerHasNotSticked(int stickerId);

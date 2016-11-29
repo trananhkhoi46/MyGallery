@@ -13,7 +13,7 @@ USING_NS_CC;
 
 class CppUtils {
 public:
-	CppUtils() = delete; //Ghi vay compiler ko khoi tao constructor
+	CppUtils() = delete; //Compiler will not compile constructor -> for optimizing point
 
 	static std::string doubleToString(double inValue);
 	static double stringToDouble(const std::string& inValue);

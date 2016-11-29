@@ -10,9 +10,9 @@ BScrollView* BScrollView::createVertical(int numberOfRows, float itemMargin,Size
 	scrollview->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
 	scrollview->setInnerContainerSize(containerSize);
 	scrollview->setContentSize(scrollFrameSize);
-	scrollview->setInertiaScrollEnabled(true); //Scroll duoc
-	scrollview->setDirection(ScrollView::Direction::VERTICAL); //Scroll theo chieu doc
-	scrollview->setBounceEnabled(true); //Phan hoi nhe khi scroll het
+	scrollview->setInertiaScrollEnabled(true); //Enalbe scroll
+	scrollview->setDirection(ScrollView::Direction::VERTICAL); //Scroll vertically
+	scrollview->setBounceEnabled(true); //Action when scroll to the edge
 
 	scrollview->topPosition = containerSize.height - itemMargin / 2;
 	scrollview->leftPosition = itemMargin / 2;
@@ -27,9 +27,9 @@ BScrollView* BScrollView::createHorizontal(int numberOfColumns, float itemMargin
 	scrollview->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
 	scrollview->setInnerContainerSize(containerSize);
 	scrollview->setContentSize(scrollFrameSize);
-	scrollview->setInertiaScrollEnabled(true); //Scroll duoc
-	scrollview->setDirection(ScrollView::Direction::HORIZONTAL); //Scroll theo chieu ngang
-	scrollview->setBounceEnabled(true); //Phan hoi nhe khi scroll het
+	scrollview->setInertiaScrollEnabled(true); //Enalbe scroll
+	scrollview->setDirection(ScrollView::Direction::HORIZONTAL); //Scroll horizontally
+	scrollview->setBounceEnabled(true); //Action when scroll to the edge
 
 	scrollview->topPosition = containerSize.height - itemMargin / 2;
 	scrollview->leftPosition = itemMargin / 2;

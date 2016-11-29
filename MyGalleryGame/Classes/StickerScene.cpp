@@ -254,6 +254,7 @@ void StickerScene::addAllStickersToScrollView() {
 	scrollview->setPosition(
 			Vec2(winSize.width / 2,
 					winSize.height / 2 - scrollviewMarginTop / 2 + scrollviewMarginBottom / 2));
+	scrollview->setScrollBarEnabled(false);
 	this->addChild(scrollview);
 
 	//Add sth to scroll view
