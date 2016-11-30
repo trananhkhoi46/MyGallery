@@ -23,6 +23,7 @@ public:
 			char delim);
 	static std::vector<std::string> splitStringByEveryCharacter(const std::string &s);
 	static int randomBetween(int x1, int x2);
+	static std::string encodeUrl(std::string url);
 };
 
 #endif

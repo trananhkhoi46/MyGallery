@@ -34,8 +34,8 @@ bool TradingScene::init() {
 	isGettingData = false;
 
 	//Set delegate to get response from FacebookHandler and FirebaseHandler
-	FirebaseHandler::getInstance()->setFirebaseDelegate(this);
-	FacebookHandler::getInstance()->setFacebookConnectDelegate(this);
+//	FirebaseHandler::getInstance()->setFirebaseDelegate(this);
+//	FacebookHandler::getInstance()->setFacebookConnectDelegate(this);
 
 	//Set default value for UserDefault
 	isWorldMode = UserDefault::getInstance()->getBoolForKey(RANKINGWORLDMODE,true);
@@ -209,12 +209,12 @@ void TradingScene::updateUI(int tag)
 
 void TradingScene::responseWhenLoginOrLogoutFacebook()
 {
-	updateUI(TAG_FACEBOOK_BUTTON);
-	//After load check facebook on Firebase responseAfterCheckFacebookIdExistOnFirebase function will be called
-	if(FacebookHandler::getInstance()->isFacebookLoggedIn())
-		FirebaseHandler::getInstance()->checkFacebookIdExistOnFirebase();
-	else
-		resetTradingScene(); //Reset trading scene.
+//	updateUI(TAG_FACEBOOK_BUTTON);
+//	//After load check facebook on Firebase responseAfterCheckFacebookIdExistOnFirebase function will be called
+//	if(FacebookHandler::getInstance()->isFacebookLoggedIn())
+//		FirebaseHandler::getInstance()->checkFacebookIdExistOnFirebase();
+//	else
+//		resetTradingScene(); //Reset trading scene.
 }
 void TradingScene::responseAfterCheckFacebookIdExistOnFirebase()
 {

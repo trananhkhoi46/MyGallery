@@ -50,9 +50,13 @@ bool FacebookHandler::isFacebookLoggedIn() {
 	else
 		return false;
 }
+
+bool isGettingMyProfle = false;
 void FacebookHandler::getMyProfile() {
+	isGettingMyProfle = true;
+	CCLog("bambi FacebookHandler getMyProfile");
 	sdkbox::FBAPIParam params;
-	params["fields"] = "name,id,locale";
+	params["fields"] = "name,id";
 	sdkbox::PluginFacebook::api("/me", "GET", params, "/me");
 	//FacebookHandler::onAPI will be involked next
 }
@@ -61,18 +65,19 @@ void FacebookHandler::getMyProfile() {
  * Facebook callbacks
  *********************/
 void FacebookHandler::onLogin(bool isLogin, const std::string& error) {
+	CCLog("##FB onLogin success");
 	if (_facebookConnectDelegate != nullptr && isLogin)
 		_facebookConnectDelegate->responseWhenLoginOrLogoutFacebook();
 }
 void FacebookHandler::onAPI(const std::string& tag,
 		const std::string& jsonData) {
 	CCLog("##FB onAPI: tag -> %s, json -> %s", tag.c_str(), jsonData.c_str());
-
-	if (tag == "/me") {
+	if (isGettingMyProfle) {
+		BUserInfor* user = BUserInfor::parseUserFrom(jsonData);
 		if (_facebookDelegate != nullptr) {
-			BUserInfor* user = BUserInfor::parseUserFrom(jsonData);
 			_facebookDelegate->responseWhenGetMyInfoSuccessfully(user);
 		}
+		isGettingMyProfle = false;
 	}
 }
 void FacebookHandler::onSharedSuccess(const std::string& message) {
@@ -119,12 +124,15 @@ void FacebookHandler::onInviteFriendsResult(bool result,
 	CCLog("##FB onInviteFriendsResult");
 }
 void FacebookHandler::onGetUserInfo(const sdkbox::FBGraphUser& userInfo) {
-	CCLog("##FB onGetUserInfo, name: %s, id: %s", userInfo.getName().c_str(),
-			userInfo.getUserId().c_str());
-	BUserInfor* user = BUserInfor::getMyInfor();
-	user->setId(userInfo.getUserId());
-	user->setName(userInfo.getName());
-	if (_facebookDelegate != nullptr) {
-		_facebookDelegate->responseWhenGetMyInfoSuccessfully(user);
+	if (isGettingMyProfle) {
+		CCLog("##FB onGetUserInfo, name: %s, id: %s",
+				userInfo.getName().c_str(), userInfo.getUserId().c_str());
+		BUserInfor* user = BUserInfor::getMyInfor();
+		user->setId(userInfo.getUserId());
+		user->setName(userInfo.getName());
+		if (_facebookDelegate != nullptr) {
+			_facebookDelegate->responseWhenGetMyInfoSuccessfully(user);
+		}
+		isGettingMyProfle = false;
 	}
 }

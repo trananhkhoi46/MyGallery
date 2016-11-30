@@ -5,7 +5,7 @@
 
 
 
-class HomeScene: public BaseScene, FacebookConnectDelegate{
+class HomeScene: public BaseScene, FacebookConnectDelegate, FirebaseDelegate{
 private:
 	static HomeScene* instance;
 public:
@@ -86,6 +86,9 @@ public:
 
 	//FacebookConnectDelegate response
 	virtual void responseWhenLoginOrLogoutFacebook();
+	//FirebaseDelegate response
+    virtual void responseForQuerryTopFriend(vector<BUserInfor*> friendList);
+    virtual void responseAfterCheckFacebookIdExistOnFirebase();
 };
 
 #endif // __HOME_SCENE_H__

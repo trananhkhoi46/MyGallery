@@ -43,6 +43,10 @@ Scene* HomeScene::scene() {
 bool HomeScene::init() {
 	bool result = BaseScene::init();
 
+	//Set delegate to get response from FacebookHandler and FirebaseHandler
+	FirebaseHandler::getInstance()->setFirebaseDelegate(this);
+	FacebookHandler::getInstance()->setFacebookConnectDelegate(this);
+
 	//Show ads
 	auto funcShowAds = CallFunc::create([=]() {
 		showFullscreenAds();
@@ -88,21 +92,19 @@ bool HomeScene::init() {
 			this);
 
 	//Login facebook
-	auto func =
-			CallFunc::create(
-					[=]() {
-						if (FacebookHandler::getInstance()->isFacebookLoggedIn())
-						{
-							FirebaseHandler::getInstance()->checkFacebookIdExistOnFirebase();
-						}
-						else
-						{
+	auto func = CallFunc::create([=]() {
+		if (FacebookHandler::getInstance()->isFacebookLoggedIn())
+		{
+			FirebaseHandler::getInstance()->checkFacebookIdExistOnFirebase();
+		}
+		else
+		{
 //							loadingSprite->setVisible(false);
 //							loadingSprite_child->setVisible(false);
-							isRequestDone = true;
-						}
+			isRequestDone = true;
+		}
 
-					});
+	});
 	this->runAction(Sequence::create(DelayTime::create(0.5f), func, nullptr));
 
 	//Schedule game loops
@@ -846,8 +848,42 @@ void HomeScene::facebookConnectButtonCallback(Ref* pSender,
 }
 
 void HomeScene::responseWhenLoginOrLogoutFacebook() {
-	CCLog("bambi responseWhenLoginOrLogoutFacebook");
-	Director::getInstance()->replaceScene(HomeScene::scene());
+	if (FacebookHandler::getInstance()->isFacebookLoggedIn()) {
+		CCLog("bambi responseWhenLoginOrLogoutFacebook: logged in");
+		FirebaseHandler::getInstance()->checkFacebookIdExistOnFirebase();
+	} else {
+		CCLog("bambi responseWhenLoginOrLogoutFacebook: not logged in");
+		//							loadingSprite->setVisible(false);
+		//							loadingSprite_child->setVisible(false);
+		isRequestDone = true;
+	}
+	setVisibilityViewsOfTradingFeature();
+}
+
+void HomeScene::responseForQuerryTopFriend(vector<BUserInfor*> friendList) {
+	CCLog("bambi responseForQuerryTopFriend");
+	for (BUserInfor* user : friendList) {
+		CCLog("%s", user->getName().c_str());
+	}
+}
+
+void HomeScene::responseAfterCheckFacebookIdExistOnFirebase() {
+	CCLog("bambi responseAfterCheckFacebookIdExistOnFirebase");
+	if (FacebookHandler::getInstance()->isFacebookLoggedIn()) {
+//			isGettingData = true;
+//			labelError->setVisible(false);
+//			loadingSprite->setVisible(true);
+		//		if(isWorldMode)
+		//			FirebaseHandler::getInstance()->fetchTopWorld();
+		//		else
+		FirebaseHandler::getInstance()->fetchTopFriend();
+		//After fetch data responseForQuerryTopWorld or responseForQuerryTopFriend will be called.
+	} else {
+		CCLog(
+				"bambi responseAfterCheckFacebookIdExistOnFirebase, facebook is not logged in");
+//			labelError->setVisible(true);
+//			isGettingData = false;
+	}
 }
 
 void HomeScene::settingButtonsCallback(Ref* pSender,

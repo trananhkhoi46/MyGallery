@@ -18,7 +18,7 @@ using namespace std;
 #define KEY_WORLD_LOCATION   "FB_Location"
 #define KEY_WORLD_ID         "FB_ID"
 #define KEY_WORLD_SCORE      "Coin"
-#define KEY_WORLD_OJECTID    "objectId"
+#define KEY_WORLD_OJECTID    "name"
 #define KEY_WORLD_INSTALLED_GAMES    "InstalledGame"
 #define KEY_IS_FIRST_TIME_LOGIN_INTO_THIS_GAME "isfirsttimeloginintothisgame"
 #define THIS_GAME_NAME "SpringNinja"
@@ -31,18 +31,21 @@ static const string restAPI =
 		"X-Parse-REST-API-Key: D1IPNshGLcQTRmnwktdjFnyyJsnTFppBvskPGpLr";
 static const string classURL = "https://api.parse.com/1/classes/BUser";
 static const string firebaseURL =
-		"https://gallerygame-fab40.firebaseio.com/json/%s.json?auth=KKgD6eWhfoJC6KUCFwSwEGIJYzxkFAjnMOqNl6ir";
+		"https://gallerygame-fab40.firebaseio.com/json/%sauth=KKgD6eWhfoJC6KUCFwSwEGIJYzxkFAjnMOqNl6ir";
 static const string firebaseQuerry_Probability_Freepacket =
-		"probability_freepacket";
+		"probability_freepacket.json?";
 static const string firebaseQuerry_Probability_Commonpacket =
-		"probability_commonpacket";
+		"probability_commonpacket.json?";
 static const string firebaseQuerry_Probability_Uncommonpacket =
-		"probability_uncommonpacket";
+		"probability_uncommonpacket.json?";
 static const string firebaseQuerry_Probability_Rarepacket =
-		"probability_rarepacket";
+		"probability_rarepacket.json?";
 static const string firebaseQuerry_Probability_Veryrarepacket =
-		"probability_veryrarepacket";
+		"probability_veryrarepacket.json?";
 static const string firebaseQuerry_Probability_Rarestpacket =
-		"probability_rarestpacket";
+		"probability_rarestpacket.json?";
+static const string firebaseQuerry_User = "users.json?";
+static const string firebaseQuerry_IsThisUserExistOnFirebase =
+		"users.json?orderBy=\"%s\"&equalTo=\"%s\"&";
 
 #endif

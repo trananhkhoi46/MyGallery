@@ -66,3 +66,30 @@ std::vector<std::string> CppUtils::splitStringByDelim(const std::string &s,
 int CppUtils::randomBetween(int x1, int x2) {
 	return CCRANDOM_0_1()*(x2-x1 +1) + x1;
 }
+
+std::string CppUtils::encodeUrl(std::string str)
+{
+	string new_str = "";
+	    char c;
+	    int ic;
+	    const char* chars = str.c_str();
+	    char bufHex[10];
+	    int len = strlen(chars);
+
+	    for(int i=0;i<len;i++){
+	        c = chars[i];
+	        ic = c;
+	        // uncomment this if you want to encode spaces with +
+	        /*if (c==' ') new_str += '+';
+	        else */if (isalnum(c) || c == '-' || c == '_' || c == '.' || c == '~') new_str += c;
+	        else {
+	            sprintf(bufHex,"%X",c);
+	            if(ic < 16)
+	                new_str += "%0";
+	            else
+	                new_str += "%";
+	            new_str += bufHex;
+	        }
+	    }
+	    return new_str;
+}

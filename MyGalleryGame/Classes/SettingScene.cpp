@@ -23,6 +23,9 @@ Scene* SettingScene::scene() {
 // on "init" you need to initialize your instance
 bool SettingScene::init() {
 	bool result = BaseScene::init();
+
+	FacebookHandler::getInstance()->setFacebookConnectDelegate(this);
+
 	//////////////////////////////
 	// 1. super init first
 	if (!LayerColor::initWithColor(Color4B(255, 255, 255, 255))) {
@@ -133,8 +136,9 @@ bool SettingScene::init() {
 	btnLoginLogoutFacebook->setTag(kTagLoginLogoutFacebook);
 	this->addChild(btnLoginLogoutFacebook);
 
-	Label* labelLoginLogoutFacebook = Label::createWithTTF(config, "LOGIN",
-			TextHAlignment::CENTER);
+	labelLoginLogoutFacebook = Label::createWithTTF(config,
+			FacebookHandler::getInstance()->isFacebookLoggedIn() ?
+					"LOGOUT" : "LOGIN", TextHAlignment::CENTER);
 	labelLoginLogoutFacebook->setPosition(
 			btnLoginLogoutFacebook->getPosition());
 	labelLoginLogoutFacebook->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
@@ -150,7 +154,16 @@ bool SettingScene::init() {
 
 	return result;
 }
-
+void SettingScene::responseWhenLoginOrLogoutFacebook() {
+	if (FacebookHandler::getInstance()->isFacebookLoggedIn()) {
+		CCLog("bambi in SettingScene -> responseWhenLoginOrLogoutFacebook logged in");
+		labelLoginLogoutFacebook->setString("LOGOUT");
+	}else
+	{
+		CCLog("bambi in SettingScene -> responseWhenLoginOrLogoutFacebook logged out");
+		labelLoginLogoutFacebook->setString("LOGIN");
+	}
+}
 void SettingScene::settingButtonsCallback(Ref* pSender,
 		ui::Widget::TouchEventType eEventType) {
 	if (eEventType == ui::Widget::TouchEventType::ENDED) {
@@ -165,7 +178,13 @@ void SettingScene::settingButtonsCallback(Ref* pSender,
 		}
 			break;
 		case kTagLoginLogoutFacebook: {
-			SocialPlugin::showToast("Doesn't support at the moment");
+			if (FacebookHandler::getInstance()->isFacebookLoggedIn()) {
+				FacebookHandler::getInstance()->logoutFacebook();
+			}
+			else
+			{
+				FacebookHandler::getInstance()->loginFacebook();
+			}
 		}
 			break;
 		case kTagMusic: {
