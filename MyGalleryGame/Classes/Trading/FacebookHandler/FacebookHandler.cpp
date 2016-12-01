@@ -127,7 +127,7 @@ void FacebookHandler::onGetUserInfo(const sdkbox::FBGraphUser& userInfo) {
 	if (isGettingMyProfle) {
 		CCLog("##FB onGetUserInfo, name: %s, id: %s",
 				userInfo.getName().c_str(), userInfo.getUserId().c_str());
-		BUserInfor* user = BUserInfor::getMyInfor();
+		BUserInfor* user = new BUserInfor();
 		user->setId(userInfo.getUserId());
 		user->setName(userInfo.getName());
 		if (_facebookDelegate != nullptr) {

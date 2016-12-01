@@ -23,21 +23,12 @@ BUserInfor* BUserInfor::parseUserFrom(const rapidjson::Value& json) //Parse the 
 
 BUserInfor* BUserInfor::parseUserFrom(string message) //Parse the message from Facebook
 {
-    BUserInfor* user=BUserInfor::getMyInfor();
+    BUserInfor* user=new BUserInfor();
 
 	rapidjson::Document document;
 	document.Parse<0>(message.c_str());
 
     user->setName(document["name"].GetString());
     user->setId(document["id"].GetString());
-    return user;
-}
-
-BUserInfor* BUserInfor::getMyInfor()
-{
-    static BUserInfor* user;
-    if (!user) {
-        user=new BUserInfor();
-    }
     return user;
 }

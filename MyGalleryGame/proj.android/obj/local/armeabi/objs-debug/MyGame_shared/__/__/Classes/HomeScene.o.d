@@ -455,6 +455,8 @@ obj/local/armeabi/objs-debug/MyGame_shared/__/__/Classes/HomeScene.o: \
  jni/../../Classes/Trading/FirebaseHandler/../../Resources.h \
  jni/../../Classes/Trading/FirebaseHandler/../../StickerResource.h \
  jni/../../Classes/Trading/FirebaseHandler/../../StickerHelper.h \
+ /Users/Kskull/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/../cocos2d/extensions/../external/json/rapidjson.h \
+ /Users/Kskull/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/../cocos2d/extensions/../external/json/document.h \
  jni/../../Classes/Trading/Model/BUserInfor.h \
  jni/PluginAdMob/PluginAdMob.h jni/PluginChartboost/PluginChartboost.h \
  jni/PluginVungle/PluginVungle.h jni/../../Classes/SettingScene.h \
@@ -1378,6 +1380,10 @@ jni/../../Classes/Trading/FirebaseHandler/../../Resources.h:
 jni/../../Classes/Trading/FirebaseHandler/../../StickerResource.h:
 
 jni/../../Classes/Trading/FirebaseHandler/../../StickerHelper.h:
+
+/Users/Kskull/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/../cocos2d/extensions/../external/json/rapidjson.h:
+
+/Users/Kskull/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/../cocos2d/extensions/../external/json/document.h:
 
 jni/../../Classes/Trading/Model/BUserInfor.h:
 

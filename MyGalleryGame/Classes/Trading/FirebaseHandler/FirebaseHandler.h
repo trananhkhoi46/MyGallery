@@ -9,11 +9,14 @@
 #include "../../Resources.h"
 #include "../../StickerResource.h"
 #include "../../StickerHelper.h"
+#include "external/json/rapidjson.h"
+#include "external/json/document.h"
 #include <iostream>
 
 USING_NS_CC;
 using namespace cocos2d::network;
 using namespace std;
+using namespace rapidjson;
 
 enum TAG{
     TAG_FRIEND,TAG_WORLD
@@ -51,10 +54,10 @@ public:
     void saveFacebookIdOnFirebase(BUserInfor* user);
     void callBacksaveFacebookIdOnFirebase(HttpClient* client,HttpResponse* response);
 
-    void fetchBUserInforAt(char* querry);
-    void callBackFetchBUserInforAt(HttpClient* client,HttpResponse* response);
+    void fetchFriendsFromFirebase(string friendList);
+    void callBackFetchFriendsFromFirebase(HttpClient* client,HttpResponse* response);
 
-    void fetchTopFriend();
+    void fetchFriendsFromFacebook();
 
     void getProbabilityFreePacket();
     void getProbability(string url, vector<string> probabilityKeys, STICKER_RARITY rarity);
@@ -63,6 +66,7 @@ public:
     void fetchScoreFromServer();
     void putScoreToSever(int score);
     int scoreToSubmit;
+    string friendList;
 
     //Facebook delegate
     virtual void responseWhenGetFriendsSuccessfully(string friendList);

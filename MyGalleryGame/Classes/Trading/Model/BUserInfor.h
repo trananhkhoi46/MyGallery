@@ -33,7 +33,6 @@ public:
     CC_SYNTHESIZE(string,_name,Name);
     CC_SYNTHESIZE(string,_id,Id);
     CC_SYNTHESIZE(string,_allStickers,AllStickers);
-    static BUserInfor* getMyInfor();
     static BUserInfor* parseUserFrom(const rapidjson::Value& json);
     static BUserInfor* parseUserFrom(string message);
 };

@@ -231,7 +231,7 @@ void TradingScene::loadLeaderboardData()
 //		if(isWorldMode)
 //			FirebaseHandler::getInstance()->fetchTopWorld();
 //		else
-			FirebaseHandler::getInstance()->fetchTopFriend();
+//			FirebaseHandler::getInstance()->fetchTopFriend();
 		//After fetch data responseForQuerryTopWorld or responseForQuerryTopFriend will be called.
 	}else
 	{

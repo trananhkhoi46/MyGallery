@@ -863,7 +863,7 @@ void HomeScene::responseWhenLoginOrLogoutFacebook() {
 void HomeScene::responseForQuerryTopFriend(vector<BUserInfor*> friendList) {
 	CCLog("bambi responseForQuerryTopFriend");
 	for (BUserInfor* user : friendList) {
-		CCLog("%s", user->getName().c_str());
+		CCLog("%s - %s", user->getName().c_str(), user->getId().c_str());
 	}
 }
 
@@ -876,7 +876,7 @@ void HomeScene::responseAfterCheckFacebookIdExistOnFirebase() {
 		//		if(isWorldMode)
 		//			FirebaseHandler::getInstance()->fetchTopWorld();
 		//		else
-		FirebaseHandler::getInstance()->fetchTopFriend();
+		FirebaseHandler::getInstance()->fetchFriendsFromFacebook();
 		//After fetch data responseForQuerryTopWorld or responseForQuerryTopFriend will be called.
 	} else {
 		CCLog(

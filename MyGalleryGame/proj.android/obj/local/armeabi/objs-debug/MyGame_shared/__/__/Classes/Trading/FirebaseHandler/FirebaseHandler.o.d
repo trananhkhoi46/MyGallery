@@ -449,6 +449,8 @@ obj/local/armeabi/objs-debug/MyGame_shared/__/__/Classes/Trading/FirebaseHandler
  jni/../../Classes/Trading/FirebaseHandler/../../Constants.h \
  jni/../../Classes/Trading/FirebaseHandler/../../CppUtils.h \
  /Users/Kskull/Documents/Cocos2dx/ndk/sources/cxx-stl/gnu-libstdc++/4.9/include/iostream \
+ /Users/Kskull/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/../cocos2d/extensions/../external/json/rapidjson.h \
+ /Users/Kskull/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/../cocos2d/extensions/../external/json/document.h \
  jni/../../Classes/Trading/BLeaderBoardContanst.h
 
 jni/../../Classes/Trading/FirebaseHandler/FirebaseHandler.h:
@@ -1348,5 +1350,9 @@ jni/../../Classes/Trading/FirebaseHandler/../../Constants.h:
 jni/../../Classes/Trading/FirebaseHandler/../../CppUtils.h:
 
 /Users/Kskull/Documents/Cocos2dx/ndk/sources/cxx-stl/gnu-libstdc++/4.9/include/iostream:
+
+/Users/Kskull/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/../cocos2d/extensions/../external/json/rapidjson.h:
+
+/Users/Kskull/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/../cocos2d/extensions/../external/json/document.h:
 
 jni/../../Classes/Trading/BLeaderBoardContanst.h:

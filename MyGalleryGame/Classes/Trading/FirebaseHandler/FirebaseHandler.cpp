@@ -80,11 +80,6 @@ void FirebaseHandler::getProbabilityFreePacket() {
 
 void FirebaseHandler::checkFacebookIdExistOnFirebase() {
 	CCLog("bambi inside FirebaseHandler->checkFacebookIdExistOnFirebase ");
-	//query string
-	char query[200];
-	sprintf(query, firebaseQuerry_IsThisUserExistOnFirebase.c_str(),
-	KEY_WORLD_ID, FacebookHandler::getInstance()->getUserFacebookID().c_str());
-
 	//Request http
 	HttpRequest* request = new HttpRequest();
 	request->setUrl(
@@ -94,11 +89,6 @@ void FirebaseHandler::checkFacebookIdExistOnFirebase() {
 									firebaseQuerry_IsThisUserExistOnFirebase.c_str(),
 									KEY_WORLD_ID,
 									FacebookHandler::getInstance()->getUserFacebookID().c_str())->getCString()).c_str())->getCString());
-
-	CCLog(
-			"bambi inside FirebaseHandler->checkFacebookIdExistOnFirebase, url: %s",
-			request->getUrl());
-
 	request->setRequestType(HttpRequest::Type::GET);
 	request->setResponseCallback(
 			CC_CALLBACK_2(
@@ -106,7 +96,6 @@ void FirebaseHandler::checkFacebookIdExistOnFirebase() {
 					this));
 	HttpClient::getInstance()->send(request);
 	request->release();
-
 }
 void FirebaseHandler::checkFacebookIdExistOnFirebaseCallBack(HttpClient* client,
 		HttpResponse* response) {
@@ -139,11 +128,11 @@ void FirebaseHandler::checkFacebookIdExistOnFirebaseCallBack(HttpClient* client,
 		} else
 			FacebookHandler::getInstance()->getMyProfile();
 		//After getMyProfile, responseWhenGetMyInfoSuccessfully function will be called.
-
 	}
 }
 void FirebaseHandler::responseWhenGetMyInfoSuccessfully(BUserInfor* user) {
-	CCLog("bambi responseWhenGetMyInfoSuccessfully, going to saveFacebookIdOnFirebase");
+	CCLog(
+			"bambi responseWhenGetMyInfoSuccessfully, going to saveFacebookIdOnFirebase");
 	saveFacebookIdOnFirebase(user);
 }
 void FirebaseHandler::saveFacebookIdOnFirebase(BUserInfor* user) {
@@ -192,34 +181,28 @@ void FirebaseHandler::callBacksaveFacebookIdOnFirebase(HttpClient* client,
 	}
 }
 
-void FirebaseHandler::fetchBUserInforAt(char* querry) {
-	char url[55500];
-	sprintf(url, "%s?%s&order=-Score&limit=5", classURL.c_str(), querry);
-
-	//Header for httprequest
-	std::vector < std::string > header;
-	header.push_back(appID);
-	header.push_back(restAPI);
-	header.push_back("Content-Type: application/json");
-
+void FirebaseHandler::fetchFriendsFromFirebase(string friendList) {
+	this->friendList = friendList;
+	CCLog("bambi fetchFriendsFromFirebase: %s" , friendList.c_str());
 	//Request http
 	HttpRequest* request = new HttpRequest();
-	request->setUrl(url);
-	request->setHeaders(header);
+	request->setUrl(
+			String::createWithFormat(firebaseURL.c_str(),
+					firebaseQuerry_User.c_str())->getCString());
 	request->setRequestType(HttpRequest::Type::GET);
 	request->setResponseCallback(
-			CC_CALLBACK_2(FirebaseHandler::callBackFetchBUserInforAt, this));
+			CC_CALLBACK_2(FirebaseHandler::callBackFetchFriendsFromFirebase,
+					this));
 	HttpClient::getInstance()->send(request);
 	request->release();
 }
 
-void FirebaseHandler::callBackFetchBUserInforAt(HttpClient* client,
+void FirebaseHandler::callBackFetchFriendsFromFirebase(HttpClient* client,
 		HttpResponse* response) {
 	std::string error = response->getErrorBuffer();
 	if (response->isSucceed() && error == "") {
 //Clear old data
 		_friendList.clear();
-		_worldList.clear();
 
 //Clear data that being got from Firebase (sometimes stranged characters be attached after the result)
 		std::vector<char> *buffer = response->getResponseData();
@@ -233,32 +216,27 @@ void FirebaseHandler::callBackFetchBUserInforAt(HttpClient* client,
 //Process data
 		rapidjson::Document document;
 		document.Parse<0>(clearData.c_str());
-		if (!document["results"].IsArray())
-			return;
-		const rapidjson::Value& jsonArray = document["results"];
-		for (int k = 0; k < jsonArray.Size(); k++) {
-			BUserInfor* user = BUserInfor::parseUserFrom(jsonArray[k]);
-			switch (tag) {
-			case TAG_FRIEND:
+		for (rapidjson::Value::ConstMemberIterator itr = document.MemberBegin();
+				itr != document.MemberEnd(); ++itr) {
+			string facebookId = document[itr->name.GetString()]["FB_ID"].GetString();
+			CCLog("bambi callBackFetchFriendsFromFirebase, in the loop, facebookId: %s - %s",facebookId.c_str(),document[itr->name.GetString()]["FB_Name"].GetString());
+			if (friendList.find(facebookId)
+					!= std::string::npos) {
+				BUserInfor* user = new BUserInfor();
+				user->setName(document[itr->name.GetString()]["FB_Name"].GetString());
+				user->setId(facebookId);
 				_friendList.push_back(user);
-				break;
-			case TAG_WORLD:
-				_worldList.push_back(user);
-				break;
 			}
 		}
 	}
 	// Response to RankingScene
-	if (!_firebaseDelegate)
-		return;
-	switch (tag) {
-	case TAG_FRIEND:
+	if (_firebaseDelegate != nullptr)
 		_firebaseDelegate->responseForQuerryTopFriend(_friendList);
-		break;
-	}
+
+	friendList = "";
 }
 
-void FirebaseHandler::fetchTopFriend() {
+void FirebaseHandler::fetchFriendsFromFacebook() {
 	FacebookHandler::getInstance()->getAllFriendsID();
 	//After get friends successfully responseWhenGetFriendsSuccessfully will be called.
 }
@@ -266,11 +244,7 @@ void FirebaseHandler::responseWhenGetFriendsSuccessfully(string friendList) {
 	friendList += "\"" + FacebookHandler::getInstance()->getUserFacebookID()
 			+ "\""; //Attach my FacebookID to friendList
 
-	CCLog("bambi get listfriend from facebook: %s", friendList.c_str());
-//	char querry[55500];
-//	tag = TAG_FRIEND;
-//	sprintf(querry, "where={\"FB_ID\":{\"$in\":[%s]}}", friendList.c_str());
-//	fetchBUserInforAt(querry);
+	fetchFriendsFromFirebase(friendList);
 }
 
 void FirebaseHandler::fetchScoreFromServer() {
