@@ -13,6 +13,7 @@
 #define kTagUncommonPacket 7
 #define kTagRarePacket 8
 #define kTagNewSticker 9
+#define kTagFriendList 10
 
 TTFConfig configControlButton(s_font, 65 * s_font_ratio);
 TTFConfig configLabelSticker(s_font, 60 * s_font_ratio);
@@ -346,6 +347,52 @@ void HomeScene::initOtherViews() {
 		}});
 	blurLayer->addChild(btnContinue);
 
+	//Add layer to show friend list
+	friendLayer = LayerColor::create(Color4B(0, 0, 0, 100));
+	friendLayer->setContentSize(winSize);
+	friendLayer->setPosition(Vec2::ZERO);
+	friendLayer->setAnchorPoint(Vec2(0.0f, 0.0f));
+	friendLayer->setVisible(false);
+	this->addChild(friendLayer);
+
+	//Add board
+	Sprite* boardFriend = Sprite::create(s_homescene_board_friends);
+	boardFriend->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
+	boardFriend->setPosition(winSize / 2);
+	friendLayer->addChild(boardFriend);
+
+	//Add btn close
+	Button* btnClose = Button::create(s_homescene_btn_close);
+	btnClose->setPosition(
+			Vec2(
+					boardFriend->getPositionX()
+							+ boardFriend->getContentSize().width / 2 - 10,
+					boardFriend->getPositionY()
+							+ boardFriend->getContentSize().height / 2 - 10));
+	btnClose->setTouchEnabled(true);
+	btnClose->setPressedActionEnabled(true);
+	btnClose->addTouchEventListener([this](Ref *pSender,
+			Widget::TouchEventType type) {
+		if (type == cocos2d::ui::Widget::TouchEventType::ENDED)
+		{
+			closeFriendLayer();
+		}});
+	friendLayer->addChild(btnClose);
+
+	//Add btn invite facebook
+	Button* btnInviteFacebook = Button::create(s_homescene_btn_invite);
+	btnInviteFacebook->setPosition(Vec2(winSize.width / 2, 310));
+	btnInviteFacebook->setTouchEnabled(true);
+	btnInviteFacebook->setPressedActionEnabled(true);
+	btnInviteFacebook->addTouchEventListener(
+			[this](Ref *pSender,
+					Widget::TouchEventType type) {
+				if (type == cocos2d::ui::Widget::TouchEventType::ENDED)
+				{
+					sdkbox::PluginFacebook::inviteFriends("https://fb.me/322164761287181",
+							"http://www.cocos2d-x.org/attachments/801/cocos2dx_portrait.png");
+				}});
+	friendLayer->addChild(btnInviteFacebook);
 }
 
 void HomeScene::initSettingMenu() {
@@ -543,6 +590,11 @@ void HomeScene::invalidateMenuBarPosition() {
 								menuBarInvisiblePosition));
 	}
 }
+
+void HomeScene::closeFriendLayer() {
+	friendLayer->setVisible(false);
+}
+
 void HomeScene::closeBlurLayer() {
 	Vector<Node*> layerChildren = blurLayer->getChildren();
 	for (const auto child : layerChildren) {
@@ -752,7 +804,7 @@ void HomeScene::openStickerDetailLayer(Sticker* sticker) {
 void HomeScene::packetButtonsCallback(Ref* pSender,
 		ui::Widget::TouchEventType eEventType) {
 	if (eEventType == ui::Widget::TouchEventType::BEGAN
-			&& !blurLayer->isVisible()) {
+			&& !blurLayer->isVisible() && !friendLayer->isVisible()) {
 		int animationDuration = 3;
 		Button* button = dynamic_cast<Button*>(pSender);
 		int tag = (int) button->getTag();
@@ -808,14 +860,14 @@ void HomeScene::packetButtonsCallback(Ref* pSender,
 void HomeScene::iapButtonsCallback(Ref* pSender,
 		ui::Widget::TouchEventType eEventType) {
 	if (eEventType == ui::Widget::TouchEventType::ENDED
-			&& !blurLayer->isVisible()) {
+			&& !blurLayer->isVisible() && !friendLayer->isVisible()) {
 		SocialPlugin::showToast("Doesn't support at the moment");
 	}
 }
 void HomeScene::rewardedButtonsCallback(Ref* pSender,
 		ui::Widget::TouchEventType eEventType) {
 	if (eEventType == ui::Widget::TouchEventType::ENDED
-			&& !blurLayer->isVisible()) {
+			&& !blurLayer->isVisible() && !friendLayer->isVisible()) {
 		showRewardedAds();
 	}
 }
@@ -823,7 +875,7 @@ void HomeScene::rewardedButtonsCallback(Ref* pSender,
 void HomeScene::tradeButtonCallback(Ref* pSender,
 		ui::Widget::TouchEventType eEventType) {
 	if (eEventType == ui::Widget::TouchEventType::ENDED
-			&& !blurLayer->isVisible()) {
+			&& !blurLayer->isVisible() && !friendLayer->isVisible()) {
 		SocialPlugin::showToast("Doesn't support at the moment");
 	}
 }
@@ -831,17 +883,15 @@ void HomeScene::tradeButtonCallback(Ref* pSender,
 void HomeScene::friendButtonCallback(Ref* pSender,
 		ui::Widget::TouchEventType eEventType) {
 	if (eEventType == ui::Widget::TouchEventType::ENDED
-			&& !blurLayer->isVisible()) {
-		SocialPlugin::showToast("Doesn't support at the moment");
+			&& !blurLayer->isVisible() && !friendLayer->isVisible()) {
+		friendLayer->setVisible(true);
 	}
 }
 
 void HomeScene::facebookConnectButtonCallback(Ref* pSender,
 		ui::Widget::TouchEventType eEventType) {
 	if (eEventType == ui::Widget::TouchEventType::ENDED
-			&& !blurLayer->isVisible()) {
-//		sdkbox::PluginFacebook::inviteFriends("https://fb.me/322164761287181",
-//				"http://www.cocos2d-x.org/attachments/801/cocos2dx_portrait.png");
+			&& !blurLayer->isVisible() && !friendLayer->isVisible()) {
 		CCLog("bambi logging in");
 		FacebookHandler::getInstance()->loginFacebook();
 	}
@@ -862,8 +912,42 @@ void HomeScene::responseWhenLoginOrLogoutFacebook() {
 
 void HomeScene::responseForQuerryTopFriend(vector<BUserInfor*> friendList) {
 	CCLog("bambi responseForQuerryTopFriend");
-	for (BUserInfor* user : friendList) {
-		CCLog("%s - %s", user->getName().c_str(), user->getId().c_str());
+	TTFConfig labelConfig(s_font, 100 * s_font_ratio);
+	vt_Friends = friendList;
+	friendLayer->removeChildByTag(kTagFriendList, false);
+
+	//Scrollview configuration
+	int numberOfItems = friendList.size();
+	float itemMargin = 125;
+	Size scrollFrameSize = Size(winSize.width, 880);
+
+	//Create scrollview
+	BScrollView* scrollview = BScrollView::createVertical(numberOfItems,
+			itemMargin, scrollFrameSize);
+	scrollview->setPosition(
+			Vec2(winSize.width / 2, winSize.height / 2 - 70));
+	scrollview->setBounceEnabled(false);
+	scrollview->setScrollBarEnabled(false);
+	friendLayer->addChild(scrollview);
+
+	//Add sth to scroll view
+	float positionX = scrollview->leftPosition;
+	float positionY = scrollview->topPosition;
+	for (int i = 1; i <= numberOfItems; i++) {
+		//Add user name label
+		BLabel* labelName = BLabel::createWithTTF(labelConfig,
+				String::createWithFormat("%d --- %s", i,
+						vt_Friends.at(i-1)->getName().c_str())->getCString(),
+				TextHAlignment::CENTER);
+		labelName->setPosition(
+				Vec2(positionX + scrollFrameSize.width / 2 - itemMargin / 2,
+						positionY));
+		labelName->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
+		labelName->setColor(Color3B::BLACK);
+		labelName->setTag(kTagFriendList);
+		scrollview->addChild(labelName);
+
+		positionY -= itemMargin;
 	}
 }
 

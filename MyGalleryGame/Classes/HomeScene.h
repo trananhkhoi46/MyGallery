@@ -48,6 +48,7 @@ public:
 	void onVideoAdsPlayed();
 	void setVisibilityViewsOfTradingFeature();
 	void openStickerDetailLayer(Sticker* sticker);
+	void closeFriendLayer();
 
 	int currentStickers;
 	int maxStickers;
@@ -60,6 +61,7 @@ public:
 
 	LayerColor* backgroundLayer;
 	Layer* blurLayer;
+	Layer* friendLayer;
 	Label* labelSticker;
 	Label* labelTimeToGetFreeSticker;
 	Sprite* menuBar;
@@ -83,6 +85,7 @@ public:
 	Button* btnFriend;
 	Button* btnTrade;
 	LoadingBar* progressBar;
+	vector<BUserInfor*> vt_Friends;
 
 	//FacebookConnectDelegate response
 	virtual void responseWhenLoginOrLogoutFacebook();

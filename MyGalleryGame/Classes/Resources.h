@@ -43,6 +43,10 @@ static const char s_homescene_btn_bundle_packet_top[] = "homescene/bundle_packet
 static const char s_homescene_btn_bundle_packet_bottom[] = "homescene/bundle_packet_bottom.png";
 static const char s_homescene_new[] = "homescene/sprite_new.png";
 static const char s_homescene_uncommon[] = "homescene/sprite_uncommon.png";
+static const char s_homescene_board_friends[] = "homescene/board_friends.png";
+static const char s_homescene_btn_close[] = "homescene/btn_close.png";
+static const char s_homescene_btn_invite[] = "homescene/btn_invite.png";
+
 
 
 //Setting Scene elements
