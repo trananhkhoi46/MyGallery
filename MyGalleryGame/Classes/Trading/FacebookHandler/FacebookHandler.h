@@ -11,7 +11,7 @@
 #include "cocos/network/HttpClient.h"
 #include "json/rapidjson.h"
 #include "json/document.h"
-
+#include "../../Constants.h"
 #include <curl/include/ios/curl/curl.h>
 #include <curl/include/android/curl/curl.h>
 USING_NS_CC;
@@ -67,6 +67,7 @@ public:
 			const std::string& msg);
 	void onInviteFriendsResult(bool result, const std::string& msg);
 	void onGetUserInfo(const sdkbox::FBGraphUser& userInfo);
+	bool isFacebookFirstTimeLoggingIn();
 };
 
 #endif

@@ -33,6 +33,10 @@ public:
     virtual void responseAfterCheckFacebookIdExistOnFirebase(){
 
     };
+
+    virtual void responseAfterGetStickersDataFromFirebase(string facebookId, string stickerData){
+
+    };
 };
 
 
@@ -58,6 +62,13 @@ public:
     void callBackFetchFriendsFromFirebase(HttpClient* client,HttpResponse* response);
 
     void fetchFriendsFromFacebook();
+
+    void saveToMyStickerList(string stickerIdString);
+
+    void saveToMyStickerList(string objectID, string stickerIdString);
+
+    void getStickersDataFromFirebase();
+    void getStickersDataFromFirebase(string objectID);
 
     void getProbabilityFreePacket();
     void getProbability(string url, vector<string> probabilityKeys, STICKER_RARITY rarity);

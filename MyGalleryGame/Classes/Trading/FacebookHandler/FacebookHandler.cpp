@@ -37,18 +37,23 @@ void FacebookHandler::getAllFriendsID() {
 void FacebookHandler::loginFacebook() {
 	sdkbox::PluginFacebook::requestReadPermissions( { "public_profile",
 			"user_friends" }); //Including login
-
+	UserDefault::getInstance()->setBoolForKey(KEY_FACEBOOK_FIRST_TIME_LOGGING_IN, true);
 }
 void FacebookHandler::logoutFacebook() {
 	sdkbox::PluginFacebook::logout();
 	if (_facebookConnectDelegate != nullptr)
 		_facebookConnectDelegate->responseWhenLoginOrLogoutFacebook();
+	UserDefault::getInstance()->setBoolForKey(KEY_FACEBOOK_FIRST_TIME_LOGGING_IN, true);
 }
+
+bool FacebookHandler::isFacebookFirstTimeLoggingIn()
+{
+	return UserDefault::getInstance()->getBoolForKey(KEY_FACEBOOK_FIRST_TIME_LOGGING_IN, true);
+}
+
 bool FacebookHandler::isFacebookLoggedIn() {
-	if (sdkbox::PluginFacebook::isLoggedIn())
-		return true;
-	else
-		return false;
+	bool isLoggedIn = sdkbox::PluginFacebook::isLoggedIn();
+	return isLoggedIn;
 }
 
 bool isGettingMyProfle = false;
@@ -74,6 +79,7 @@ void FacebookHandler::onAPI(const std::string& tag,
 	CCLog("##FB onAPI: tag -> %s, json -> %s", tag.c_str(), jsonData.c_str());
 	if (isGettingMyProfle) {
 		BUserInfor* user = BUserInfor::parseUserFrom(jsonData);
+		user->setAllStickers(UserDefault::getInstance()->getStringForKey(CURRENT_STICKER, ""));
 		if (_facebookDelegate != nullptr) {
 			_facebookDelegate->responseWhenGetMyInfoSuccessfully(user);
 		}
@@ -130,6 +136,7 @@ void FacebookHandler::onGetUserInfo(const sdkbox::FBGraphUser& userInfo) {
 		BUserInfor* user = new BUserInfor();
 		user->setId(userInfo.getUserId());
 		user->setName(userInfo.getName());
+		user->setAllStickers(UserDefault::getInstance()->getStringForKey(CURRENT_STICKER, ""));
 		if (_facebookDelegate != nullptr) {
 			_facebookDelegate->responseWhenGetMyInfoSuccessfully(user);
 		}

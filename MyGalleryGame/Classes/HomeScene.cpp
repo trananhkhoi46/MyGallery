@@ -911,6 +911,8 @@ void HomeScene::responseWhenLoginOrLogoutFacebook() {
 }
 
 void HomeScene::responseForQuerryTopFriend(vector<BUserInfor*> friendList) {
+	FirebaseHandler::getInstance()->getStickersDataFromFirebase();
+
 	CCLog("bambi responseForQuerryTopFriend");
 	TTFConfig labelConfig(s_font, 100 * s_font_ratio);
 	vt_Friends = friendList;
@@ -924,8 +926,7 @@ void HomeScene::responseForQuerryTopFriend(vector<BUserInfor*> friendList) {
 	//Create scrollview
 	BScrollView* scrollview = BScrollView::createVertical(numberOfItems,
 			itemMargin, scrollFrameSize);
-	scrollview->setPosition(
-			Vec2(winSize.width / 2, winSize.height / 2 - 70));
+	scrollview->setPosition(Vec2(winSize.width / 2, winSize.height / 2 - 70));
 	scrollview->setBounceEnabled(false);
 	scrollview->setScrollBarEnabled(false);
 	friendLayer->addChild(scrollview);
@@ -937,7 +938,7 @@ void HomeScene::responseForQuerryTopFriend(vector<BUserInfor*> friendList) {
 		//Add user name label
 		BLabel* labelName = BLabel::createWithTTF(labelConfig,
 				String::createWithFormat("%d --- %s", i,
-						vt_Friends.at(i-1)->getName().c_str())->getCString(),
+						vt_Friends.at(i - 1)->getName().c_str())->getCString(),
 				TextHAlignment::CENTER);
 		labelName->setPosition(
 				Vec2(positionX + scrollFrameSize.width / 2 - itemMargin / 2,
@@ -948,6 +949,39 @@ void HomeScene::responseForQuerryTopFriend(vector<BUserInfor*> friendList) {
 		scrollview->addChild(labelName);
 
 		positionY -= itemMargin;
+	}
+}
+
+void HomeScene::responseAfterGetStickersDataFromFirebase(string facebookId,
+		string stickerData) {
+	CCLog(
+			"bambi HomeScene responseAfterGetStickersDataFromFirebase - facebookID: %s, stickerData: %s",
+			facebookId.c_str(), stickerData.c_str());
+	if (facebookId == sdkbox::PluginFacebook::getUserID()) {
+		CCLog(
+				"bambi HomeScene responseAfterGetStickersDataFromFirebase - this is my facebook id");
+		if (FacebookHandler::getInstance()->isFacebookFirstTimeLoggingIn()) {
+			CCLog(
+					"bambi HomeScene responseAfterGetStickersDataFromFirebase - is first time logging in");
+			if (stickerData.length() > 0) {
+				CCLog(
+						"bambi HomeScene responseAfterGetStickersDataFromFirebase - has data from server -> save stickers to local");
+
+				UserDefault::getInstance()->setStringForKey(CURRENT_STICKER,
+						stickerData);
+				UserDefault::getInstance()->setBoolForKey(
+				KEY_FACEBOOK_FIRST_TIME_LOGGING_IN, false);
+
+				//Update UI
+				invalidateProgressBar();
+			} else {
+				CCLog(
+						"bambi HomeScene responseAfterGetStickersDataFromFirebase - has no data from server -> save stickers from local to server");
+				FirebaseHandler::getInstance()->saveToMyStickerList(
+						UserDefault::getInstance()->getStringForKey(
+								CURRENT_STICKER));
+			}
+		}
 	}
 }
 

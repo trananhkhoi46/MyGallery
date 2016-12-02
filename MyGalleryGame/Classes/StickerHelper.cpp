@@ -64,6 +64,11 @@ void StickerHelper::saveToMyStickerList(string stickerIdString) {
 					+ "," + stickerIdString);
 	CCLog("bambi saveToMyStickerList - after saving successfully: %s",
 			UserDefault::getInstance()->getStringForKey(CURRENT_STICKER).c_str());
+
+	//Save to server
+	if (FacebookHandler::getInstance()->isFacebookLoggedIn()) {
+		FirebaseHandler::getInstance()->saveToMyStickerList(stickerIdString);
+	}
 }
 void StickerHelper::saveToMyStickerList(int stickerId) {
 	saveToMyStickerList(CppUtils::doubleToString(stickerId));

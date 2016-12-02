@@ -20,6 +20,10 @@ Scene* TradingScene::scene() {
 	// return the scene
 	return scene;
 }
+void TradingScene::responseAfterGetStickersDataFromFirebase(string facebookId, string stickerData)
+{
+
+}
 
 // on "init" you need to initialize your instance
 bool TradingScene::init() {

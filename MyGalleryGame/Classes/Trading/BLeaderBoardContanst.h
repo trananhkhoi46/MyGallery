@@ -8,6 +8,7 @@ using namespace std;
 #define RANKINGWORLDMODE "isrankingworldmode"
 
 //Define for BUserInfo
+#define KEY_FACEBOOK_FIRST_TIME_LOGGING_IN "keyfacebookfirsttimeloggingin"
 #define KEY_PROBABILITY_COMMON "common"
 #define KEY_PROBABILITY_UNCOMMON "uncommon"
 #define KEY_PROBABILITY_RARE "rare"
@@ -18,7 +19,7 @@ using namespace std;
 #define KEY_WORLD_LOCATION   "FB_Location"
 #define KEY_WORLD_ID         "FB_ID"
 #define KEY_WORLD_SCORE      "Coin"
-#define KEY_WORLD_OJECTID    "name"
+#define KEY_WORLD_OJECTID    "ObjectID"
 #define KEY_WORLD_INSTALLED_GAMES    "InstalledGame"
 #define KEY_IS_FIRST_TIME_LOGIN_INTO_THIS_GAME "isfirsttimeloginintothisgame"
 #define THIS_GAME_NAME "SpringNinja"
@@ -45,6 +46,7 @@ static const string firebaseQuerry_Probability_Veryrarepacket =
 static const string firebaseQuerry_Probability_Rarestpacket =
 		"probability_rarestpacket.json?";
 static const string firebaseQuerry_User = "users.json?";
+static const string firebaseQuerry_Specific_User = "users/%s.json?";
 static const string firebaseQuerry_IsThisUserExistOnFirebase =
 		"users.json?orderBy=\"%s\"&equalTo=\"%s\"&";
 

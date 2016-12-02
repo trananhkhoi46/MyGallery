@@ -42,5 +42,6 @@ public:
 		virtual void responseForQuerryTopWorld(vector<BUserInfor*> worldList); //From FirebaseHandler
 		virtual void responseForQuerryTopFriend(vector<BUserInfor*> worldList); //From FirebaseHandler
 		virtual void responseAfterCheckFacebookIdExistOnFirebase(); //From FirebaseHandler
+		virtual void responseAfterGetStickersDataFromFirebase(string facebookId, string stickerData);
 };
 #endif

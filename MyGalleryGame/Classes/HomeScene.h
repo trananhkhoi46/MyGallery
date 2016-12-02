@@ -92,6 +92,7 @@ public:
 	//FirebaseDelegate response
     virtual void responseForQuerryTopFriend(vector<BUserInfor*> friendList);
     virtual void responseAfterCheckFacebookIdExistOnFirebase();
+    virtual void responseAfterGetStickersDataFromFirebase(string facebookId, string stickerData);
 };
 
 #endif // __HOME_SCENE_H__

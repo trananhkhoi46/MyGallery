@@ -9,6 +9,9 @@
 #include <json/filestream.h>
 #include <json/document.h>
 #include <json/stringbuffer.h>
+#ifdef SDKBOX_ENABLED
+#include "PluginFacebook/PluginFacebook.h"
+#endif
 
 FirebaseHandler::FirebaseHandler() {
 	FacebookHandler::getInstance()->setFacebookDelegate(this);
@@ -28,6 +31,43 @@ FirebaseHandler* FirebaseHandler::getInstance() {
 	return instance;
 }
 
+void FirebaseHandler::saveToMyStickerList(string stickerIdString) {
+	CCLog("bambi saveToMyStickerList Firebase, getting my object id");
+	saveToMyStickerList(UserDefault::getInstance()->getStringForKey(KEY_WORLD_OJECTID), stickerIdString);
+}
+
+void FirebaseHandler::saveToMyStickerList(string objectID,
+		string stickerIdString) {
+	string url =
+			"https://gallerygame-fab40.firebaseio.com/json/users/" + objectID
+					+ "/All_Stickers.json?auth=KKgD6eWhfoJC6KUCFwSwEGIJYzxkFAjnMOqNl6ir";
+
+	CCLog("bambi saveToMyStickerList Firebase - stickerId: %s, url: %s",
+			stickerIdString.c_str(), url.c_str());
+
+	string data = "\"" + UserDefault::getInstance()->getStringForKey(CURRENT_STICKER) + "\"";
+	//Request http
+	HttpRequest* request = new HttpRequest();
+	request->setUrl(url.c_str());
+	request->setRequestType(HttpRequest::Type::PUT);
+	request->setRequestData(data.c_str(), data.length());
+	request->setResponseCallback([this](HttpClient* client,
+			HttpResponse* response) {
+		CCLog("bambi saveToMyStickerList on Firebase - responding: %s",
+				response->isSucceed() ? "success" : "failed");
+		if (response->isSucceed()) {
+			//Clear data (sometimes stranged characters be attached after the result)
+			std::vector<char> *buffer = response->getResponseData();
+			const char *data = reinterpret_cast<char *>(&(buffer->front()));
+			std::string clearData(data);
+			size_t pos = clearData.rfind("}");
+			clearData = clearData.substr(0, pos + 1);
+			CCLog("bambi saveToMyStickerList on Firebase callback: %s", clearData.c_str());
+		}
+	});
+	HttpClient::getInstance()->send(request);
+	request->release();
+}
 void FirebaseHandler::getProbability(string url, vector<string> probabilityKeys,
 		STICKER_RARITY rarity) {
 	CCLog("bambi get Probability from Firebase - calling");
@@ -118,13 +158,13 @@ void FirebaseHandler::checkFacebookIdExistOnFirebaseCallBack(HttpClient* client,
 			if (positionOfColon == string::npos) {
 				return;
 			}
-			string objectId = clearData.substr(1, positionOfColon - 1);
+			string objectId = clearData.substr(2, positionOfColon - 3);
 			CCLog("bambi objectId: %s", objectId.c_str());
 			//Save to UserDefault (your will need objectId when posting score on Firebase)
 			UserDefault::getInstance()->setStringForKey(KEY_WORLD_OJECTID,
 					objectId);
 			if (_firebaseDelegate != nullptr)
-				_firebaseDelegate->responseAfterCheckFacebookIdExistOnFirebase(); //Respone to ranking scene
+				_firebaseDelegate->responseAfterCheckFacebookIdExistOnFirebase(); //Response to home scene
 		} else
 			FacebookHandler::getInstance()->getMyProfile();
 		//After getMyProfile, responseWhenGetMyInfoSuccessfully function will be called.
@@ -170,9 +210,9 @@ void FirebaseHandler::callBacksaveFacebookIdOnFirebase(HttpClient* client,
 		rapidjson::Document d;
 		d.Parse<0>(clearData.c_str());
 
-		if (d.HasMember(KEY_WORLD_OJECTID)) {
+		if (d.HasMember("name")) {
 			UserDefault::getInstance()->setStringForKey(KEY_WORLD_OJECTID,
-					d[KEY_WORLD_OJECTID].GetString());
+					d["name"].GetString());
 		}
 
 		if (_firebaseDelegate != nullptr)
@@ -183,7 +223,7 @@ void FirebaseHandler::callBacksaveFacebookIdOnFirebase(HttpClient* client,
 
 void FirebaseHandler::fetchFriendsFromFirebase(string friendList) {
 	this->friendList = friendList;
-	CCLog("bambi fetchFriendsFromFirebase: %s" , friendList.c_str());
+	CCLog("bambi fetchFriendsFromFirebase: %s", friendList.c_str());
 	//Request http
 	HttpRequest* request = new HttpRequest();
 	request->setUrl(
@@ -218,13 +258,20 @@ void FirebaseHandler::callBackFetchFriendsFromFirebase(HttpClient* client,
 		document.Parse<0>(clearData.c_str());
 		for (rapidjson::Value::ConstMemberIterator itr = document.MemberBegin();
 				itr != document.MemberEnd(); ++itr) {
-			string facebookId = document[itr->name.GetString()]["FB_ID"].GetString();
-			CCLog("bambi callBackFetchFriendsFromFirebase, in the loop, facebookId: %s - %s",facebookId.c_str(),document[itr->name.GetString()]["FB_Name"].GetString());
-			if (friendList.find(facebookId)
-					!= std::string::npos) {
+			string facebookId =
+					document[itr->name.GetString()][KEY_WORLD_ID].GetString();
+			CCLog(
+					"bambi callBackFetchFriendsFromFirebase, in the loop, facebookId: %s - %s",
+					facebookId.c_str(),
+					document[itr->name.GetString()][KEY_WORLD_NAME].GetString());
+			if (friendList.find(facebookId) != std::string::npos) {
 				BUserInfor* user = new BUserInfor();
-				user->setName(document[itr->name.GetString()]["FB_Name"].GetString());
+				user->setName(
+						document[itr->name.GetString()][KEY_WORLD_NAME].GetString());
 				user->setId(facebookId);
+				user->setAllStickers(
+						document[itr->name.GetString()][KEY_WORLD_ALL_STICKERS].GetString());
+				user->setObjectId(itr->name.GetString());
 				_friendList.push_back(user);
 			}
 		}
@@ -324,4 +371,49 @@ void FirebaseHandler::putScoreToSever(int score) {
 void FirebaseHandler::submitScore(int score) {
 	scoreToSubmit = score;
 	fetchScoreFromServer();
+}
+
+void FirebaseHandler::getStickersDataFromFirebase() {
+	getStickersDataFromFirebase(sdkbox::PluginFacebook::getUserID());
+}
+
+void FirebaseHandler::getStickersDataFromFirebase(string facebookID) {
+	//Request http
+	HttpRequest* request = new HttpRequest();
+	request->setUrl(
+			String::createWithFormat(firebaseURL.c_str(),
+					firebaseQuerry_User.c_str())->getCString());
+	request->setRequestType(HttpRequest::Type::GET);
+	request->setResponseCallback([this, facebookID](HttpClient* client,
+			HttpResponse* response) {
+		std::string error = response->getErrorBuffer();
+		if (response->isSucceed() && error == "") {
+			//Clear data that being got from Firebase (sometimes stranged characters be attached after the result)
+			std::vector<char> *buffer = response->getResponseData();
+			const char *data = reinterpret_cast<char *>(&(buffer->front()));
+			std::string clearData(data);
+			size_t pos = clearData.rfind("}");
+			clearData = clearData.substr(0, pos + 1);
+			if (clearData == "")
+			return;
+
+			//Process data
+			rapidjson::Document document;
+			document.Parse<0>(clearData.c_str());
+			for (rapidjson::Value::ConstMemberIterator itr = document.MemberBegin();
+					itr != document.MemberEnd(); ++itr) {
+				string facebookId = document[itr->name.GetString()][KEY_WORLD_ID].GetString();
+				if (facebookID.find(facebookId)
+						!= std::string::npos) {
+					if(_firebaseDelegate)
+					{
+						_firebaseDelegate->responseAfterGetStickersDataFromFirebase(facebookId, document[itr->name.GetString()][KEY_WORLD_ALL_STICKERS].GetString());
+					}
+					break;
+				}
+			}
+		}
+	});
+	HttpClient::getInstance()->send(request);
+	request->release();
 }
