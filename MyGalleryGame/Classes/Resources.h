@@ -46,8 +46,18 @@ static const char s_homescene_uncommon[] = "homescene/sprite_uncommon.png";
 static const char s_homescene_board_friends[] = "homescene/board_friends.png";
 static const char s_homescene_btn_close[] = "homescene/btn_close.png";
 static const char s_homescene_btn_invite[] = "homescene/btn_invite.png";
+static const char s_homescene_btn_friend_name_background[] = "homescene/btn_friend_name_background.png";
 
-
+//Trade Scene elements
+static const char s_tradescene_background[] = "tradescene/bg_trade.png";
+static const char s_tradescene_sprite_ask[] = "tradescene/ask.png";
+static const char s_tradescene_bg_progress[] = "tradescene/bg_progress.png";
+static const char s_tradescene_progress[] = "tradescene/progress.png";
+static const char s_tradescene_btn_ask[] = "tradescene/btn_ask.png";
+static const char s_tradescene_btn_back[] = "tradescene/btn_back.png";
+static const char s_tradescene_btn_filter_ask[] = "tradescene/btn_filter_ask.png";
+static const char s_tradescene_sprite_sticker_detail[] = "tradescene/sticker_detail.png";
+static const char s_tradescene_sprite_wait[] = "tradescene/wait.png";
 
 //Setting Scene elements
 static const char s_settingscene_background[] = "settingscene/bg_setting.png";

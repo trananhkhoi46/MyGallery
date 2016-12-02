@@ -463,7 +463,8 @@ obj/local/armeabi/objs-debug/MyGame_shared/__/__/Classes/Trading/TradingScene.o:
  jni/../../Classes/Trading/FacebookHandler/FacebookHandler.h \
  jni/../../Classes/Trading/Model/BUserInfor.h \
  jni/PluginAdMob/PluginAdMob.h jni/PluginChartboost/PluginChartboost.h \
- jni/PluginVungle/PluginVungle.h
+ jni/PluginVungle/PluginVungle.h jni/../../Classes/Trading/../HomeScene.h \
+ jni/../../Classes/Trading/../BaseScene.h
 
 /Users/Kskull/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/../cocos2d/cocos/audio/android/../include/SimpleAudioEngine.h:
 
@@ -1402,3 +1403,7 @@ jni/PluginAdMob/PluginAdMob.h:
 jni/PluginChartboost/PluginChartboost.h:
 
 jni/PluginVungle/PluginVungle.h:
+
+jni/../../Classes/Trading/../HomeScene.h:
+
+jni/../../Classes/Trading/../BaseScene.h:

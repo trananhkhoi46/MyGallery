@@ -462,7 +462,8 @@ obj/local/armeabi/objs-debug/MyGame_shared/__/__/Classes/HomeScene.o: \
  jni/PluginAdMob/PluginAdMob.h jni/PluginChartboost/PluginChartboost.h \
  jni/PluginVungle/PluginVungle.h jni/../../Classes/SettingScene.h \
  jni/../../Classes/StickerScene.h jni/../../Classes/BScrollView.h \
- jni/../../Classes/AlbumScene.h
+ jni/../../Classes/AlbumScene.h jni/../../Classes/Trading/TradingScene.h \
+ jni/../../Classes/BaseScene.h
 
 jni/../../Classes/HomeScene.h:
 
@@ -1403,3 +1404,7 @@ jni/../../Classes/StickerScene.h:
 jni/../../Classes/BScrollView.h:
 
 jni/../../Classes/AlbumScene.h:
+
+jni/../../Classes/Trading/TradingScene.h:
+
+jni/../../Classes/BaseScene.h:

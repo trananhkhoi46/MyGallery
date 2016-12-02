@@ -261,9 +261,9 @@ void FirebaseHandler::callBackFetchFriendsFromFirebase(HttpClient* client,
 			string facebookId =
 					document[itr->name.GetString()][KEY_WORLD_ID].GetString();
 			CCLog(
-					"bambi callBackFetchFriendsFromFirebase, in the loop, facebookId: %s - %s",
+					"bambi callBackFetchFriendsFromFirebase, in the loop, facebookId: %s - %s, stickers: %s",
 					facebookId.c_str(),
-					document[itr->name.GetString()][KEY_WORLD_NAME].GetString());
+					document[itr->name.GetString()][KEY_WORLD_NAME].GetString(), document[itr->name.GetString()][KEY_WORLD_ALL_STICKERS].GetString());
 			if (friendList.find(facebookId) != std::string::npos) {
 				BUserInfor* user = new BUserInfor();
 				user->setName(

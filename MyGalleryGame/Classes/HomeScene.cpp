@@ -2,6 +2,7 @@
 #include "SettingScene.h"
 #include "StickerScene.h"
 #include "AlbumScene.h"
+#include "Trading/TradingScene.h"
 
 #define kTagFacebookPage 0
 #define kTagMoreGame 1
@@ -920,7 +921,7 @@ void HomeScene::responseForQuerryTopFriend(vector<BUserInfor*> friendList) {
 
 	//Scrollview configuration
 	int numberOfItems = friendList.size();
-	float itemMargin = 125;
+	float itemMargin = 170;
 	Size scrollFrameSize = Size(winSize.width, 880);
 
 	//Create scrollview
@@ -935,18 +936,52 @@ void HomeScene::responseForQuerryTopFriend(vector<BUserInfor*> friendList) {
 	float positionX = scrollview->leftPosition;
 	float positionY = scrollview->topPosition;
 	for (int i = 1; i <= numberOfItems; i++) {
+		//Add btn friend name
+		Button*stickerBtn = Button::create(
+				s_homescene_btn_friend_name_background);
+		stickerBtn->setTouchEnabled(true);
+		stickerBtn->setPressedActionEnabled(true);
+		stickerBtn->setTag(i);
+		stickerBtn->addTouchEventListener(
+				[this](Ref *pSender,
+						Widget::TouchEventType type) {
+					if (type == cocos2d::ui::Widget::TouchEventType::ENDED)
+					{
+						int index = (int) dynamic_cast<Button*>(pSender)->getTag();
+						if(vt_Friends.at(index - 1)->getObjectId().compare(UserDefault::getInstance()->getStringForKey(KEY_WORLD_OJECTID)) == 0)
+						{
+							CCLog("bambi go to setting scene - objectId: %s",vt_Friends.at(index - 1)->getObjectId().c_str());
+							auto *newScene = SettingScene::scene();
+							auto transition = TransitionFade::create(1.0, newScene);
+							Director *pDirector = Director::getInstance();
+							pDirector->replaceScene(transition);
+						} else
+						{
+							CCLog("bambi go to trade scene - objectId: %s",vt_Friends.at(index - 1)->getObjectId().c_str());
+							auto *newScene = TradingScene::scene(vt_Friends.at(index - 1));
+							auto transition = TransitionFade::create(1.0, newScene);
+							Director *pDirector = Director::getInstance();
+							pDirector->replaceScene(transition);
+						}
+						instance = nullptr;
+					}});
+		stickerBtn->setPosition(
+				Vec2(positionX + scrollFrameSize.width / 2 - itemMargin / 2,
+						positionY - stickerBtn->getContentSize().height / 2));
+		scrollview->addChild(stickerBtn);
+
 		//Add user name label
 		BLabel* labelName = BLabel::createWithTTF(labelConfig,
 				String::createWithFormat("%d --- %s", i,
 						vt_Friends.at(i - 1)->getName().c_str())->getCString(),
 				TextHAlignment::CENTER);
 		labelName->setPosition(
-				Vec2(positionX + scrollFrameSize.width / 2 - itemMargin / 2,
-						positionY));
+				Vec2(stickerBtn->getContentSize().width / 2,
+						stickerBtn->getContentSize().height / 2));
 		labelName->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
 		labelName->setColor(Color3B::BLACK);
 		labelName->setTag(kTagFriendList);
-		scrollview->addChild(labelName);
+		stickerBtn->addChild(labelName);
 
 		positionY -= itemMargin;
 	}
@@ -979,7 +1014,7 @@ void HomeScene::responseAfterGetStickersDataFromFirebase(string facebookId,
 						"bambi HomeScene responseAfterGetStickersDataFromFirebase - has no data from server -> save stickers from local to server");
 				FirebaseHandler::getInstance()->saveToMyStickerList(
 						UserDefault::getInstance()->getStringForKey(
-								CURRENT_STICKER));
+						CURRENT_STICKER));
 			}
 		}
 	}
