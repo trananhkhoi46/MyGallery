@@ -30,10 +30,52 @@ FirebaseHandler* FirebaseHandler::getInstance() {
 	}
 	return instance;
 }
+void FirebaseHandler::saveToMyStickedStickerList(string stickerIdString) {
+	CCLog("bambi saveToMyStickerList Firebase, getting my object id");
+	saveToMyStickedStickerList(
+			UserDefault::getInstance()->getStringForKey(KEY_WORLD_OJECTID),
+			stickerIdString);
+}
 
+void FirebaseHandler::saveToMyStickedStickerList(string objectID,
+		string stickerIdString) {
+	string url =
+			"https://gallerygame-fab40.firebaseio.com/json/users/" + objectID
+					+ "/Sticked_Stickers.json?auth=KKgD6eWhfoJC6KUCFwSwEGIJYzxkFAjnMOqNl6ir";
+
+	CCLog("bambi saveToMyStickedStickerList Firebase - stickerId: %s, url: %s",
+			stickerIdString.c_str(), url.c_str());
+
+	string data = "\""
+			+ stickerIdString
+			+ "\"";
+	//Request http
+	HttpRequest* request = new HttpRequest();
+	request->setUrl(url.c_str());
+	request->setRequestType(HttpRequest::Type::PUT);
+	request->setRequestData(data.c_str(), data.length());
+	request->setResponseCallback([this](HttpClient* client,
+			HttpResponse* response) {
+		CCLog("bambi saveToMyStickedStickerList on Firebase - responding: %s",
+				response->isSucceed() ? "success" : "failed");
+		if (response->isSucceed()) {
+			//Clear data (sometimes stranged characters be attached after the result)
+			std::vector<char> *buffer = response->getResponseData();
+			const char *data = reinterpret_cast<char *>(&(buffer->front()));
+			std::string clearData(data);
+			size_t pos = clearData.rfind("}");
+			clearData = clearData.substr(0, pos + 1);
+			CCLog("bambi saveToMyStickedStickerList on Firebase callback: %s", clearData.c_str());
+		}
+	});
+	HttpClient::getInstance()->send(request);
+	request->release();
+}
 void FirebaseHandler::saveToMyStickerList(string stickerIdString) {
 	CCLog("bambi saveToMyStickerList Firebase, getting my object id");
-	saveToMyStickerList(UserDefault::getInstance()->getStringForKey(KEY_WORLD_OJECTID), stickerIdString);
+	saveToMyStickerList(
+			UserDefault::getInstance()->getStringForKey(KEY_WORLD_OJECTID),
+			stickerIdString);
 }
 
 void FirebaseHandler::saveToMyStickerList(string objectID,
@@ -45,7 +87,9 @@ void FirebaseHandler::saveToMyStickerList(string objectID,
 	CCLog("bambi saveToMyStickerList Firebase - stickerId: %s, url: %s",
 			stickerIdString.c_str(), url.c_str());
 
-	string data = "\"" + UserDefault::getInstance()->getStringForKey(CURRENT_STICKER) + "\"";
+	string data = "\""
+			+ stickerIdString
+			+ "\"";
 	//Request http
 	HttpRequest* request = new HttpRequest();
 	request->setUrl(url.c_str());
@@ -263,7 +307,8 @@ void FirebaseHandler::callBackFetchFriendsFromFirebase(HttpClient* client,
 			CCLog(
 					"bambi callBackFetchFriendsFromFirebase, in the loop, facebookId: %s - %s, stickers: %s",
 					facebookId.c_str(),
-					document[itr->name.GetString()][KEY_WORLD_NAME].GetString(), document[itr->name.GetString()][KEY_WORLD_ALL_STICKERS].GetString());
+					document[itr->name.GetString()][KEY_WORLD_NAME].GetString(),
+					document[itr->name.GetString()][KEY_WORLD_ALL_STICKERS].GetString());
 			if (friendList.find(facebookId) != std::string::npos) {
 				BUserInfor* user = new BUserInfor();
 				user->setName(
@@ -271,6 +316,8 @@ void FirebaseHandler::callBackFetchFriendsFromFirebase(HttpClient* client,
 				user->setId(facebookId);
 				user->setAllStickers(
 						document[itr->name.GetString()][KEY_WORLD_ALL_STICKERS].GetString());
+				user->setStickedStickers(
+						document[itr->name.GetString()][KEY_WORLD_STICKED_STICKERS].GetString());
 				user->setObjectId(itr->name.GetString());
 				_friendList.push_back(user);
 			}
@@ -407,7 +454,8 @@ void FirebaseHandler::getStickersDataFromFirebase(string facebookID) {
 						!= std::string::npos) {
 					if(_firebaseDelegate)
 					{
-						_firebaseDelegate->responseAfterGetStickersDataFromFirebase(facebookId, document[itr->name.GetString()][KEY_WORLD_ALL_STICKERS].GetString());
+						_firebaseDelegate->responseAfterGetStickersDataFromFirebase(facebookId, document[itr->name.GetString()][KEY_WORLD_ALL_STICKERS].GetString(),
+								document[itr->name.GetString()][KEY_WORLD_STICKED_STICKERS].GetString());
 					}
 					break;
 				}

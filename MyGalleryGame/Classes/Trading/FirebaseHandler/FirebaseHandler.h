@@ -34,7 +34,7 @@ public:
 
     };
 
-    virtual void responseAfterGetStickersDataFromFirebase(string facebookId, string stickerData){
+    virtual void responseAfterGetStickersDataFromFirebase(string facebookId, string stickerData, string stickedData){
 
     };
 };
@@ -62,6 +62,10 @@ public:
     void callBackFetchFriendsFromFirebase(HttpClient* client,HttpResponse* response);
 
     void fetchFriendsFromFacebook();
+
+    void saveToMyStickedStickerList(string stickerIdString);
+
+    void saveToMyStickedStickerList(string objectID, string stickerIdString);
 
     void saveToMyStickerList(string stickerIdString);
 

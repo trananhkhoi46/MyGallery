@@ -67,7 +67,7 @@ void StickerHelper::saveToMyStickerList(string stickerIdString) {
 
 	//Save to server
 	if (FacebookHandler::getInstance()->isFacebookLoggedIn()) {
-		FirebaseHandler::getInstance()->saveToMyStickerList(stickerIdString);
+		FirebaseHandler::getInstance()->saveToMyStickerList(UserDefault::getInstance()->getStringForKey(CURRENT_STICKER));
 	}
 }
 void StickerHelper::saveToMyStickerList(int stickerId) {
@@ -80,6 +80,11 @@ void StickerHelper::saveToMyGluedStickerList(string stickerIdString) {
 					+ "," + stickerIdString);
 	CCLog("bambi saveToMyStickerList - after saving successfully: %s",
 			UserDefault::getInstance()->getStringForKey(STICKED_STICKER).c_str());
+
+	//Save to server
+	if (FacebookHandler::getInstance()->isFacebookLoggedIn()) {
+		FirebaseHandler::getInstance()->saveToMyStickedStickerList(UserDefault::getInstance()->getStringForKey(STICKED_STICKER));
+	}
 }
 void StickerHelper::saveToMyGluedStickerList(int stickerId) {
 	saveToMyGluedStickerList(CppUtils::doubleToString(stickerId));

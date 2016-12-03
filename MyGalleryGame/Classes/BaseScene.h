@@ -13,6 +13,7 @@
 #include "StickerHelper.h"
 #include "SocialPlugin.h"
 #include "BLabel.h"
+#include "BScrollView.h"
 #include "Trading/FacebookHandler/FacebookHandler.h"
 #include "Trading/FirebaseHandler/FirebaseHandler.h"
 #include "Trading/Model/BUserInfor.h"

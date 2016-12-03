@@ -14,6 +14,7 @@ BUserInfor* BUserInfor::parseUserFrom(const rapidjson::Value& json) //Parse the 
 	user->setName(json[KEY_WORLD_NAME].GetString());
 	user->setId(json[KEY_WORLD_ID].GetString());
 	user->setAllStickers(json[KEY_WORLD_ALL_STICKERS].GetString());
+	user->setStickedStickers(json[KEY_WORLD_STICKED_STICKERS].GetString());
 	user->setObjectId("");
 	return user;
 }
@@ -33,6 +34,8 @@ BUserInfor* BUserInfor::parseUserFrom(string json, string facebookIDToCheck) //P
 			user->setId(facebookId);
 			user->setAllStickers(
 					document[itr->name.GetString()][KEY_WORLD_ALL_STICKERS].GetString());
+			user->setStickedStickers(
+								document[itr->name.GetString()][KEY_WORLD_STICKED_STICKERS].GetString());
 			user->setObjectId(itr->name.GetString());
 			user->setName(
 					document[itr->name.GetString()][KEY_WORLD_NAME].GetString());
@@ -56,7 +59,9 @@ vector<BUserInfor*> BUserInfor::parseListUserFrom(string json) //Parse the data 
 		user->setId(document[itr->name.GetString()][KEY_WORLD_ID].GetString());
 		user->setAllStickers(
 				document[itr->name.GetString()][KEY_WORLD_ALL_STICKERS].GetString());
-		user->setObjectId(itr->name.GetString());
+		user->setStickedStickers(
+					document[itr->name.GetString()][KEY_WORLD_STICKED_STICKERS].GetString());
+			user->setObjectId(itr->name.GetString());
 		user->setName(
 				document[itr->name.GetString()][KEY_WORLD_NAME].GetString());
 		result.push_back(user);
@@ -75,6 +80,7 @@ BUserInfor* BUserInfor::parseUserFrom(string message) //Parse the message from F
 
 	user->setName(document["name"].GetString());
 	user->setId(document["id"].GetString());
+	user->setStickedStickers("");
 	user->setAllStickers("");
 	user->setObjectId("");
 	return user;

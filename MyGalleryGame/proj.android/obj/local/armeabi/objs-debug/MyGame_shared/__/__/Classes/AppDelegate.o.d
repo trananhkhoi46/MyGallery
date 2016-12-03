@@ -457,6 +457,7 @@ obj/local/armeabi/objs-debug/MyGame_shared/__/__/Classes/AppDelegate.o: \
  /Users/Kskull/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/../cocos2d/extensions/../external/json/rapidjson.h \
  /Users/Kskull/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/../cocos2d/extensions/../external/json/document.h \
  jni/../../Classes/SocialPlugin.h jni/../../Classes/BLabel.h \
+ jni/../../Classes/BScrollView.h \
  jni/../../Classes/Trading/FacebookHandler/FacebookHandler.h \
  jni/../../Classes/Trading/Model/BUserInfor.h \
  jni/PluginAdMob/PluginAdMob.h jni/PluginChartboost/PluginChartboost.h \
@@ -1385,6 +1386,8 @@ jni/../../Classes/Trading/FirebaseHandler/../../StickerHelper.h:
 jni/../../Classes/SocialPlugin.h:
 
 jni/../../Classes/BLabel.h:
+
+jni/../../Classes/BScrollView.h:
 
 jni/../../Classes/Trading/FacebookHandler/FacebookHandler.h:
 

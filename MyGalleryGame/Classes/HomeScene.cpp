@@ -988,7 +988,7 @@ void HomeScene::responseForQuerryTopFriend(vector<BUserInfor*> friendList) {
 }
 
 void HomeScene::responseAfterGetStickersDataFromFirebase(string facebookId,
-		string stickerData) {
+		string stickerData, string stickedStickerData) {
 	CCLog(
 			"bambi HomeScene responseAfterGetStickersDataFromFirebase - facebookID: %s, stickerData: %s",
 			facebookId.c_str(), stickerData.c_str());
@@ -1004,6 +1004,8 @@ void HomeScene::responseAfterGetStickersDataFromFirebase(string facebookId,
 
 				UserDefault::getInstance()->setStringForKey(CURRENT_STICKER,
 						stickerData);
+				UserDefault::getInstance()->setStringForKey(STICKED_STICKER,
+						stickedStickerData);
 				UserDefault::getInstance()->setBoolForKey(
 				KEY_FACEBOOK_FIRST_TIME_LOGGING_IN, false);
 
@@ -1015,6 +1017,9 @@ void HomeScene::responseAfterGetStickersDataFromFirebase(string facebookId,
 				FirebaseHandler::getInstance()->saveToMyStickerList(
 						UserDefault::getInstance()->getStringForKey(
 						CURRENT_STICKER));
+				FirebaseHandler::getInstance()->saveToMyStickedStickerList(
+									UserDefault::getInstance()->getStringForKey(
+									STICKED_STICKER));
 			}
 		}
 	}

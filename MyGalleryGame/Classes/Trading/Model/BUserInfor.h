@@ -22,6 +22,8 @@ public:
         writer.String(_id.c_str());
         writer.String(KEY_WORLD_ALL_STICKERS);
         writer.String(_allStickers.c_str());
+        writer.String(KEY_WORLD_STICKED_STICKERS);
+        writer.String(_stickedStickers.c_str());
         writer.EndObject();
     }
     std::string serialize(){
@@ -35,6 +37,7 @@ public:
     CC_SYNTHESIZE(string,_name,Name);
     CC_SYNTHESIZE(string,_id,Id);
     CC_SYNTHESIZE(string,_allStickers,AllStickers);
+    CC_SYNTHESIZE(string,_stickedStickers,StickedStickers);
     CC_SYNTHESIZE(string,_objectId,ObjectId);
     static BUserInfor* parseUserFrom(const rapidjson::Value& json);
     static BUserInfor* parseUserFrom(string message);

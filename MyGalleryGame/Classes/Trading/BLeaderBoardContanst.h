@@ -24,6 +24,7 @@ using namespace std;
 #define KEY_IS_FIRST_TIME_LOGIN_INTO_THIS_GAME "isfirsttimeloginintothisgame"
 #define THIS_GAME_NAME "SpringNinja"
 #define KEY_WORLD_ALL_STICKERS "All_Stickers"
+#define KEY_WORLD_STICKED_STICKERS "Sticked_Stickers"
 
 //Key for Parse
 static const string appID =

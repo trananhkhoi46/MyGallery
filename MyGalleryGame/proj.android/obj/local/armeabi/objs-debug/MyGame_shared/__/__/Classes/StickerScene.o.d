@@ -457,11 +457,12 @@ obj/local/armeabi/objs-debug/MyGame_shared/__/__/Classes/StickerScene.o: \
  /Users/Kskull/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/../cocos2d/extensions/../external/json/rapidjson.h \
  /Users/Kskull/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/../cocos2d/extensions/../external/json/document.h \
  jni/../../Classes/SocialPlugin.h jni/../../Classes/BLabel.h \
+ jni/../../Classes/BScrollView.h \
  jni/../../Classes/Trading/FacebookHandler/FacebookHandler.h \
  jni/../../Classes/Trading/Model/BUserInfor.h \
  jni/PluginAdMob/PluginAdMob.h jni/PluginChartboost/PluginChartboost.h \
- jni/PluginVungle/PluginVungle.h jni/../../Classes/BScrollView.h \
- jni/../../Classes/HomeScene.h jni/../../Classes/AlbumScene.h
+ jni/PluginVungle/PluginVungle.h jni/../../Classes/HomeScene.h \
+ jni/../../Classes/AlbumScene.h
 
 jni/../../Classes/StickerScene.h:
 
@@ -1385,6 +1386,8 @@ jni/../../Classes/SocialPlugin.h:
 
 jni/../../Classes/BLabel.h:
 
+jni/../../Classes/BScrollView.h:
+
 jni/../../Classes/Trading/FacebookHandler/FacebookHandler.h:
 
 jni/../../Classes/Trading/Model/BUserInfor.h:
@@ -1394,8 +1397,6 @@ jni/PluginAdMob/PluginAdMob.h:
 jni/PluginChartboost/PluginChartboost.h:
 
 jni/PluginVungle/PluginVungle.h:
-
-jni/../../Classes/BScrollView.h:
 
 jni/../../Classes/HomeScene.h:
 
