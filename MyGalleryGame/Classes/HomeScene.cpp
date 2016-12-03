@@ -33,6 +33,7 @@ Scene* HomeScene::scene() {
 	Scene *scene = Scene::create();
 
 	// 'layer' is an autorelease object
+	HomeScene::instance = nullptr;
 	HomeScene *layer = HomeScene::getInstance();
 	// add layer as a child to scene
 	scene->addChild(layer);
@@ -43,6 +44,7 @@ Scene* HomeScene::scene() {
 
 // on "init" you need to initialize your instance
 bool HomeScene::init() {
+	isHomeScene = true;
 	bool result = BaseScene::init();
 
 	//Set delegate to get response from FacebookHandler and FirebaseHandler

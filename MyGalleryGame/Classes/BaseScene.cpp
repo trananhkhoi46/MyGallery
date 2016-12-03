@@ -195,12 +195,12 @@ bool BaseScene::isRewardedAdsAvailable() {
 		CCLog("bambi HomeScene -> isRewardedAdsAvailable -> chartboost ads is not available");
 	}
 
-	if(sdkbox::PluginChartboost::isAvailable(kChartboostRewardedAds))
+	if(sdkbox::PluginVungle::isCacheAvailable())
 	{
-		CCLog("bambi HomeScene -> isRewardedAdsAvailable -> chartboost ads is available");
+		CCLog("bambi HomeScene -> isRewardedAdsAvailable -> vungle ads is available");
 	} else
 	{
-		CCLog("bambi HomeScene -> isRewardedAdsAvailable -> chartboost ads is not available");
+		CCLog("bambi HomeScene -> isRewardedAdsAvailable -> vungle ads is not available");
 	}
 #else
 	result = sdkbox::PluginChartboost::isAvailable(kChartboostRewardedAds);
@@ -269,14 +269,16 @@ bool BaseScene::init() {
 
 	origin = Director::getInstance()->getVisibleOrigin();
 	winSize = Director::getInstance()->getVisibleSize();
+	if (isHomeScene) {
 #ifdef SDKBOX_ENABLED
-	sdkbox::PluginAdMob::setListener(new IAdmobListener());
-	sdkbox::PluginChartboost::setListener(new IChartboostListener());
+		sdkbox::PluginAdMob::setListener(new IAdmobListener());
+		sdkbox::PluginChartboost::setListener(new IChartboostListener());
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-	sdkbox::PluginVungle::setListener(new IVungleListener());
-	sdkbox::PluginVungle::setDebug(true);
+		sdkbox::PluginVungle::setListener(new IVungleListener());
+		sdkbox::PluginVungle::setDebug(true);
 #endif
 #endif
+	}
 	return true;
 }
 

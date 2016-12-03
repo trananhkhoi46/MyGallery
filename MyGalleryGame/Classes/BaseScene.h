@@ -44,6 +44,7 @@ public:
 	void onVideoAdsPlayed();
 	bool isRewardedAdsAvailable();
 
+	bool isHomeScene;
 	bool isChartboostAdsAvailable;
 	bool isVungleAdsAvailable;
 	bool isSound;
