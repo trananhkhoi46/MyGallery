@@ -912,6 +912,8 @@ void HomeScene::friendButtonCallback(Ref* pSender,
 			backgroundLayer = nullptr;
 		} else {
 			friendLayer->setVisible(true);
+			isMenuBarShowing = false;
+			invalidateMenuBarPosition();
 		}
 	}
 }
@@ -1151,6 +1153,10 @@ void HomeScene::onVideoAdsPlayed() {
 }
 
 bool HomeScene::onTouchBegan(Touch* touch, Event* event) {
+	if (friendLayer != nullptr && friendLayer->isVisible()) {
+		friendLayer->setVisible(false);
+	}
+
 	Rect rect = menuBar->getBoundingBox();
 	rect.setRect(rect.origin.x, rect.origin.y, rect.size.width, 200);
 	if (rect.containsPoint(touch->getLocation())) {
@@ -1160,7 +1166,6 @@ bool HomeScene::onTouchBegan(Touch* touch, Event* event) {
 		this->removeChild(backgroundLayer, false);
 		backgroundLayer = nullptr;
 	}
-
 	return true;
 }
 
