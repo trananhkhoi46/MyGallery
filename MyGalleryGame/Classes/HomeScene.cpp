@@ -463,16 +463,23 @@ void HomeScene::initControlButtons() {
 							- 10));
 	btnStickerScene->setTouchEnabled(true);
 	btnStickerScene->setPressedActionEnabled(true);
-	btnStickerScene->addTouchEventListener([this](Ref *pSender,
-			Widget::TouchEventType type) {
-		if (type == cocos2d::ui::Widget::TouchEventType::ENDED)
-		{
-			auto *newScene = StickerScene::scene();
-			auto transition = TransitionFade::create(1.0, newScene);
-			Director *pDirector = Director::getInstance();
-			pDirector->replaceScene(transition);
-			instance = nullptr;
-		}});
+	btnStickerScene->addTouchEventListener(
+			[this](Ref *pSender,
+					Widget::TouchEventType type) {
+				if (type == cocos2d::ui::Widget::TouchEventType::ENDED)
+				{
+					if (backgroundLayer != nullptr && backgroundLayer->isVisible()) {
+						this->removeChild(backgroundLayer, false);
+						backgroundLayer = nullptr;
+					} else
+					{
+						auto *newScene = StickerScene::scene();
+						auto transition = TransitionFade::create(1.0, newScene);
+						Director *pDirector = Director::getInstance();
+						pDirector->replaceScene(transition);
+						instance = nullptr;
+					}
+				}});
 	this->addChild(btnStickerScene);
 
 	//Add btn album
@@ -485,16 +492,23 @@ void HomeScene::initControlButtons() {
 							- 10));
 	btnAlbumScene->setTouchEnabled(true);
 	btnAlbumScene->setPressedActionEnabled(true);
-	btnAlbumScene->addTouchEventListener([this](Ref *pSender,
-			Widget::TouchEventType type) {
-		if (type == cocos2d::ui::Widget::TouchEventType::ENDED)
-		{
-			auto *newScene = AlbumScene::scene();
-			auto transition = TransitionFade::create(1.0, newScene);
-			Director *pDirector = Director::getInstance();
-			pDirector->replaceScene(transition);
-			instance = nullptr;
-		}});
+	btnAlbumScene->addTouchEventListener(
+			[this](Ref *pSender,
+					Widget::TouchEventType type) {
+				if (type == cocos2d::ui::Widget::TouchEventType::ENDED)
+				{
+					if (backgroundLayer != nullptr && backgroundLayer->isVisible()) {
+						this->removeChild(backgroundLayer, false);
+						backgroundLayer = nullptr;
+					} else
+					{
+						auto *newScene = AlbumScene::scene();
+						auto transition = TransitionFade::create(1.0, newScene);
+						Director *pDirector = Director::getInstance();
+						pDirector->replaceScene(transition);
+						instance = nullptr;
+					}
+				}});
 	this->addChild(btnAlbumScene);
 
 	//Add btn home
@@ -507,9 +521,20 @@ void HomeScene::initControlButtons() {
 					winSize.height - btnHomeScene->getContentSize().height / 2
 							- 10));
 	btnHomeScene->setZoomScale(0);
+	btnHomeScene->addTouchEventListener(
+			[this](Ref *pSender,
+					Widget::TouchEventType type) {
+				if (type == cocos2d::ui::Widget::TouchEventType::ENDED)
+				{
+					if (backgroundLayer != nullptr && backgroundLayer->isVisible()) {
+						this->removeChild(backgroundLayer, false);
+						backgroundLayer = nullptr;
+					}
+				}});
 	this->addChild(btnHomeScene);
 
 }
+
 //---------------------------------------------------------------------End of init methods
 //---------------------------------------------------------------------Game loop methods
 void HomeScene::update(float dt) {
@@ -517,6 +542,12 @@ void HomeScene::update(float dt) {
 }
 
 void HomeScene::timer(float interval) {
+	if (btnRewardedAds != nullptr) {
+		bool isAdsAvailable = BaseScene::isRewardedAdsAvailable();
+		btnRewardedAds->setEnabled(isAdsAvailable);
+		btnRewardedAds->setOpacity(isAdsAvailable ? 255 : 150);
+	}
+
 	int currentTimeInSecond = time(nullptr);
 	int secondLeft = timeToGetFreeStickerInSecond - currentTimeInSecond;
 	int minuteLeft = secondLeft / 60;
@@ -628,12 +659,18 @@ void HomeScene::earn3Stickers(STICKER_RARITY rarity) {
 			stickerBtn->setTouchEnabled(true);
 			stickerBtn->setZoomScale(0);
 			stickerBtn->setPressedActionEnabled(true);
-			stickerBtn->addTouchEventListener([this, sticker](Ref *pSender,
-					Widget::TouchEventType type) {
-				if (type == cocos2d::ui::Widget::TouchEventType::ENDED)
-				{
-					openStickerDetailLayer(sticker);
-				}});
+			stickerBtn->addTouchEventListener(
+					[this, sticker](Ref *pSender,
+							Widget::TouchEventType type) {
+						if (type == cocos2d::ui::Widget::TouchEventType::ENDED)
+						{
+							if (backgroundLayer != nullptr && backgroundLayer->isVisible()) {
+								this->removeChild(backgroundLayer, false);
+								backgroundLayer = nullptr;
+							} else
+							{
+								openStickerDetailLayer(sticker);
+							}}});
 			stickerBtn->setTag(kTagNewSticker);
 
 			//Add sprite_new if needed
@@ -832,14 +869,24 @@ void HomeScene::iapButtonsCallback(Ref* pSender,
 		ui::Widget::TouchEventType eEventType) {
 	if (eEventType == ui::Widget::TouchEventType::ENDED
 			&& !blurLayer->isVisible() && !friendLayer->isVisible()) {
-		SocialPlugin::showToast("Doesn't support at the moment");
+		if (backgroundLayer != nullptr && backgroundLayer->isVisible()) {
+			this->removeChild(backgroundLayer, false);
+			backgroundLayer = nullptr;
+		} else {
+			SocialPlugin::showToast("Doesn't support at the moment");
+		}
 	}
 }
 void HomeScene::rewardedButtonsCallback(Ref* pSender,
 		ui::Widget::TouchEventType eEventType) {
 	if (eEventType == ui::Widget::TouchEventType::ENDED
 			&& !blurLayer->isVisible() && !friendLayer->isVisible()) {
-		showRewardedAds();
+		if (backgroundLayer != nullptr && backgroundLayer->isVisible()) {
+			this->removeChild(backgroundLayer, false);
+			backgroundLayer = nullptr;
+		} else {
+			showRewardedAds();
+		}
 	}
 }
 
@@ -847,7 +894,12 @@ void HomeScene::tradeButtonCallback(Ref* pSender,
 		ui::Widget::TouchEventType eEventType) {
 	if (eEventType == ui::Widget::TouchEventType::ENDED
 			&& !blurLayer->isVisible() && !friendLayer->isVisible()) {
-		SocialPlugin::showToast("Doesn't support at the moment");
+		if (backgroundLayer != nullptr && backgroundLayer->isVisible()) {
+			this->removeChild(backgroundLayer, false);
+			backgroundLayer = nullptr;
+		} else {
+			SocialPlugin::showToast("Doesn't support at the moment");
+		}
 	}
 }
 
@@ -855,7 +907,12 @@ void HomeScene::friendButtonCallback(Ref* pSender,
 		ui::Widget::TouchEventType eEventType) {
 	if (eEventType == ui::Widget::TouchEventType::ENDED
 			&& !blurLayer->isVisible() && !friendLayer->isVisible()) {
-		friendLayer->setVisible(true);
+		if (backgroundLayer != nullptr && backgroundLayer->isVisible()) {
+			this->removeChild(backgroundLayer, false);
+			backgroundLayer = nullptr;
+		} else {
+			friendLayer->setVisible(true);
+		}
 	}
 }
 
@@ -865,14 +922,20 @@ void HomeScene::facebookConnectButtonCallback(Ref* pSender,
 	if (eEventType == ui::Widget::TouchEventType::ENDED
 			&& !blurLayer->isVisible() && !friendLayer->isVisible()
 			&& !isLoggingInFacebook) {
-		CCLog("bambi logging in");
-		isLoggingInFacebook = true;
-		auto func = CallFunc::create([=]() {
-			isLoggingInFacebook = false;
-		});
-		this->runAction(Sequence::create(DelayTime::create(1), func, nullptr));
+		if (backgroundLayer != nullptr && backgroundLayer->isVisible()) {
+			this->removeChild(backgroundLayer, false);
+			backgroundLayer = nullptr;
+		} else {
+			CCLog("bambi logging in");
+			isLoggingInFacebook = true;
+			auto func = CallFunc::create([=]() {
+				isLoggingInFacebook = false;
+			});
+			this->runAction(
+					Sequence::create(DelayTime::create(1), func, nullptr));
 
-		FacebookHandler::getInstance()->loginFacebook();
+			FacebookHandler::getInstance()->loginFacebook();
+		}
 	}
 }
 
@@ -1039,40 +1102,44 @@ void HomeScene::settingButtonsCallback(Ref* pSender,
 		});
 		this->runAction(Sequence::create(DelayTime::create(1), func, nullptr));
 
-		int tag = (int) dynamic_cast<Button*>(pSender)->getTag();
-		switch (tag) {
-		case kTagFacebookPage:
-			Application::getInstance()->openURL(s_linkToFacebookPage);
-			break;
-		case kTagMoreGame:
+		if (backgroundLayer != nullptr && backgroundLayer->isVisible()) {
+			this->removeChild(backgroundLayer, false);
+			backgroundLayer = nullptr;
+		} else {
+			int tag = (int) dynamic_cast<Button*>(pSender)->getTag();
+			switch (tag) {
+			case kTagFacebookPage:
+				Application::getInstance()->openURL(s_linkToFacebookPage);
+				break;
+			case kTagMoreGame:
 #if(CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
-			Application::getInstance()->openURL(s_linkToAppStoreMoreGame);
+				Application::getInstance()->openURL(s_linkToAppStoreMoreGame);
 #endif
 #if(CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-			Application::getInstance()->openURL(s_linkToGooglePlayMoreGame);
+				Application::getInstance()->openURL(s_linkToGooglePlayMoreGame);
 #endif
-			break;
-		case kTagRating:
+				break;
+			case kTagRating:
 #if(CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
-			Application::getInstance()->openURL(s_linkToAppStoreRating);
+				Application::getInstance()->openURL(s_linkToAppStoreRating);
 #endif
 #if(CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-			Application::getInstance()->openURL(s_linkToGooglePlayRating);
+				Application::getInstance()->openURL(s_linkToGooglePlayRating);
 #endif
-			break;
-		case kTagSetting: {
-			auto *newScene = SettingScene::scene();
-			auto transition = TransitionFade::create(1.0, newScene);
-			Director *pDirector = Director::getInstance();
-			pDirector->pushScene(transition);
-			instance = nullptr;
+				break;
+			case kTagSetting: {
+				auto *newScene = SettingScene::scene();
+				auto transition = TransitionFade::create(1.0, newScene);
+				Director *pDirector = Director::getInstance();
+				pDirector->pushScene(transition);
+				instance = nullptr;
+			}
+				break;
+			default:
+				CCLOG("Error in Menu inflatten");
+				break;
+			}
 		}
-			break;
-		default:
-			CCLOG("Error in Menu inflatten");
-			break;
-		}
-
 	}
 }
 

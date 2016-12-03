@@ -42,6 +42,7 @@ class IChartboostListener : public sdkbox::ChartboostListener {
 public:
 	virtual void onChartboostCached(const std::string& name)
 	{
+		HomeScene::getInstance()->isChartboostAdsAvailable = true;
 		CCLog("bambi chartboost onChartboostCached %s: ", name.c_str());
 	}
 	virtual bool onChartboostShouldDisplay(const std::string& name)
@@ -68,12 +69,17 @@ public:
 	{
 		CCLog("bambi chartboost onChartboostReward %s: ", name.c_str());
 
+		HomeScene::getInstance()->isChartboostAdsAvailable = false;
 		//TODO return to the listener
 		HomeScene::getInstance()->onVideoAdsPlayed();
 	}
 	virtual void onChartboostFailedToLoad(const std::string& name, sdkbox::CB_LoadError e)
 	{
 		CCLog("bambi chartboost onChartboostFailedToLoad %s: ", name.c_str());
+		auto func = CallFunc::create([=]() {
+					sdkbox::PluginChartboost::show(kChartboostRewardedAds);
+				});
+		HomeScene::getInstance()->runAction(Sequence::create(DelayTime::create(1), func, nullptr));
 	}
 	virtual void onChartboostFailToRecordClick(const std::string& name, sdkbox::CB_ClickError e)
 	{
@@ -94,6 +100,7 @@ class IVungleListener : public sdkbox::VungleListener, public Ref
 public:
 	virtual void onVungleCacheAvailable()
 	{
+		HomeScene::getInstance()->isVungleAdsAvailable = true;
 		CCLog("bambi vungle onVungleCacheAvailable");
 	}
 	virtual void onVungleStarted()
@@ -110,6 +117,7 @@ public:
 	}
 	virtual void onVungleAdReward(const std::string& name) {
 		cocos2d::Director::getInstance()->getScheduler()->performFunctionInCocosThread([=]() {
+					HomeScene::getInstance()->isVungleAdsAvailable = false;
 					HomeScene::getInstance()->onVideoAdsPlayed();
 					CCLog("bambi vungle onVungleAdReward - name: %s",name.c_str());
 				});
@@ -142,6 +150,69 @@ void BaseScene::showFullscreenAds() {
 //#endif
 }
 
+//bool BaseScene::isRewardedAdsAvailable() {
+//	bool result = false;
+//#ifdef SDKBOX_ENABLED
+//#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+//	result = isChartboostAdsAvailable || isVungleAdsAvailable;
+//	if(isChartboostAdsAvailable)
+//	{
+//		CCLog("bambi HomeScene -> isRewardedAdsAvailable -> chartboost ads is available");
+//	} else
+//	{
+//		CCLog("bambi HomeScene -> isRewardedAdsAvailable -> chartboost ads is not available");
+//	}
+//
+//	if(isVungleAdsAvailable)
+//	{
+//		CCLog("bambi HomeScene -> isRewardedAdsAvailable -> vungle ads is available");
+//	} else
+//	{
+//		CCLog("bambi HomeScene -> isRewardedAdsAvailable -> vungle ads is not available");
+//	}
+//#else
+//	result = sdkbox::PluginChartboost::isAvailable(kChartboostRewardedAds);
+//#endif
+//#endif
+//	return result;
+//}
+
+bool BaseScene::isRewardedAdsAvailable() {
+	bool result = false;
+#ifdef SDKBOX_ENABLED
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+	result = sdkbox::PluginChartboost::isAvailable(kChartboostRewardedAds) || sdkbox::PluginVungle::isCacheAvailable();
+	if(!sdkbox::PluginChartboost::isAvailable(kChartboostRewardedAds))
+	{
+		sdkbox::PluginChartboost::cache(kChartboostRewardedAds);
+	}
+
+	if(sdkbox::PluginChartboost::isAvailable(kChartboostRewardedAds))
+	{
+		CCLog("bambi HomeScene -> isRewardedAdsAvailable -> chartboost ads is available");
+	} else
+	{
+		CCLog("bambi HomeScene -> isRewardedAdsAvailable -> chartboost ads is not available");
+	}
+
+	if(sdkbox::PluginChartboost::isAvailable(kChartboostRewardedAds))
+	{
+		CCLog("bambi HomeScene -> isRewardedAdsAvailable -> chartboost ads is available");
+	} else
+	{
+		CCLog("bambi HomeScene -> isRewardedAdsAvailable -> chartboost ads is not available");
+	}
+#else
+	result = sdkbox::PluginChartboost::isAvailable(kChartboostRewardedAds);
+	if(!result)
+	{
+		sdkbox::PluginChartboost::cache(kChartboostRewardedAds);
+	}
+#endif
+#endif
+	return result;
+}
+
 bool isShowingAds = false;
 void BaseScene::showRewardedAds() {
 	if (isShowingAds) {
@@ -157,9 +228,21 @@ void BaseScene::showRewardedAds() {
 #ifdef SDKBOX_ENABLED
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
 	if(CppUtils::randomBetween(1,2) == 1) {
-		sdkbox::PluginChartboost::show(kChartboostRewardedAds);
+		if(sdkbox::PluginChartboost::isAvailable(kChartboostRewardedAds))
+		{
+			sdkbox::PluginChartboost::show(kChartboostRewardedAds);
+		} else
+		{
+			sdkbox::PluginVungle::show(kVungleRewardedAds);
+		}
 	} else {
-		sdkbox::PluginVungle::show(kVungleRewardedAds);
+		if(sdkbox::PluginVungle::isCacheAvailable())
+		{
+			sdkbox::PluginVungle::show(kVungleRewardedAds);
+		} else
+		{
+			sdkbox::PluginChartboost::show(kChartboostRewardedAds);
+		}
 	}
 #else
 	sdkbox::PluginChartboost::show(kChartboostRewardedAds);
@@ -175,6 +258,8 @@ bool BaseScene::init() {
 		return false;
 	}
 
+	isChartboostAdsAvailable = false;
+	isVungleAdsAvailable = false;
 	isSound = UserDefault::getInstance()->getBoolForKey(SOUND, true);
 	UserDefault::getInstance()->setBoolForKey(SOUND, isSound);
 	isMusic = UserDefault::getInstance()->getBoolForKey(MUSIC, true);

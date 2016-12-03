@@ -42,7 +42,10 @@ public:
 	void showFullscreenAds();
 	void showRewardedAds();
 	void onVideoAdsPlayed();
+	bool isRewardedAdsAvailable();
 
+	bool isChartboostAdsAvailable;
+	bool isVungleAdsAvailable;
 	bool isSound;
 	bool isAlert;
 	bool isMusic;

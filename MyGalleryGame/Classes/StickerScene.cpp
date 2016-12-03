@@ -97,15 +97,23 @@ void StickerScene::initMenuBottom() {
 	btnSearchAll->setTouchEnabled(true);
 	btnSearchAll->setPressedActionEnabled(true);
 	btnSearchAll->setOpacity(123);
-	btnSearchAll->addTouchEventListener([this](Ref *pSender,
-			Widget::TouchEventType type) {
-		if (type == cocos2d::ui::Widget::TouchEventType::ENDED)
-		{
-			auto *newScene = StickerScene::scene(SEARCH_TYPE_ALL);
-			auto transition = TransitionFade::create(1.0, newScene);
-			Director *pDirector = Director::getInstance();
-			pDirector->replaceScene(transition);
-		}});
+	btnSearchAll->addTouchEventListener(
+			[this](Ref *pSender,
+					Widget::TouchEventType type) {
+				if (type == cocos2d::ui::Widget::TouchEventType::ENDED)
+				{
+					if (backgroundLayer != nullptr && backgroundLayer->isVisible()) {
+						this->removeChild(backgroundLayer, false);
+						backgroundLayer = nullptr;
+						scrollview->setVisible(true);
+					} else if(searchingType != SEARCH_TYPE_ALL)
+					{
+						auto *newScene = StickerScene::scene(SEARCH_TYPE_ALL);
+						auto transition = TransitionFade::create(1.0, newScene);
+						Director *pDirector = Director::getInstance();
+						pDirector->replaceScene(transition);
+					}
+				}});
 	this->addChild(btnSearchAll);
 	if (searchingType == SEARCH_TYPE_ALL) {
 		btnSearchAll->setOpacity(255);
@@ -118,15 +126,23 @@ void StickerScene::initMenuBottom() {
 	btnSearchStick->setTouchEnabled(true);
 	btnSearchStick->setPressedActionEnabled(true);
 	btnSearchStick->setOpacity(123);
-	btnSearchStick->addTouchEventListener([this](Ref *pSender,
-			Widget::TouchEventType type) {
-		if (type == cocos2d::ui::Widget::TouchEventType::ENDED)
-		{
-			auto *newScene = StickerScene::scene(SEARCH_TYPE_STICK);
-			auto transition = TransitionFade::create(1.0, newScene);
-			Director *pDirector = Director::getInstance();
-			pDirector->replaceScene(transition);
-		}});
+	btnSearchStick->addTouchEventListener(
+			[this](Ref *pSender,
+					Widget::TouchEventType type) {
+				if (type == cocos2d::ui::Widget::TouchEventType::ENDED)
+				{
+					if (backgroundLayer != nullptr && backgroundLayer->isVisible()) {
+						this->removeChild(backgroundLayer, false);
+						backgroundLayer = nullptr;
+						scrollview->setVisible(true);
+					} else if(searchingType != SEARCH_TYPE_STICK)
+					{
+						auto *newScene = StickerScene::scene(SEARCH_TYPE_STICK);
+						auto transition = TransitionFade::create(1.0, newScene);
+						Director *pDirector = Director::getInstance();
+						pDirector->replaceScene(transition);
+					}
+				}});
 	this->addChild(btnSearchStick);
 	if (searchingType == SEARCH_TYPE_STICK) {
 		btnSearchStick->setOpacity(255);
@@ -166,6 +182,17 @@ void StickerScene::initControlButtons() {
 							- btnStickerScene->getContentSize().height / 2
 							- 10));
 	btnStickerScene->setZoomScale(0);
+	btnStickerScene->addTouchEventListener(
+			[this](Ref *pSender,
+					Widget::TouchEventType type) {
+				if (type == cocos2d::ui::Widget::TouchEventType::ENDED)
+				{
+					if (backgroundLayer != nullptr && backgroundLayer->isVisible()) {
+						this->removeChild(backgroundLayer, false);
+						backgroundLayer = nullptr;
+						scrollview->setVisible(true);
+					}
+				}});
 	this->addChild(btnStickerScene);
 
 	//Add btn album
@@ -178,15 +205,23 @@ void StickerScene::initControlButtons() {
 							- 10));
 	btnAlbumScene->setTouchEnabled(true);
 	btnAlbumScene->setPressedActionEnabled(true);
-	btnAlbumScene->addTouchEventListener([this](Ref *pSender,
-			Widget::TouchEventType type) {
-		if (type == cocos2d::ui::Widget::TouchEventType::ENDED)
-		{
-			auto *newScene = AlbumScene::scene();
-			auto transition = TransitionFade::create(1.0, newScene);
-			Director *pDirector = Director::getInstance();
-			pDirector->replaceScene(transition);
-		}});
+	btnAlbumScene->addTouchEventListener(
+			[this](Ref *pSender,
+					Widget::TouchEventType type) {
+				if (type == cocos2d::ui::Widget::TouchEventType::ENDED)
+				{
+					if (backgroundLayer != nullptr && backgroundLayer->isVisible()) {
+						this->removeChild(backgroundLayer, false);
+						backgroundLayer = nullptr;
+						scrollview->setVisible(true);
+					} else
+					{
+						auto *newScene = AlbumScene::scene();
+						auto transition = TransitionFade::create(1.0, newScene);
+						Director *pDirector = Director::getInstance();
+						pDirector->replaceScene(transition);
+					}
+				}});
 	this->addChild(btnAlbumScene);
 
 	//Add btn home
@@ -200,15 +235,23 @@ void StickerScene::initControlButtons() {
 							- 10));
 	btnHomeScene->setTouchEnabled(true);
 	btnHomeScene->setPressedActionEnabled(true);
-	btnHomeScene->addTouchEventListener([this](Ref *pSender,
-			Widget::TouchEventType type) {
-		if (type == cocos2d::ui::Widget::TouchEventType::ENDED)
-		{
-			auto *newScene = HomeScene::scene();
-			auto transition = TransitionFade::create(1.0, newScene);
-			Director *pDirector = Director::getInstance();
-			pDirector->replaceScene(transition);
-		}});
+	btnHomeScene->addTouchEventListener(
+			[this](Ref *pSender,
+					Widget::TouchEventType type) {
+				if (type == cocos2d::ui::Widget::TouchEventType::ENDED)
+				{
+					if (backgroundLayer != nullptr && backgroundLayer->isVisible()) {
+						this->removeChild(backgroundLayer, false);
+						backgroundLayer = nullptr;
+						scrollview->setVisible(true);
+					} else
+					{
+						auto *newScene = HomeScene::scene();
+						auto transition = TransitionFade::create(1.0, newScene);
+						Director *pDirector = Director::getInstance();
+						pDirector->replaceScene(transition);
+					}
+				}});
 	this->addChild(btnHomeScene);
 }
 
@@ -261,9 +304,16 @@ void StickerScene::addAllStickersToScrollView() {
 						Widget::TouchEventType type) {
 					if (type == cocos2d::ui::Widget::TouchEventType::ENDED)
 					{
-						int tag = (int) dynamic_cast<Button*>(pSender)->getTag();
-						CCLog("bambi btnStickerScene->addTouchEventListener, tag: %d",tag);
-						openStickerDetailLayer(StickerHelper::getStickerFromId(tag));
+						if (backgroundLayer != nullptr && backgroundLayer->isVisible()) {
+							this->removeChild(backgroundLayer, false);
+							backgroundLayer = nullptr;
+							scrollview->setVisible(true);
+						} else
+						{
+							int tag = (int) dynamic_cast<Button*>(pSender)->getTag();
+							CCLog("bambi btnStickerScene->addTouchEventListener, tag: %d",tag);
+							openStickerDetailLayer(StickerHelper::getStickerFromId(tag));
+						}
 					}});
 		scrollview->addChild(btnStickerScene);
 
@@ -419,15 +469,16 @@ void StickerScene::openStickerDetailLayer(Sticker* sticker) {
 								- 20, winSize.height * 0.1f));
 		btnAlbumScene->setTouchEnabled(true);
 		btnAlbumScene->setPressedActionEnabled(true);
-		btnAlbumScene->addTouchEventListener([this, sticker](Ref *pSender,
-				Widget::TouchEventType type) {
-			if (type == cocos2d::ui::Widget::TouchEventType::ENDED)
-			{
-				auto *newScene = AlbumScene::scene(sticker->sticker_page_id - 1);
-				auto transition = TransitionFade::create(1.0, newScene);
-				Director *pDirector = Director::getInstance();
-				pDirector->replaceScene(transition);
-			}});
+		btnAlbumScene->addTouchEventListener(
+				[this, sticker](Ref *pSender,
+						Widget::TouchEventType type) {
+					if (type == cocos2d::ui::Widget::TouchEventType::ENDED)
+					{
+						auto *newScene = AlbumScene::scene(sticker->sticker_page_id - 1);
+						auto transition = TransitionFade::create(1.0, newScene);
+						Director *pDirector = Director::getInstance();
+						pDirector->replaceScene(transition);
+					}});
 		backgroundLayer->addChild(btnAlbumScene);
 	}
 
