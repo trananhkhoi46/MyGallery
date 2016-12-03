@@ -17,6 +17,7 @@
 #include "Trading/FacebookHandler/FacebookHandler.h"
 #include "Trading/FirebaseHandler/FirebaseHandler.h"
 #include "Trading/Model/BUserInfor.h"
+#include "CustomDirector.h"
 #ifdef SDKBOX_ENABLED
 #include "PluginAdMob/PluginAdMob.h"
 #include "PluginChartboost/PluginChartboost.h"

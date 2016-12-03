@@ -2,7 +2,14 @@
 #include "HomeScene.h"
 #include "StickerScene.h"
 
+int stickerInitPage;
 Scene* AlbumScene::scene() {
+	scene(0);
+}
+Scene* AlbumScene::scene(int initPage) {
+	if (initPage < vt_sticker_pages.size()) {
+		stickerInitPage = initPage;
+	}
 	// 'scene' is an autorelease object
 	Scene *scene = Scene::create();
 
@@ -40,6 +47,10 @@ bool AlbumScene::init() {
 	initPageView();
 	initControlButtons();
 	initScrollView();
+
+	//Scroll to the init page
+	scrollToPageIndex(stickerInitPage);
+	setVisibilityBtnLeftRight();
 
 	//Keyboard handling
 	auto keyboardListener = EventListenerKeyboard::create();
@@ -303,14 +314,6 @@ void AlbumScene::initControlButtons() {
 			pDirector->replaceScene(transition);
 		}});
 	this->addChild(btnStickerScene);
-	Label* labelButtonSticker = Label::createWithTTF(configControlButton,
-			"STICKER", TextHAlignment::CENTER);
-	labelButtonSticker->setPosition(
-			Vec2(btnStickerScene->getPositionX() + 33,
-					btnStickerScene->getPositionY()));
-	labelButtonSticker->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
-	labelButtonSticker->setColor(Color3B::BLACK);
-	this->addChild(labelButtonSticker);
 
 	//Add btn album
 	Button* btnAlbumScene = Button::create(s_albumscene_btn_album);
@@ -322,14 +325,6 @@ void AlbumScene::initControlButtons() {
 							- 10));
 	btnAlbumScene->setZoomScale(0);
 	this->addChild(btnAlbumScene);
-	Label* labelButtonAlbum = Label::createWithTTF(configControlButton, "ALBUM",
-			TextHAlignment::CENTER);
-	labelButtonAlbum->setPosition(
-			Vec2(btnAlbumScene->getPositionX() + 60,
-					btnAlbumScene->getPositionY() - 10));
-	labelButtonAlbum->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
-	labelButtonAlbum->setColor(Color3B::BLACK);
-	this->addChild(labelButtonAlbum);
 
 	//Add btn home
 	Button* btnHomeScene = Button::create(s_albumscene_btn_home);
@@ -352,14 +347,6 @@ void AlbumScene::initControlButtons() {
 			pDirector->replaceScene(transition);
 		}});
 	this->addChild(btnHomeScene);
-	Label* labelButtonHome = Label::createWithTTF(configControlButton, "HOME",
-			TextHAlignment::CENTER);
-	labelButtonHome->setPosition(
-			Vec2(btnHomeScene->getPositionX() + 30,
-					btnHomeScene->getPositionY() - 10));
-	labelButtonHome->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
-	labelButtonHome->setColor(Color3B::BLACK);
-	this->addChild(labelButtonHome);
 
 	//Btn left
 	btnLeft = Button::create(s_albumscene_btn_left);

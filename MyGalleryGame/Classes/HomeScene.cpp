@@ -169,6 +169,7 @@ void HomeScene::initPacketButtons() {
 
 	//Add btn free packet
 	btnFreePacketTop = Button::create(s_homescene_btn_free_packet_top);
+	btnFreePacketTop->setZoomScale(0);
 	btnFreePacketTop->setPosition(Vec2(winSize.width / 2, winSize.height / 2));
 	this->addChild(btnFreePacketTop);
 	btnFreePacketBottom = Button::create(s_homescene_btn_free_packet_bottom);
@@ -190,6 +191,7 @@ void HomeScene::setVisibilityViewsOfTradingFeature() {
 	btnFriend->setVisible(isFacebookLoggedIn);
 }
 
+bool isInviting = false;
 void HomeScene::initOtherViews() {
 	//Add btnFacebookConnect
 	btnFacebookConnect = Button::create(s_homescene_btn_facebook_connect);
@@ -228,14 +230,6 @@ void HomeScene::initOtherViews() {
 	btnFriend->addTouchEventListener(
 			CC_CALLBACK_2(HomeScene::friendButtonCallback, this));
 	this->addChild(btnFriend);
-	Label* labelButtonFriend = Label::createWithTTF(configControlButton,
-			"FRIEND", TextHAlignment::CENTER);
-	labelButtonFriend->setPosition(
-			Vec2(btnFriend->getContentSize().width / 2,
-					btnFriend->getContentSize().height / 2 - 55));
-	labelButtonFriend->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
-	labelButtonFriend->setColor(Color3B::BLACK);
-	btnFriend->addChild(labelButtonFriend);
 
 	//Add btn trade
 	btnTrade = Button::create(s_homescene_btn_trade);
@@ -249,14 +243,6 @@ void HomeScene::initOtherViews() {
 	btnTrade->addTouchEventListener(
 			CC_CALLBACK_2(HomeScene::tradeButtonCallback, this));
 	this->addChild(btnTrade);
-	Label* labelButtonTrade = Label::createWithTTF(configControlButton, "TRADE",
-			TextHAlignment::CENTER);
-	labelButtonTrade->setPosition(
-			Vec2(btnTrade->getContentSize().width / 2,
-					btnTrade->getContentSize().height / 2 - 55));
-	labelButtonTrade->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
-	labelButtonTrade->setColor(Color3B::BLACK);
-	btnTrade->addChild(labelButtonTrade);
 
 	//Set show btnFacebookConnect if user hasn't logged in Facebook, vice versa
 	setVisibilityViewsOfTradingFeature();
@@ -388,8 +374,14 @@ void HomeScene::initOtherViews() {
 	btnInviteFacebook->addTouchEventListener(
 			[this](Ref *pSender,
 					Widget::TouchEventType type) {
-				if (type == cocos2d::ui::Widget::TouchEventType::ENDED)
+				if (type == cocos2d::ui::Widget::TouchEventType::ENDED && !isInviting)
 				{
+					isInviting = true;
+					auto func = CallFunc::create([=]() {
+								isInviting = false;
+							});
+					this->runAction(Sequence::create(DelayTime::create(1), func, nullptr));
+
 					sdkbox::PluginFacebook::inviteFriends("https://fb.me/322164761287181",
 							"http://www.cocos2d-x.org/attachments/801/cocos2dx_portrait.png");
 				}});
@@ -482,14 +474,6 @@ void HomeScene::initControlButtons() {
 			instance = nullptr;
 		}});
 	this->addChild(btnStickerScene);
-	Label* labelButtonSticker = Label::createWithTTF(configControlButton,
-			"STICKER", TextHAlignment::CENTER);
-	labelButtonSticker->setPosition(
-			Vec2(btnStickerScene->getPositionX() + 33,
-					btnStickerScene->getPositionY()));
-	labelButtonSticker->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
-	labelButtonSticker->setColor(Color3B::BLACK);
-	this->addChild(labelButtonSticker);
 
 	//Add btn album
 	Button* btnAlbumScene = Button::create(s_homescene_btn_album);
@@ -512,14 +496,6 @@ void HomeScene::initControlButtons() {
 			instance = nullptr;
 		}});
 	this->addChild(btnAlbumScene);
-	Label* labelButtonAlbum = Label::createWithTTF(configControlButton, "ALBUM",
-			TextHAlignment::CENTER);
-	labelButtonAlbum->setPosition(
-			Vec2(btnAlbumScene->getPositionX() + 60,
-					btnAlbumScene->getPositionY() - 10));
-	labelButtonAlbum->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
-	labelButtonAlbum->setColor(Color3B::BLACK);
-	this->addChild(labelButtonAlbum);
 
 	//Add btn home
 	Button* btnHomeScene = Button::create(s_homescene_btn_home);
@@ -532,14 +508,7 @@ void HomeScene::initControlButtons() {
 							- 10));
 	btnHomeScene->setZoomScale(0);
 	this->addChild(btnHomeScene);
-	Label* labelButtonHome = Label::createWithTTF(configControlButton, "HOME",
-			TextHAlignment::CENTER);
-	labelButtonHome->setPosition(
-			Vec2(btnHomeScene->getPositionX() + 30,
-					btnHomeScene->getPositionY() - 10));
-	labelButtonHome->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
-	labelButtonHome->setColor(Color3B::BLACK);
-	this->addChild(labelButtonHome);
+
 }
 //---------------------------------------------------------------------End of init methods
 //---------------------------------------------------------------------Game loop methods
@@ -805,7 +774,8 @@ void HomeScene::openStickerDetailLayer(Sticker* sticker) {
 void HomeScene::packetButtonsCallback(Ref* pSender,
 		ui::Widget::TouchEventType eEventType) {
 	if (eEventType == ui::Widget::TouchEventType::BEGAN
-			&& !blurLayer->isVisible() && !friendLayer->isVisible()) {
+			&& !blurLayer->isVisible() && !friendLayer->isVisible()
+			&& cut->numberOfRunningActions() == 0) {
 		int animationDuration = 3;
 		Button* button = dynamic_cast<Button*>(pSender);
 		int tag = (int) button->getTag();
@@ -889,11 +859,19 @@ void HomeScene::friendButtonCallback(Ref* pSender,
 	}
 }
 
+bool isLoggingInFacebook = false;
 void HomeScene::facebookConnectButtonCallback(Ref* pSender,
 		ui::Widget::TouchEventType eEventType) {
 	if (eEventType == ui::Widget::TouchEventType::ENDED
-			&& !blurLayer->isVisible() && !friendLayer->isVisible()) {
+			&& !blurLayer->isVisible() && !friendLayer->isVisible()
+			&& !isLoggingInFacebook) {
 		CCLog("bambi logging in");
+		isLoggingInFacebook = true;
+		auto func = CallFunc::create([=]() {
+			isLoggingInFacebook = false;
+		});
+		this->runAction(Sequence::create(DelayTime::create(1), func, nullptr));
+
 		FacebookHandler::getInstance()->loginFacebook();
 	}
 }
@@ -945,8 +923,15 @@ void HomeScene::responseForQuerryTopFriend(vector<BUserInfor*> friendList) {
 		stickerBtn->addTouchEventListener(
 				[this](Ref *pSender,
 						Widget::TouchEventType type) {
-					if (type == cocos2d::ui::Widget::TouchEventType::ENDED)
+					if (type == cocos2d::ui::Widget::TouchEventType::ENDED && !isOpeningAnotherScene)
 					{
+						isOpeningAnotherScene = true;
+						auto func = CallFunc::create([=]() {
+									isOpeningAnotherScene = false;
+								});
+						this->runAction(
+								Sequence::create(DelayTime::create(1), func, nullptr));
+
 						int index = (int) dynamic_cast<Button*>(pSender)->getTag();
 						if(vt_Friends.at(index - 1)->getObjectId().compare(UserDefault::getInstance()->getStringForKey(KEY_WORLD_OJECTID)) == 0)
 						{
@@ -954,14 +939,14 @@ void HomeScene::responseForQuerryTopFriend(vector<BUserInfor*> friendList) {
 							auto *newScene = SettingScene::scene();
 							auto transition = TransitionFade::create(1.0, newScene);
 							Director *pDirector = Director::getInstance();
-							pDirector->replaceScene(transition);
+							pDirector->pushScene(transition);
 						} else
 						{
 							CCLog("bambi go to trade scene - objectId: %s",vt_Friends.at(index - 1)->getObjectId().c_str());
 							auto *newScene = TradingScene::scene(vt_Friends.at(index - 1));
 							auto transition = TransitionFade::create(1.0, newScene);
 							Director *pDirector = Director::getInstance();
-							pDirector->replaceScene(transition);
+							pDirector->pushScene(transition);
 						}
 						instance = nullptr;
 					}});
@@ -1018,8 +1003,8 @@ void HomeScene::responseAfterGetStickersDataFromFirebase(string facebookId,
 						UserDefault::getInstance()->getStringForKey(
 						CURRENT_STICKER));
 				FirebaseHandler::getInstance()->saveToMyStickedStickerList(
-									UserDefault::getInstance()->getStringForKey(
-									STICKED_STICKER));
+						UserDefault::getInstance()->getStringForKey(
+						STICKED_STICKER));
 			}
 		}
 	}
@@ -1046,7 +1031,14 @@ void HomeScene::responseAfterCheckFacebookIdExistOnFirebase() {
 
 void HomeScene::settingButtonsCallback(Ref* pSender,
 		ui::Widget::TouchEventType eEventType) {
-	if (eEventType == ui::Widget::TouchEventType::ENDED) {
+	if (eEventType == ui::Widget::TouchEventType::ENDED
+			&& !isOpeningAnotherScene) {
+		isOpeningAnotherScene = true;
+		auto func = CallFunc::create([=]() {
+			isOpeningAnotherScene = false;
+		});
+		this->runAction(Sequence::create(DelayTime::create(1), func, nullptr));
+
 		int tag = (int) dynamic_cast<Button*>(pSender)->getTag();
 		switch (tag) {
 		case kTagFacebookPage:
@@ -1072,7 +1064,7 @@ void HomeScene::settingButtonsCallback(Ref* pSender,
 			auto *newScene = SettingScene::scene();
 			auto transition = TransitionFade::create(1.0, newScene);
 			Director *pDirector = Director::getInstance();
-			pDirector->replaceScene(transition);
+			pDirector->pushScene(transition);
 			instance = nullptr;
 		}
 			break;

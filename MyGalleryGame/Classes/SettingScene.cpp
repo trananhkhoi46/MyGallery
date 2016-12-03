@@ -32,6 +32,7 @@ bool SettingScene::init() {
 		return false;
 	}
 
+	isTouchedOnFacebookConnect = false;
 	TTFConfig config(s_font, 120 * s_font_ratio);
 
 	//Add background
@@ -156,11 +157,12 @@ bool SettingScene::init() {
 }
 void SettingScene::responseWhenLoginOrLogoutFacebook() {
 	if (FacebookHandler::getInstance()->isFacebookLoggedIn()) {
-		CCLog("bambi in SettingScene -> responseWhenLoginOrLogoutFacebook logged in");
+		CCLog(
+				"bambi in SettingScene -> responseWhenLoginOrLogoutFacebook logged in");
 		labelLoginLogoutFacebook->setString("LOGOUT");
-	}else
-	{
-		CCLog("bambi in SettingScene -> responseWhenLoginOrLogoutFacebook logged out");
+	} else {
+		CCLog(
+				"bambi in SettingScene -> responseWhenLoginOrLogoutFacebook logged out");
 		labelLoginLogoutFacebook->setString("LOGIN");
 	}
 }
@@ -171,18 +173,24 @@ void SettingScene::settingButtonsCallback(Ref* pSender,
 		int tag = (int) button->getTag();
 		switch (tag) {
 		case kTagBack: {
-			auto *newScene = HomeScene::scene();
-			auto transition = TransitionFade::create(1.0, newScene);
-			Director *pDirector = Director::getInstance();
-			pDirector->replaceScene(transition);
+			if (!isTouchedOnFacebookConnect) {
+				CustomDirector *director =
+						(CustomDirector *) CustomDirector::getInstance();
+				director->popSceneWithTransitionFade(1);
+			} else {
+				auto *newScene = HomeScene::scene();
+				auto transition = TransitionFade::create(1.0, newScene);
+				Director *pDirector = Director::getInstance();
+				pDirector->replaceScene(transition);
+			}
+
 		}
 			break;
 		case kTagLoginLogoutFacebook: {
+			isTouchedOnFacebookConnect = true;
 			if (FacebookHandler::getInstance()->isFacebookLoggedIn()) {
 				FacebookHandler::getInstance()->logoutFacebook();
-			}
-			else
-			{
+			} else {
 				FacebookHandler::getInstance()->loginFacebook();
 			}
 		}
@@ -223,9 +231,15 @@ void SettingScene::settingButtonsCallback(Ref* pSender,
 }
 void SettingScene::onKeyReleased(EventKeyboard::KeyCode keycode, Event* event) {
 	if (keycode == EventKeyboard::KeyCode::KEY_ESCAPE) {
-		auto *newScene = HomeScene::scene();
-		auto transition = TransitionFade::create(1.0, newScene);
-		Director *pDirector = Director::getInstance();
-		pDirector->replaceScene(transition);
+		if (!isTouchedOnFacebookConnect) {
+			CustomDirector *director =
+					(CustomDirector *) CustomDirector::getInstance();
+			director->popSceneWithTransitionFade(1);
+		} else {
+			auto *newScene = HomeScene::scene();
+			auto transition = TransitionFade::create(1.0, newScene);
+			Director *pDirector = Director::getInstance();
+			pDirector->replaceScene(transition);
+		}
 	}
 }

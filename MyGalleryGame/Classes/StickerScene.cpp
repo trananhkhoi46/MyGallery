@@ -167,14 +167,6 @@ void StickerScene::initControlButtons() {
 							- 10));
 	btnStickerScene->setZoomScale(0);
 	this->addChild(btnStickerScene);
-	Label* labelButtonSticker = Label::createWithTTF(configControlButton,
-			"STICKER", TextHAlignment::CENTER);
-	labelButtonSticker->setPosition(
-			Vec2(btnStickerScene->getPositionX() + 33,
-					btnStickerScene->getPositionY()));
-	labelButtonSticker->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
-	labelButtonSticker->setColor(Color3B::BLACK);
-	this->addChild(labelButtonSticker);
 
 	//Add btn album
 	Button* btnAlbumScene = Button::create(s_stickerscene_btn_album);
@@ -196,14 +188,6 @@ void StickerScene::initControlButtons() {
 			pDirector->replaceScene(transition);
 		}});
 	this->addChild(btnAlbumScene);
-	Label* labelButtonAlbum = Label::createWithTTF(configControlButton, "ALBUM",
-			TextHAlignment::CENTER);
-	labelButtonAlbum->setPosition(
-			Vec2(btnAlbumScene->getPositionX() + 60,
-					btnAlbumScene->getPositionY() - 10));
-	labelButtonAlbum->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
-	labelButtonAlbum->setColor(Color3B::BLACK);
-	this->addChild(labelButtonAlbum);
 
 	//Add btn home
 	Button* btnHomeScene = Button::create(s_stickerscene_btn_home);
@@ -226,15 +210,8 @@ void StickerScene::initControlButtons() {
 			pDirector->replaceScene(transition);
 		}});
 	this->addChild(btnHomeScene);
-	Label* labelButtonHome = Label::createWithTTF(configControlButton, "HOME",
-			TextHAlignment::CENTER);
-	labelButtonHome->setPosition(
-			Vec2(btnHomeScene->getPositionX() + 30,
-					btnHomeScene->getPositionY() - 10));
-	labelButtonHome->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
-	labelButtonHome->setColor(Color3B::BLACK);
-	this->addChild(labelButtonHome);
 }
+
 void StickerScene::addAllStickersToScrollView() {
 	TTFConfig configStickerDetailLabel(s_font, 65 * s_font_ratio);
 
@@ -254,7 +231,9 @@ void StickerScene::addAllStickersToScrollView() {
 					winSize.height / 2 - scrollviewMarginTop / 2
 							+ scrollviewMarginBottom / 2));
 	scrollview->setScrollBarEnabled(false);
-	if (scrollview->getInnerContainerSize().height < scrollFrameSize.height) {
+	CCLog("bambi AlbumScene - inner height: %f, frame hight: %f",
+			scrollview->getInnerContainerSize().height, scrollFrameSize.height);
+	if (scrollview->getInnerContainerSize().height <= scrollFrameSize.height) {
 		scrollview->setBounceEnabled(false);
 	}
 	this->addChild(scrollview);
@@ -430,6 +409,28 @@ void StickerScene::openStickerDetailLayer(Sticker* sticker) {
 	labelStickerRarity->setColor(Color3B::WHITE);
 	backgroundLayer->addChild(labelStickerRarity);
 
+	//Add button go to album scene
+	if (StickerHelper::isStickerHasNotSticked(sticker->sticker_id)) {
+		Button* btnAlbumScene = Button::create(s_albumscene_btn_sticker);
+		btnAlbumScene->setPosition(
+				Vec2(
+						winSize.width
+								- btnAlbumScene->getContentSize().width / 2
+								- 20, winSize.height * 0.1f));
+		btnAlbumScene->setTouchEnabled(true);
+		btnAlbumScene->setPressedActionEnabled(true);
+		btnAlbumScene->addTouchEventListener([this, sticker](Ref *pSender,
+				Widget::TouchEventType type) {
+			if (type == cocos2d::ui::Widget::TouchEventType::ENDED)
+			{
+				auto *newScene = AlbumScene::scene(sticker->sticker_page_id - 1);
+				auto transition = TransitionFade::create(1.0, newScene);
+				Director *pDirector = Director::getInstance();
+				pDirector->replaceScene(transition);
+			}});
+		backgroundLayer->addChild(btnAlbumScene);
+	}
+
 	//Hide scrollview to make onTouchBegan works
 	scrollview->setVisible(false);
 }
@@ -447,17 +448,23 @@ bool StickerScene::onTouchBegan(Touch* touch, Event* event) {
 bool firstClickInStickerScene = true;
 void StickerScene::onKeyReleased(EventKeyboard::KeyCode keycode, Event* event) {
 	if (keycode == EventKeyboard::KeyCode::KEY_ESCAPE) {
-		if (firstClickInStickerScene) {
-			firstClickInStickerScene = false;
-			SocialPlugin::showToast("Press back again to Exit!");
-
-			auto func = CallFunc::create([=]() {
-				firstClickInStickerScene = true;
-			});
-			this->runAction(
-					Sequence::create(DelayTime::create(2), func, nullptr));
+		if (backgroundLayer != nullptr && backgroundLayer->isVisible()) {
+			this->removeChild(backgroundLayer, false);
+			backgroundLayer = nullptr;
+			scrollview->setVisible(true);
 		} else {
-			CCDirector::sharedDirector()->end();
+			if (firstClickInStickerScene) {
+				firstClickInStickerScene = false;
+				SocialPlugin::showToast("Press back again to Exit!");
+
+				auto func = CallFunc::create([=]() {
+					firstClickInStickerScene = true;
+				});
+				this->runAction(
+						Sequence::create(DelayTime::create(2), func, nullptr));
+			} else {
+				CCDirector::sharedDirector()->end();
+			}
 		}
 	}
 }

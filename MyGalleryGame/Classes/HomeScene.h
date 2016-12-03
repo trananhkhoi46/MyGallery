@@ -56,6 +56,7 @@ public:
 	bool isMenuBarShowing;
 	bool isFreePacketAvailable;
 	bool isRequestDone;
+	bool isOpeningAnotherScene;
 	Vec2 menuBarVisiblePosition;
 	Vec2 menuBarInvisiblePosition;
 

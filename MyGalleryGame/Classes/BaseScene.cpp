@@ -141,7 +141,18 @@ void BaseScene::showFullscreenAds() {
 //#endif
 //#endif
 }
+
+bool isShowingAds = false;
 void BaseScene::showRewardedAds() {
+	if (isShowingAds) {
+		return;
+	}
+	isShowingAds = true;
+	auto func = CallFunc::create([=]() {
+		isShowingAds = false;
+	});
+	this->runAction(Sequence::create(DelayTime::create(1), func, nullptr));
+
 	CCLog("bambi showRewardedAds");
 #ifdef SDKBOX_ENABLED
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)

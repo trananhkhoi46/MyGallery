@@ -16,6 +16,7 @@ public:
 	void onKeyReleased(EventKeyboard::KeyCode keycode, Event* event);
 
 	Label* labelLoginLogoutFacebook;
+	bool isTouchedOnFacebookConnect;
 
 	//Reponse from FacebookConnectDelegate
 	virtual void responseWhenLoginOrLogoutFacebook();

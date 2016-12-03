@@ -35,9 +35,10 @@ void TradingScene::parseAllStickers() {
 				if (stickedRecord == record) {
 					isRecordExistInStickedVector = true;
 					splitStickedStickerStrings.erase(
-									std::remove(splitStickedStickerStrings.begin(),
-											splitStickedStickerStrings.end(), stickedRecord),
-											splitStickedStickerStrings.end());
+							std::remove(splitStickedStickerStrings.begin(),
+									splitStickedStickerStrings.end(),
+									stickedRecord),
+							splitStickedStickerStrings.end());
 				}
 			}
 			if (!isRecordExistInStickedVector) {
@@ -304,7 +305,6 @@ void TradingScene::openStickerDetailLayer(Sticker* sticker) {
 					winSize.height * 0.1f));
 	btnAsk->setTouchEnabled(true);
 	btnAsk->setPressedActionEnabled(true);
-	btnAsk->setTag(sticker->sticker_id);
 	btnAsk->addTouchEventListener(
 			[this, sticker](Ref *pSender,
 					Widget::TouchEventType type) {
@@ -339,19 +339,23 @@ void TradingScene::responseAfterGetStickersDataFromFirebase(string facebookId,
 void TradingScene::onKeyReleased(EventKeyboard::KeyCode keycode, Event* event) {
 
 	if (EventKeyboard::KeyCode::KEY_ESCAPE == keycode) {
-		auto *newScene = HomeScene::scene();
-		auto transition = TransitionFade::create(1.0, newScene);
-		Director *pDirector = Director::getInstance();
-		pDirector->replaceScene(transition);
+		if (backgroundLayer != nullptr && backgroundLayer->isVisible()) {
+			this->removeChild(backgroundLayer, false);
+			backgroundLayer = nullptr;
+			scrollview->setVisible(true);
+		} else {
+			CustomDirector *director =
+					(CustomDirector *) CustomDirector::getInstance();
+			director->popSceneWithTransitionFade(1);
+		}
 	}
 }
 void TradingScene::backToHome(Ref* pSender,
 		ui::Widget::TouchEventType eEventType) {
 	if (eEventType == ui::Widget::TouchEventType::ENDED) {
-		auto *newScene = HomeScene::scene();
-		auto transition = TransitionFade::create(1.0, newScene);
-		Director *pDirector = Director::getInstance();
-		pDirector->replaceScene(transition);
+		CustomDirector *director =
+				(CustomDirector *) CustomDirector::getInstance();
+		director->popSceneWithTransitionFade(1);
 	}
 }
 
