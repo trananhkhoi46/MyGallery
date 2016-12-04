@@ -57,6 +57,9 @@ bool TradingScene::init() {
 		return false;
 	}
 
+	//Add listener
+	FirebaseHandler::getInstance()->setFirebaseTradeFeatureDelegate(this);
+
 	parseAllStickers();
 	TTFConfig config(s_font, 120 * s_font_ratio);
 
@@ -158,6 +161,7 @@ void TradingScene::addAllStickersToScrollView() {
 						openStickerDetailLayer(StickerHelper::getStickerFromId(tag));
 					}});
 		scrollview->addChild(btnStickerScene);
+		vt_btn_stickers_of_user.push_back(btnStickerScene);
 
 		//Sticker detail sprite
 		Sprite* itemDetailSprite = Sprite::create(
@@ -310,8 +314,8 @@ void TradingScene::openStickerDetailLayer(Sticker* sticker) {
 					Widget::TouchEventType type) {
 				if (type == cocos2d::ui::Widget::TouchEventType::ENDED)
 				{
-					CCLog("bambi btnStickerScene->addTouchEventListener, tag: %d",sticker->sticker_id);
-					SocialPlugin::showToast("Touched on " + sticker->sticker_name + ", hasn't support this feature");
+					CCLog("bambi btnStickerScene->addTouchEventListener, tag: %d - userobjectId: %s",sticker->sticker_id, user->getObjectId().c_str());
+					FirebaseHandler::getInstance()->askTheStickerOfUer(sticker->sticker_id, user->getObjectId());
 				}});
 	backgroundLayer->addChild(btnAsk);
 
@@ -329,13 +333,48 @@ bool TradingScene::onTouchBegan(Touch* touch, Event* event) {
 	return true;
 }
 
-void TradingScene::responseAfterCheckFacebookIdExistOnFirebase() {
+void TradingScene::responseAfterAskingSticker(int stickerId, bool isSuccess) {
+	if (backgroundLayer != nullptr && backgroundLayer->isVisible()) {
+		this->removeChild(backgroundLayer, false);
+		backgroundLayer = nullptr;
+		scrollview->setVisible(true);
+	}
+
+	for (Button* button : vt_btn_stickers_of_user) {
+		if (button->getTag() == stickerId) {
+			button->removeAllChildren();
+			if (!isSuccess) {
+				//Show ask sprite if the current user doesn't have this sticker -> suggest to ask this sticker
+				if (!StickerHelper::isStickerHasAlreadyExisted(stickerId)) {
+					Sprite* stickerStick = Sprite::create(
+							s_tradescene_sprite_ask);
+					stickerStick->setAnchorPoint(Vec2::ANCHOR_TOP_LEFT);
+					stickerStick->setPosition(
+							Vec2(0, button->getContentSize().height));
+					button->addChild(stickerStick);
+
+					stickerStick->runAction(
+							RepeatForever::create(
+									Sequence::create(ScaleTo::create(0.5, 0.9),
+											ScaleTo::create(0.5, 1), nullptr)));
+				}
+			} else {
+				Sprite* stickerWait = Sprite::create(s_tradescene_sprite_wait);
+				stickerWait->setAnchorPoint(Vec2::ANCHOR_TOP_LEFT);
+				stickerWait->setPosition(
+						Vec2(0, button->getContentSize().height));
+				button->addChild(stickerWait);
+				stickerWait->runAction(
+						RepeatForever::create(
+								Sequence::create(ScaleTo::create(0.5, 0.9),
+										ScaleTo::create(0.5, 1), nullptr)));
+			}
+		}
+	}
+
+	SocialPlugin::showToast(isSuccess ? "Successfully" : "Failed");
 }
-void TradingScene::responseForQuerryTopFriend(vector<BUserInfor*> friendList) {
-}
-void TradingScene::responseAfterGetStickersDataFromFirebase(string facebookId,
-		string stickerData, string stickedData) {
-}
+
 void TradingScene::onKeyReleased(EventKeyboard::KeyCode keycode, Event* event) {
 
 	if (EventKeyboard::KeyCode::KEY_ESCAPE == keycode) {

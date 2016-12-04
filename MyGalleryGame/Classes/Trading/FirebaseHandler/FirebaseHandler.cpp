@@ -30,6 +30,54 @@ FirebaseHandler* FirebaseHandler::getInstance() {
 	}
 	return instance;
 }
+
+void FirebaseHandler::askTheStickerOfUer(int stickerId,
+		string objectIdOfUserWantToAsk) {
+	string url =
+			"https://gallerygame-fab40.firebaseio.com/json/users/"
+					+ objectIdOfUserWantToAsk
+					+ "/Pending_Request.json?auth=KKgD6eWhfoJC6KUCFwSwEGIJYzxkFAjnMOqNl6ir";
+
+	CCLog("bambi askTheStickerOfUer Firebase - stickerId: %d, url: %s",
+			stickerId, url.c_str());
+
+	//Request http
+	HttpRequest* request = new HttpRequest();
+	request->setUrl(url.c_str());
+	request->setRequestType(HttpRequest::Type::GET);
+	request->setResponseCallback([this, stickerId](HttpClient* client,
+			HttpResponse* response) {
+		CCLog("bambi askTheStickerOfUer on Firebase - responding: %s",
+				response->isSucceed() ? "success" : "failed");
+		if (response->isSucceed()) {
+			//Clear data (sometimes stranged characters be attached after the result)
+			std::vector<char> *buffer = response->getResponseData();
+			const char *data = reinterpret_cast<char *>(&(buffer->front()));
+			std::string clearData(data);
+			CCLog("bambi askTheStickerOfUer on Firebase callback: %s", clearData.c_str());
+
+			//Process data
+			if (clearData.length() > 5) { //Has data
+				string pendingRequest = clearData.substr(1, positionOfColon - 2);
+				CCLog("bambi pendingRequest: %s", pendingRequest.c_str());
+
+				if (_firebaseTradeFeatureDelegate != nullptr) {
+					_firebaseTradeFeatureDelegate->responseAfterAskingSticker(stickerId,
+							true);
+				}
+			} else
+			{
+				if (_firebaseTradeFeatureDelegate != nullptr) {
+					_firebaseTradeFeatureDelegate->responseAfterAskingSticker(stickerId,
+							false);
+				}
+			}
+		}
+	});
+	HttpClient::getInstance()->send(request);
+	request->release();
+}
+
 void FirebaseHandler::saveToMyStickedStickerList(string stickerIdString) {
 	CCLog("bambi saveToMyStickerList Firebase, getting my object id");
 	saveToMyStickedStickerList(
@@ -46,9 +94,7 @@ void FirebaseHandler::saveToMyStickedStickerList(string objectID,
 	CCLog("bambi saveToMyStickedStickerList Firebase - stickerId: %s, url: %s",
 			stickerIdString.c_str(), url.c_str());
 
-	string data = "\""
-			+ stickerIdString
-			+ "\"";
+	string data = "\"" + stickerIdString + "\"";
 	//Request http
 	HttpRequest* request = new HttpRequest();
 	request->setUrl(url.c_str());
@@ -87,9 +133,7 @@ void FirebaseHandler::saveToMyStickerList(string objectID,
 	CCLog("bambi saveToMyStickerList Firebase - stickerId: %s, url: %s",
 			stickerIdString.c_str(), url.c_str());
 
-	string data = "\""
-			+ stickerIdString
-			+ "\"";
+	string data = "\"" + stickerIdString + "\"";
 	//Request http
 	HttpRequest* request = new HttpRequest();
 	request->setUrl(url.c_str());
