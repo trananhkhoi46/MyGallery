@@ -454,7 +454,7 @@ void TradingScene::responseAfterAskingSticker(int stickerId, bool isSuccess) {
 				}
 			} else {
 				isDataChanged = true;
-
+				button->setEnabled(false);
 				Sprite* stickerWait = Sprite::create(s_tradescene_sprite_wait);
 				stickerWait->setAnchorPoint(Vec2::ANCHOR_TOP_LEFT);
 				stickerWait->setPosition(
