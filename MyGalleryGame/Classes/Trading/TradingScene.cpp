@@ -32,7 +32,17 @@ void TradingScene::parseAllStickers() {
 	vector<PendingRequest*> vtPendingRequest;
 	vector < string > listStringPendingRequest = CppUtils::splitStringByDelim(
 			user->getPendingRequest(), ',');
+	for (string pendingRequestString : listStringPendingRequest) {
+		PendingRequest* request = new PendingRequest();
+		vector < string > requestData = CppUtils::splitStringByDelim(
+				pendingRequestString, '#');
+		request->setObjectId(requestData.at(0));
+		request->setName(requestData.at(1));
+		request->setStickerId(requestData.at(2));
+		vtPendingRequest.push_back(request);
+	}
 
+	CCLog("bambi parseAllStickers, pending request size: %d", vtPendingRequest.size());
 	//Remove all sticked stickers from vector stickers & pending request
 	for (string record : splitAllStickerStrings) {
 		Sticker* sticker = StickerHelper::getStickerFromId(
@@ -50,9 +60,15 @@ void TradingScene::parseAllStickers() {
 				}
 			}
 			for (PendingRequest* request : vtPendingRequest) {
-				if (CppUtils::doubleToString(sticker->sticker_id)
-						== request->getStickerId()) {
+				CCLog(
+						"bambi parseAllStickers - pendingRequest loop - requestStickerId: %s",
+						request->getStickerId().c_str());
+				if (record == request->getStickerId()) {
+					CCLog(
+							"bambi parseAllStickers - pendingRequest loop - record == stickerId");
 					if (request->getObjectId() != loggedInUserObjectId) {
+						CCLog(
+								"bambi parseAllStickers - pendingRequest loop - record == stickerId - objectID != requestObjectId");
 						isRecordExistInStickedVector = true;
 						vtPendingRequest.erase(
 								std::remove(vtPendingRequest.begin(),
@@ -262,6 +278,7 @@ void TradingScene::addAllStickersToScrollView() {
 					RepeatForever::create(
 							Sequence::create(ScaleTo::create(0.5, 0.9),
 									ScaleTo::create(0.5, 1), nullptr)));
+			btnStickerScene->setEnabled(false);
 		} else {
 			//Show ask sprite if the current user doesn't have this sticker -> suggest to ask this sticker
 			if (!StickerHelper::isStickerHasAlreadyExisted(
