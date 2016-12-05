@@ -20,12 +20,20 @@ Scene* TradingScene::scene(BUserInfor* userInfor) {
 }
 
 void TradingScene::parseAllStickers() {
-	vector < string > splitAllStickerStrings = CppUtils::splitStringByDelim(
+	vector < string > vtSplitAllStickerStrings = CppUtils::splitStringByDelim(
 			user->getAllStickers(), ',');
+	set < string
+			> splitAllStickerStrings(vtSplitAllStickerStrings.begin(),
+					vtSplitAllStickerStrings.end());
 	vector < string > splitStickedStickerStrings = CppUtils::splitStringByDelim(
 			user->getStickedStickers(), ',');
+	string loggedInUserObjectId = UserDefault::getInstance()->getStringForKey(
+	KEY_WORLD_OJECTID);
+	vector<PendingRequest*> vtPendingRequest;
+	vector < string > listStringPendingRequest = CppUtils::splitStringByDelim(
+			user->getPendingRequest(), ',');
 
-	//Remove all sticked stickers from vector stickers
+	//Remove all sticked stickers from vector stickers & pending request
 	for (string record : splitAllStickerStrings) {
 		Sticker* sticker = StickerHelper::getStickerFromId(
 				CppUtils::stringToDouble(record));
@@ -41,6 +49,19 @@ void TradingScene::parseAllStickers() {
 							splitStickedStickerStrings.end());
 				}
 			}
+			for (PendingRequest* request : vtPendingRequest) {
+				if (CppUtils::doubleToString(sticker->sticker_id)
+						== request->getStickerId()) {
+					if (request->getObjectId() != loggedInUserObjectId) {
+						isRecordExistInStickedVector = true;
+						vtPendingRequest.erase(
+								std::remove(vtPendingRequest.begin(),
+										vtPendingRequest.end(), request),
+								vtPendingRequest.end());
+					}
+				}
+			}
+
 			if (!isRecordExistInStickedVector) {
 				vt_stickers_of_user.push_back(sticker);
 			}
@@ -60,6 +81,7 @@ bool TradingScene::init() {
 	//Add listener
 	FirebaseHandler::getInstance()->setFirebaseTradeFeatureDelegate(this);
 
+	isDataChanged = false;
 	parseAllStickers();
 	TTFConfig config(s_font, 120 * s_font_ratio);
 
@@ -133,11 +155,45 @@ void TradingScene::addAllStickersToScrollView() {
 	}
 	this->addChild(scrollview);
 
+	//Get pending requests
+	vector<PendingRequest*> vtPendingRequest;
+	vector < string > listStringPendingRequest = CppUtils::splitStringByDelim(
+			user->getPendingRequest(), ',');
+	for (string pendingRequestString : listStringPendingRequest) {
+		PendingRequest* request = new PendingRequest();
+		vector < string > requestData = CppUtils::splitStringByDelim(
+				pendingRequestString, '#');
+		request->setObjectId(requestData.at(0));
+		request->setName(requestData.at(1));
+		request->setStickerId(requestData.at(2));
+		vtPendingRequest.push_back(request);
+	}
+
 //Add sth to scroll view
+	string loggedInUserObjectId = UserDefault::getInstance()->getStringForKey(
+	KEY_WORLD_OJECTID);
+	if (loggedInUserObjectId == "") {
+		return;
+	}
 	float positionX = scrollview->leftPosition;
 	float positionY = scrollview->topPosition + 30;
 	for (int i = 0; i < numberOfItems; i++) {
 		Sticker* sticker = vt_stickers_of_user.at(i);
+
+		bool isStickerWaiting = false;
+		for (PendingRequest* request : vtPendingRequest) {
+			if (CppUtils::doubleToString(sticker->sticker_id)
+					== request->getStickerId()) {
+				if (request->getObjectId() == loggedInUserObjectId) {
+					isStickerWaiting = true;
+				}
+				vtPendingRequest.erase(
+						std::remove(vtPendingRequest.begin(),
+								vtPendingRequest.end(), request),
+						vtPendingRequest.end());
+				break;
+			}
+		}
 
 		//Add btn sticker
 		Button* btnStickerScene = Button::create(sticker->sticker_image);
@@ -196,18 +252,31 @@ void TradingScene::addAllStickersToScrollView() {
 		labelStickerQuantity->setColor(Color3B::BLACK);
 		itemDetailSprite->addChild(labelStickerQuantity);
 
-		//Show ask sprite if the current user doesn't have this sticker -> suggest to ask this sticker
-		if (!StickerHelper::isStickerHasAlreadyExisted(sticker->sticker_id)) {
-			Sprite* stickerStick = Sprite::create(s_tradescene_sprite_ask);
-			stickerStick->setAnchorPoint(Vec2::ANCHOR_TOP_LEFT);
-			stickerStick->setPosition(
+		if (isStickerWaiting) {
+			Sprite* stickerWait = Sprite::create(s_tradescene_sprite_wait);
+			stickerWait->setAnchorPoint(Vec2::ANCHOR_TOP_LEFT);
+			stickerWait->setPosition(
 					Vec2(0, btnStickerScene->getContentSize().height));
-			btnStickerScene->addChild(stickerStick);
-
-			stickerStick->runAction(
+			btnStickerScene->addChild(stickerWait);
+			stickerWait->runAction(
 					RepeatForever::create(
 							Sequence::create(ScaleTo::create(0.5, 0.9),
 									ScaleTo::create(0.5, 1), nullptr)));
+		} else {
+			//Show ask sprite if the current user doesn't have this sticker -> suggest to ask this sticker
+			if (!StickerHelper::isStickerHasAlreadyExisted(
+					sticker->sticker_id)) {
+				Sprite* stickerStick = Sprite::create(s_tradescene_sprite_ask);
+				stickerStick->setAnchorPoint(Vec2::ANCHOR_TOP_LEFT);
+				stickerStick->setPosition(
+						Vec2(0, btnStickerScene->getContentSize().height));
+				btnStickerScene->addChild(stickerStick);
+
+				stickerStick->runAction(
+						RepeatForever::create(
+								Sequence::create(ScaleTo::create(0.5, 0.9),
+										ScaleTo::create(0.5, 1), nullptr)));
+			}
 		}
 
 		if (i % 2 == 1) {
@@ -341,6 +410,7 @@ void TradingScene::responseAfterCheckingGivenSticker(
 
 }
 void TradingScene::responseAfterAskingSticker(int stickerId, bool isSuccess) {
+	CCLog("bambi responseAfterAskingSticker");
 	if (backgroundLayer != nullptr && backgroundLayer->isVisible()) {
 		this->removeChild(backgroundLayer, false);
 		backgroundLayer = nullptr;
@@ -366,6 +436,8 @@ void TradingScene::responseAfterAskingSticker(int stickerId, bool isSuccess) {
 											ScaleTo::create(0.5, 1), nullptr)));
 				}
 			} else {
+				isDataChanged = true;
+
 				Sprite* stickerWait = Sprite::create(s_tradescene_sprite_wait);
 				stickerWait->setAnchorPoint(Vec2::ANCHOR_TOP_LEFT);
 				stickerWait->setPosition(
@@ -376,6 +448,7 @@ void TradingScene::responseAfterAskingSticker(int stickerId, bool isSuccess) {
 								Sequence::create(ScaleTo::create(0.5, 0.9),
 										ScaleTo::create(0.5, 1), nullptr)));
 			}
+			break;
 		}
 	}
 
@@ -390,18 +463,32 @@ void TradingScene::onKeyReleased(EventKeyboard::KeyCode keycode, Event* event) {
 			backgroundLayer = nullptr;
 			scrollview->setVisible(true);
 		} else {
-			CustomDirector *director =
-					(CustomDirector *) CustomDirector::getInstance();
-			director->popSceneWithTransitionFade(1);
+			if (isDataChanged) {
+				auto *newScene = HomeScene::scene();
+				auto transition = TransitionFade::create(1.0, newScene);
+				Director *pDirector = Director::getInstance();
+				pDirector->replaceScene(transition);
+			} else {
+				CustomDirector *director =
+						(CustomDirector *) CustomDirector::getInstance();
+				director->popSceneWithTransitionFade(1);
+			}
 		}
 	}
 }
 void TradingScene::backToHome(Ref* pSender,
 		ui::Widget::TouchEventType eEventType) {
 	if (eEventType == ui::Widget::TouchEventType::ENDED) {
-		CustomDirector *director =
-				(CustomDirector *) CustomDirector::getInstance();
-		director->popSceneWithTransitionFade(1);
+		if (isDataChanged) {
+			auto *newScene = HomeScene::scene();
+			auto transition = TransitionFade::create(1.0, newScene);
+			Director *pDirector = Director::getInstance();
+			pDirector->replaceScene(transition);
+		} else {
+			CustomDirector *director =
+					(CustomDirector *) CustomDirector::getInstance();
+			director->popSceneWithTransitionFade(1);
+		}
 	}
 }
 

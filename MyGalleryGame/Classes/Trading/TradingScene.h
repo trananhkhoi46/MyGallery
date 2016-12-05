@@ -23,6 +23,7 @@ public:
 	BScrollView* scrollview;
 	vector<Sticker*> vt_stickers_of_user;
 	vector<Button*> vt_btn_stickers_of_user;
+	bool isDataChanged;
 
 	//Responsed function
 	virtual void responseAfterAskingSticker(int stickerId, bool isSuccess); //From FirebaseTradeFeatureDelegate

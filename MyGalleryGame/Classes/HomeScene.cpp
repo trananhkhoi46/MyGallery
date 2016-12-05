@@ -1090,8 +1090,8 @@ void HomeScene::responseAfterCheckingGivenSticker(
 	for (PendingRequest* request : vtGivenStickers) {
 		CCLog(
 				"bambi responseAfterCheckingGivenSticker, object id: %s - name: %s - stickerId: %s",
-				request->getObjectId(), request->getName(),
-				request->getStickerId());
+				request->getObjectId().c_str(), request->getName().c_str(),
+				request->getStickerId().c_str());
 	}
 }
 void HomeScene::responseAfterCheckingPendingRequest(
@@ -1099,8 +1099,8 @@ void HomeScene::responseAfterCheckingPendingRequest(
 	for (PendingRequest* request : vtPendingRequest) {
 		CCLog(
 				"bambi responseAfterCheckingPendingRequest, object id: %s - name: %s - stickerId: %s",
-				request->getObjectId(), request->getName(),
-				request->getStickerId());
+				request->getObjectId().c_str(), request->getName().c_str(),
+				request->getStickerId().c_str());
 	}
 }
 

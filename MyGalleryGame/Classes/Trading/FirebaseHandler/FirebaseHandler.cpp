@@ -38,14 +38,13 @@ void FirebaseHandler::checkPendingRequest() {
 					KEY_WORLD_OJECTID)
 					+ "/Pending_Request.json?auth=KKgD6eWhfoJC6KUCFwSwEGIJYzxkFAjnMOqNl6ir";
 
-	CCLog("bambi checkPendingRequest Firebase - stickerId: %d, url: %s",
-			stickerId, url.c_str());
+	CCLog("bambi checkPendingRequest Firebase - url: %s", url.c_str());
 
 	//Request http
 	HttpRequest* request = new HttpRequest();
 	request->setUrl(url.c_str());
 	request->setRequestType(HttpRequest::Type::GET);
-	request->setResponseCallback([this, stickerId, user](HttpClient* client,
+	request->setResponseCallback([this](HttpClient* client,
 			HttpResponse* response) {
 		CCLog("bambi checkPendingRequest on Firebase 1 - responding: %s",
 				response->isSucceed() ? "success" : "failed");
@@ -58,13 +57,14 @@ void FirebaseHandler::checkPendingRequest() {
 
 			//Process data
 			if (clearData.length() > 5) { //Has data
-				string pendingRequest = clearData.substr(1, positionOfColon - 2);
+				string pendingRequest = clearData.substr(1, clearData.length() - 2);
 				CCLog("bambi checkPendingRequest: %s", pendingRequest.c_str());
 
 				vector<PendingRequest*> vtPendingRequest;
 				vector<string> listStringPendingRequest = CppUtils::splitStringByDelim(pendingRequest,',');
 				for(string pendingRequestString : listStringPendingRequest)
 				{
+					CCLog("bambi checkPendingRequest after splitting: %s", pendingRequestString.c_str());
 					PendingRequest* request = new PendingRequest();
 					vector<string> requestData = CppUtils::splitStringByDelim(pendingRequest, '#');
 					request->setObjectId(requestData.at(0));
@@ -92,14 +92,13 @@ void FirebaseHandler::checkGivenStickers() {
 					KEY_WORLD_OJECTID)
 					+ "/Given_Stickers.json?auth=KKgD6eWhfoJC6KUCFwSwEGIJYzxkFAjnMOqNl6ir";
 
-	CCLog("bambi checkGivenStickers Firebase - stickerId: %d, url: %s",
-			stickerId, url.c_str());
+	CCLog("bambi checkGivenStickers Firebase - url: %s", url.c_str());
 
 	//Request http
 	HttpRequest* request = new HttpRequest();
 	request->setUrl(url.c_str());
 	request->setRequestType(HttpRequest::Type::GET);
-	request->setResponseCallback([this, stickerId, user](HttpClient* client,
+	request->setResponseCallback([this](HttpClient* client,
 			HttpResponse* response) {
 		CCLog("bambi checkGivenStickers on Firebase 1 - responding: %s",
 				response->isSucceed() ? "success" : "failed");
@@ -112,7 +111,7 @@ void FirebaseHandler::checkGivenStickers() {
 
 			//Process data
 			if (clearData.length() > 5) { //Has data
-				string pendingRequest = clearData.substr(1, positionOfColon - 2);
+				string pendingRequest = clearData.substr(1, clearData.length() - 2);
 				CCLog("bambi checkGivenStickers: %s", pendingRequest.c_str());
 
 				vector<PendingRequest*> vtPendingRequest;
@@ -144,9 +143,6 @@ void FirebaseHandler::askTheStickerOfUer(int stickerId, BUserInfor* user) {
 					+ user->getObjectId()
 					+ "/Pending_Request.json?auth=KKgD6eWhfoJC6KUCFwSwEGIJYzxkFAjnMOqNl6ir";
 
-	CCLog("bambi askTheStickerOfUer Firebase - stickerId: %d, url: %s",
-			stickerId, url.c_str());
-
 	//Request http
 	HttpRequest* request = new HttpRequest();
 	request->setUrl(url.c_str());
@@ -163,54 +159,55 @@ void FirebaseHandler::askTheStickerOfUer(int stickerId, BUserInfor* user) {
 			CCLog("bambi askTheStickerOfUer on Firebase callback: %s", clearData.c_str());
 
 			//Process data
-			if (clearData.length() > 5) { //Has data
-				string pendingRequest = clearData.substr(1, positionOfColon - 2);
-				CCLog("bambi pendingRequest: %s", pendingRequest.c_str());
+			string pendingRequest = clearData.substr(1, clearData.length() - 2);
+			CCLog("bambi pendingRequest: %s", pendingRequest.c_str());
 
-				//Then add a new pending request to the string and put it to server
-				string url =
-				"https://gallerygame-fab40.firebaseio.com/json/users/" + user->getObjectId()
-				+ "/Pending_Request.json?auth=KKgD6eWhfoJC6KUCFwSwEGIJYzxkFAjnMOqNl6ir";
+			//Then add a new pending request to the string and put it to server
+			string url =
+			"https://gallerygame-fab40.firebaseio.com/json/users/" + user->getObjectId()
+			+ "/Pending_Request.json?auth=KKgD6eWhfoJC6KUCFwSwEGIJYzxkFAjnMOqNl6ir";
 
-				string data = pendingRequest+",\"" +user->getObjectId()+ "#"+user->getName()+"#"+stickerIdString + "\"";
-				//Request http
-				HttpRequest* request = new HttpRequest();
-				request->setUrl(url.c_str());
-				request->setRequestType(HttpRequest::Type::PUT);
-				request->setRequestData(data.c_str(), data.length());
-				request->setResponseCallback([this](HttpClient* client,
-								HttpResponse* response) {
-							CCLog("bambi askTheStickerOfUer on Firebase 2 - responding: %s",
-									response->isSucceed() ? "success" : "failed");
-							if (response->isSucceed()) {
-								//Clear data (sometimes stranged characters be attached after the result)
-								std::vector<char> *buffer = response->getResponseData();
-								const char *data = reinterpret_cast<char *>(&(buffer->front()));
-								std::string clearData(data);
-								size_t pos = clearData.rfind("}");
-								clearData = clearData.substr(0, pos + 1);
-								CCLog("bambi askTheStickerOfUer on Firebase callback: %s", clearData.c_str());
+			CCLog("bambi askTheStickerOfUer Firebase 2 - stickerId: %d, url: %s",
+					stickerId, url.c_str());
 
-								if (_firebaseTradeFeatureDelegate != nullptr) {
-									_firebaseTradeFeatureDelegate->responseAfterAskingSticker(stickerId,
-											true);
-								}
-							} else {
-								if (_firebaseTradeFeatureDelegate != nullptr) {
-									_firebaseTradeFeatureDelegate->responseAfterAskingSticker(stickerId,
-											false);
-								}
-							}
-						});
-				HttpClient::getInstance()->send(request);
-				request->release();
+			string dataString;
+			string loggedInUserObjectID = UserDefault::getInstance()->getStringForKey(KEY_WORLD_OJECTID);
+			if(pendingRequest == "")
+			{
+				dataString = "\""+loggedInUserObjectID+ "#"+user->getName()+"#"+CppUtils::doubleToString(stickerId) + "\"";
 			} else
 			{
-				if (_firebaseTradeFeatureDelegate != nullptr) {
-					_firebaseTradeFeatureDelegate->responseAfterAskingSticker(stickerId,
-							false);
-				}
+				dataString = "\""+pendingRequest+"," +loggedInUserObjectID+ "#"+user->getName()+"#"+CppUtils::doubleToString(stickerId) + "\"";
 			}
+			//Request http
+			HttpRequest* request = new HttpRequest();
+			request->setUrl(url.c_str());
+			request->setRequestType(HttpRequest::Type::PUT);
+			request->setRequestData(dataString.c_str(), dataString.length());
+			request->setResponseCallback([this, stickerId](HttpClient* client,
+							HttpResponse* response) {
+						CCLog("bambi askTheStickerOfUer on Firebase 2 - responding: %s",
+								response->isSucceed() ? "success" : "failed");
+						if (response->isSucceed()) {
+							//Clear data (sometimes stranged characters be attached after the result)
+							std::vector<char> *buffer = response->getResponseData();
+							const char *data = reinterpret_cast<char *>(&(buffer->front()));
+							std::string clearData(data);
+							CCLog("bambi askTheStickerOfUer on Firebase 2 callback: %s", clearData.c_str());
+
+							if (_firebaseTradeFeatureDelegate != nullptr) {
+								_firebaseTradeFeatureDelegate->responseAfterAskingSticker(stickerId,
+										true);
+							}
+						} else {
+							if (_firebaseTradeFeatureDelegate != nullptr) {
+								_firebaseTradeFeatureDelegate->responseAfterAskingSticker(stickerId,
+										false);
+							}
+						}
+					});
+			HttpClient::getInstance()->send(request);
+			request->release();
 		}
 	});
 	HttpClient::getInstance()->send(request);
@@ -501,6 +498,8 @@ void FirebaseHandler::callBackFetchFriendsFromFirebase(HttpClient* client,
 						document[itr->name.GetString()][KEY_WORLD_ALL_STICKERS].GetString());
 				user->setStickedStickers(
 						document[itr->name.GetString()][KEY_WORLD_STICKED_STICKERS].GetString());
+				user->setPendingRequest(
+						document[itr->name.GetString()][KEY_WORLD_PENDING_REQUEST].GetString());
 				user->setObjectId(itr->name.GetString());
 				_friendList.push_back(user);
 			}
