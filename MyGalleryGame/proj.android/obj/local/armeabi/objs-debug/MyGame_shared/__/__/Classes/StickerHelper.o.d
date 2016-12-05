@@ -397,6 +397,7 @@ obj/local/armeabi/objs-debug/MyGame_shared/__/__/Classes/StickerHelper.o: \
  /Users/Kskull/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/../cocos2d/external/flatbuffers/../json/document.h \
  /Users/Kskull/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/../cocos2d/external/flatbuffers/../json/reader.h \
  jni/../../Classes/Trading/FirebaseHandler/../Model/../BLeaderBoardContanst.h \
+ jni/../../Classes/Trading/FirebaseHandler/../Model/PendingRequest.h \
  jni/../../Classes/Trading/FirebaseHandler/../FacebookHandler/FacebookHandler.h \
  /Users/Kskull/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/../cocos2d/extensions/../cocos/ui/CocosGUI.h \
  /Users/Kskull/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/../cocos2d/cocos/3d/../ui/UIWidget.h \
@@ -1250,6 +1251,8 @@ jni/../../Classes/Trading/FirebaseHandler/../Model/BUserInfor.h:
 /Users/Kskull/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/../cocos2d/external/flatbuffers/../json/reader.h:
 
 jni/../../Classes/Trading/FirebaseHandler/../Model/../BLeaderBoardContanst.h:
+
+jni/../../Classes/Trading/FirebaseHandler/../Model/PendingRequest.h:
 
 jni/../../Classes/Trading/FirebaseHandler/../FacebookHandler/FacebookHandler.h:
 

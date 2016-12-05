@@ -49,6 +49,7 @@ bool HomeScene::init() {
 
 	//Set delegate to get response from FacebookHandler and FirebaseHandler
 	FirebaseHandler::getInstance()->setFirebaseDelegate(this);
+	FirebaseHandler::getInstance()->setFirebaseTradeFeatureDelegate(this);
 	FacebookHandler::getInstance()->setFacebookConnectDelegate(this);
 
 	//Show ads
@@ -107,7 +108,6 @@ bool HomeScene::init() {
 //							loadingSprite_child->setVisible(false);
 			isRequestDone = true;
 		}
-
 	});
 	this->runAction(Sequence::create(DelayTime::create(0.5f), func, nullptr));
 
@@ -1041,6 +1041,10 @@ void HomeScene::responseForQuerryTopFriend(vector<BUserInfor*> friendList) {
 
 void HomeScene::responseAfterGetStickersDataFromFirebase(string facebookId,
 		string stickerData, string stickedStickerData) {
+	//TODO get pending request from server here
+	FirebaseHandler::getInstance()->checkPendingRequest(); //responseAfterCheckingPendingRequest will be called
+	FirebaseHandler::getInstance()->checkGivenStickers(); //responseAfterCheckingGivenSticker will be called
+
 	CCLog(
 			"bambi HomeScene responseAfterGetStickersDataFromFirebase - facebookID: %s, stickerData: %s",
 			facebookId.c_str(), stickerData.c_str());
@@ -1074,6 +1078,29 @@ void HomeScene::responseAfterGetStickersDataFromFirebase(string facebookId,
 						STICKED_STICKER));
 			}
 		}
+	}
+}
+
+void HomeScene::responseAfterAskingSticker(int stickerId, bool isSuccess) {
+	//Required null
+}
+
+void HomeScene::responseAfterCheckingGivenSticker(
+		vector<PendingRequest*> vtGivenStickers) {
+	for (PendingRequest* request : vtGivenStickers) {
+		CCLog(
+				"bambi responseAfterCheckingGivenSticker, object id: %s - name: %s - stickerId: %s",
+				request->getObjectId(), request->getName(),
+				request->getStickerId());
+	}
+}
+void HomeScene::responseAfterCheckingPendingRequest(
+		vector<PendingRequest*> vtPendingRequest) {
+	for (PendingRequest* request : vtPendingRequest) {
+		CCLog(
+				"bambi responseAfterCheckingPendingRequest, object id: %s - name: %s - stickerId: %s",
+				request->getObjectId(), request->getName(),
+				request->getStickerId());
 	}
 }
 

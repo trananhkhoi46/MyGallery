@@ -393,6 +393,7 @@ obj/local/armeabi/objs-debug/MyGame_shared/__/__/Classes/Trading/FirebaseHandler
  /Users/Kskull/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/../cocos2d/cocos/3d/../platform/android/CCApplication-android.h \
  /Users/Kskull/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/../cocos2d/cocos/3d/../renderer/CCGLProgramCache.h \
  /Users/Kskull/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/../cocos2d/cocos/3d/../renderer/ccGLStateCache.h \
+ jni/../../Classes/Trading/FirebaseHandler/../Model/PendingRequest.h \
  jni/../../Classes/Trading/FirebaseHandler/../FacebookHandler/FacebookHandler.h \
  /Users/Kskull/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/../cocos2d/extensions/../cocos/ui/CocosGUI.h \
  /Users/Kskull/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/../cocos2d/cocos/3d/../ui/UIWidget.h \
@@ -1240,6 +1241,8 @@ jni/../../Classes/Trading/FirebaseHandler/../Model/../BLeaderBoardContanst.h:
 /Users/Kskull/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/../cocos2d/cocos/3d/../renderer/CCGLProgramCache.h:
 
 /Users/Kskull/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/../cocos2d/cocos/3d/../renderer/ccGLStateCache.h:
+
+jni/../../Classes/Trading/FirebaseHandler/../Model/PendingRequest.h:
 
 jni/../../Classes/Trading/FirebaseHandler/../FacebookHandler/FacebookHandler.h:
 

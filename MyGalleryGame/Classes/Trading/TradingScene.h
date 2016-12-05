@@ -25,6 +25,10 @@ public:
 	vector<Button*> vt_btn_stickers_of_user;
 
 	//Responsed function
-	virtual void  responseAfterAskingSticker(int stickerId, bool isSuccess); //From FirebaseHandler
+	virtual void responseAfterAskingSticker(int stickerId, bool isSuccess); //From FirebaseTradeFeatureDelegate
+	virtual void responseAfterCheckingPendingRequest(
+			vector<PendingRequest*> vtPendingRequest); //From FirebaseTradeFeatureDelegate
+	virtual void responseAfterCheckingGivenSticker(
+				vector<PendingRequest*> vtGivenStickers); //From FirebaseTradeFeatureDelegate
 };
 #endif

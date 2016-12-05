@@ -443,6 +443,8 @@ obj/local/armeabi/objs-debug/MyGame_shared/__/__/Classes/Trading/FacebookHandler
  jni/../../Classes/Trading/FacebookHandler/../FirebaseHandler/FirebaseHandler.h \
  /Users/Kskull/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/../cocos2d/extensions/../cocos/network/HttpResponse.h \
  jni/../../Classes/Trading/FacebookHandler/../FirebaseHandler/../Model/BUserInfor.h \
+ jni/../../Classes/Trading/FacebookHandler/../FirebaseHandler/../Model/PendingRequest.h \
+ jni/../../Classes/Trading/FacebookHandler/../FirebaseHandler/../Model/../BLeaderBoardContanst.h \
  jni/../../Classes/Trading/FacebookHandler/../FirebaseHandler/../FacebookHandler/FacebookHandler.h \
  jni/../../Classes/Trading/FacebookHandler/../FirebaseHandler/../../Constants.h \
  jni/../../Classes/Trading/FacebookHandler/../FirebaseHandler/../../Resources.h \
@@ -1343,6 +1345,10 @@ jni/../../Classes/Trading/FacebookHandler/../FirebaseHandler/FirebaseHandler.h:
 /Users/Kskull/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/../cocos2d/extensions/../cocos/network/HttpResponse.h:
 
 jni/../../Classes/Trading/FacebookHandler/../FirebaseHandler/../Model/BUserInfor.h:
+
+jni/../../Classes/Trading/FacebookHandler/../FirebaseHandler/../Model/PendingRequest.h:
+
+jni/../../Classes/Trading/FacebookHandler/../FirebaseHandler/../Model/../BLeaderBoardContanst.h:
 
 jni/../../Classes/Trading/FacebookHandler/../FirebaseHandler/../FacebookHandler/FacebookHandler.h:
 

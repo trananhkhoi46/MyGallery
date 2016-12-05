@@ -3,9 +3,10 @@
 
 #include "BaseScene.h"
 
-
-
-class HomeScene: public BaseScene, FacebookConnectDelegate, FirebaseDelegate{
+class HomeScene: public BaseScene,
+		FacebookConnectDelegate,
+		FirebaseDelegate,
+		FirebaseTradeFeatureDelegate {
 private:
 	static HomeScene* instance;
 public:
@@ -13,8 +14,7 @@ public:
 	// Here's a difference. Method 'init' in cocos2d-x returns bool, instead of returning 'id' in cocos2d-iphone
 	virtual bool init();
 	static cocos2d::Scene* scene();
-	static HomeScene* getInstance();
-	CREATE_FUNC(HomeScene)
+	static HomeScene* getInstance();CREATE_FUNC(HomeScene)
 
 	void onKeyReleased(EventKeyboard::KeyCode keycode, Event* event);
 	bool onTouchBegan(Touch* touch, Event* event);
@@ -24,7 +24,7 @@ public:
 	void friendButtonCallback(Ref* pSender,
 			ui::Widget::TouchEventType eEventType);
 	void facebookConnectButtonCallback(Ref* pSender,
-				ui::Widget::TouchEventType eEventType);
+			ui::Widget::TouchEventType eEventType);
 	void tradeButtonCallback(Ref* pSender,
 			ui::Widget::TouchEventType eEventType);
 	void settingButtonsCallback(Ref* pSender,
@@ -91,9 +91,15 @@ public:
 	//FacebookConnectDelegate response
 	virtual void responseWhenLoginOrLogoutFacebook();
 	//FirebaseDelegate response
-    virtual void responseForQuerryTopFriend(vector<BUserInfor*> friendList);
-    virtual void responseAfterCheckFacebookIdExistOnFirebase();
-    virtual void responseAfterGetStickersDataFromFirebase(string facebookId, string stickerData, string stickedData);
+	virtual void responseForQuerryTopFriend(vector<BUserInfor*> friendList);
+	virtual void responseAfterCheckFacebookIdExistOnFirebase();
+	virtual void responseAfterGetStickersDataFromFirebase(string facebookId,
+			string stickerData, string stickedData);
+	virtual void responseAfterAskingSticker(int stickerId, bool isSuccess); //From FirebaseTradeFeatureDelegate
+	virtual void responseAfterCheckingPendingRequest(
+			vector<PendingRequest*> vtPendingRequest); //From FirebaseTradeFeatureDelegate
+	virtual void responseAfterCheckingGivenSticker(
+				vector<PendingRequest*> vtGivenStickers); //From FirebaseTradeFeatureDelegate
 };
 
 #endif // __HOME_SCENE_H__

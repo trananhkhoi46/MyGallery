@@ -25,6 +25,8 @@ using namespace std;
 #define THIS_GAME_NAME "SpringNinja"
 #define KEY_WORLD_ALL_STICKERS "All_Stickers"
 #define KEY_WORLD_STICKED_STICKERS "Sticked_Stickers"
+#define KEY_WORLD_PENDING_REQUEST "Pending_Request"
+#define KEY_WORLD_GIVEN_STICKERS "Given_Stickers"
 
 //Key for Parse
 static const string appID =

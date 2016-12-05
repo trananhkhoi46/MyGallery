@@ -3,6 +3,7 @@
 #include <cocos/network/HttpClient.h>
 #include <cocos/network/HttpResponse.h>
 #include "../Model/BUserInfor.h"
+#include "../Model/PendingRequest.h"
 #include "../FacebookHandler/FacebookHandler.h"
 #include "../../Constants.h"
 #include "../../Resources.h"
@@ -46,6 +47,17 @@ public:
 	}
 	;
 
+	virtual void responseAfterCheckingPendingRequest(
+			vector<PendingRequest*> vtPendingRequest) {
+
+	}
+	;
+
+	virtual void responseAfterCheckingGivenSticker(
+			vector<PendingRequest*> vtGivenStickers) {
+
+	}
+	;
 };
 
 class FirebaseHandler: public FacebookDelegate {
@@ -82,6 +94,10 @@ public:
 
 	void saveToMyStickerList(string objectID, string stickerIdString);
 
+	void checkPendingRequest();
+
+	void checkGivenStickers();
+
 	void getStickersDataFromFirebase();
 	void getStickersDataFromFirebase(string objectID);
 
@@ -89,7 +105,7 @@ public:
 	void getProbability(string url, vector<string> probabilityKeys,
 			STICKER_RARITY rarity);
 
-	void askTheStickerOfUer(int stickerId, string objectIdOfUserWantToAsk);
+	void askTheStickerOfUer(int stickerId, BUserInfor* user);
 
 	void submitScore(int score);
 	void fetchScoreFromServer();

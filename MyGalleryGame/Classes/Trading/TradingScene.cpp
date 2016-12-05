@@ -315,7 +315,7 @@ void TradingScene::openStickerDetailLayer(Sticker* sticker) {
 				if (type == cocos2d::ui::Widget::TouchEventType::ENDED)
 				{
 					CCLog("bambi btnStickerScene->addTouchEventListener, tag: %d - userobjectId: %s",sticker->sticker_id, user->getObjectId().c_str());
-					FirebaseHandler::getInstance()->askTheStickerOfUer(sticker->sticker_id, user->getObjectId());
+					FirebaseHandler::getInstance()->askTheStickerOfUer(sticker->sticker_id, user);
 				}});
 	backgroundLayer->addChild(btnAsk);
 
@@ -332,7 +332,14 @@ bool TradingScene::onTouchBegan(Touch* touch, Event* event) {
 	}
 	return true;
 }
+void TradingScene::responseAfterCheckingPendingRequest(
+		vector<PendingRequest*> vtPendingRequest) {
 
+}
+void TradingScene::responseAfterCheckingGivenSticker(
+		vector<PendingRequest*> vtGivenStickers) {
+
+}
 void TradingScene::responseAfterAskingSticker(int stickerId, bool isSuccess) {
 	if (backgroundLayer != nullptr && backgroundLayer->isVisible()) {
 		this->removeChild(backgroundLayer, false);
