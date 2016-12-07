@@ -883,7 +883,7 @@ void HomeScene::addElementsToTradeLayer() {
 	BLabel* labelPendingNumber =
 			BLabel::createWithTTF(labelConfig,
 					String::createWithFormat("%d",
-							vtPendingRequest.size() + vtGivenSticker.size())->getCString(),
+							(vtPendingRequest.size() + vtGivenSticker.size()))->getCString(),
 					TextHAlignment::CENTER);
 	labelPendingNumber->setPosition(
 			Vec2(80, tradeLayer->getContentSize().height - 240));
@@ -992,7 +992,7 @@ void HomeScene::addElementsToTradeLayer() {
 								});
 						this->runAction(Sequence::create(DelayTime::create(1), func, nullptr));
 
-						FirebaseHandler::getInstance()->acceptSendingSticker(pendingRequest);
+						FirebaseHandler::getInstance()->acceptSendingSticker(vtPendingRequest, pendingRequest);
 					}});
 		btnAcceptRequest->setTag(kTagTradeLayerElements);
 		tradeLayer->addChild(btnAcceptRequest);
@@ -1017,7 +1017,7 @@ void HomeScene::addElementsToTradeLayer() {
 								});
 						this->runAction(Sequence::create(DelayTime::create(1), func, nullptr));
 
-						FirebaseHandler::getInstance()->denySendingSticker(pendingRequest);
+						FirebaseHandler::getInstance()->denySendingSticker(vtPendingRequest, pendingRequest);
 					}});
 		btnDenyRequest->setTag(kTagTradeLayerElements);
 		tradeLayer->addChild(btnDenyRequest);
@@ -1106,11 +1106,7 @@ void HomeScene::addElementsToTradeLayer() {
 
 		//Add btn accept request
 		Button* btnAcceptRequest = Button::create(s_homescene_btn_ok);
-		btnAcceptRequest->setPosition(
-				Vec2(
-						winSize.width / 2
-								- btnAcceptRequest->getContentSize().width / 2,
-						350));
+		btnAcceptRequest->setPosition(Vec2(winSize.width / 2, 350));
 		btnAcceptRequest->setTouchEnabled(true);
 		btnAcceptRequest->setPressedActionEnabled(true);
 		btnAcceptRequest->addTouchEventListener(
@@ -1124,7 +1120,7 @@ void HomeScene::addElementsToTradeLayer() {
 								});
 						this->runAction(Sequence::create(DelayTime::create(1), func, nullptr));
 
-						FirebaseHandler::getInstance()->acceptReceivingSticker(pendingRequest);
+						FirebaseHandler::getInstance()->acceptReceivingSticker(vtGivenSticker, pendingRequest);
 					}});
 		btnAcceptRequest->setTag(kTagTradeLayerElements);
 		tradeLayer->addChild(btnAcceptRequest);
@@ -1136,6 +1132,30 @@ void HomeScene::addElementsToTradeLayer() {
 
 //---------------------------------------------------------------------End of game logic methods
 //---------------------------------------------------------------------Callback methods
+
+void HomeScene::responseAfterDenyingRequest(bool isSuccess) {
+	CCLog(
+			isSuccess ?
+					"HomeScene -> responseAfterDenyingRequest -> success" :
+					"HomeScene -> responseAfterDenyingRequest -> failed");
+	if(isSuccess)
+	{
+		closeTradeLayer();
+	}
+}
+
+void HomeScene::responseAfterAcceptingRequest(bool isSuccess) {
+	CCLog(
+			isSuccess ?
+					"HomeScene -> responseAfterAcceptingRequest -> success" :
+					"HomeScene -> responseAfterDenyingRequest -> failed");
+
+	if(isSuccess)
+	{
+		closeTradeLayer();
+	}
+}
+
 void HomeScene::packetButtonsCallback(Ref* pSender,
 		ui::Widget::TouchEventType eEventType) {
 	if (eEventType == ui::Widget::TouchEventType::BEGAN

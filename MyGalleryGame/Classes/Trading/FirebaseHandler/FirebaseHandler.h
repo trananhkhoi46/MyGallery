@@ -47,6 +47,16 @@ public:
 	}
 	;
 
+	virtual void responseAfterDenyingRequest(bool isSuccess) {
+
+	}
+	;
+
+	virtual void responseAfterAcceptingRequest(bool isSuccess) {
+
+	}
+	;
+
 	virtual void responseAfterCheckingPendingRequest(
 			vector<PendingRequest*> vtPendingRequest) {
 
@@ -101,11 +111,14 @@ public:
 	void getStickersDataFromFirebase();
 	void getStickersDataFromFirebase(string objectID);
 
-	void acceptSendingSticker(PendingRequest* request);
+	void acceptSendingSticker(vector<PendingRequest*> vtPendingRequest,
+			PendingRequest* request);
 
-	void denySendingSticker(PendingRequest* request);
+	void denySendingSticker(vector<PendingRequest*> vtPendingRequest,
+			PendingRequest* request);
 
-	void acceptReceivingSticker(PendingRequest* request);
+	void acceptReceivingSticker(vector<PendingRequest*> vtPendingRequest,
+			PendingRequest* request);
 
 	void getProbabilityFreePacket();
 	void getProbability(string url, vector<string> probabilityKeys,

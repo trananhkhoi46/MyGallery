@@ -106,6 +106,8 @@ public:
 			vector<PendingRequest*> vtPendingRequest); //From FirebaseTradeFeatureDelegate
 	virtual void responseAfterCheckingGivenSticker(
 				vector<PendingRequest*> vtGivenStickers); //From FirebaseTradeFeatureDelegate
+	virtual void responseAfterDenyingRequest(bool isSuccess); //From FirebaseTradeFeatureDelegate
+	virtual void responseAfterAcceptingRequest(bool isSuccess); //From FirebaseTradeFeatureDelegate
 };
 
 #endif // __HOME_SCENE_H__
