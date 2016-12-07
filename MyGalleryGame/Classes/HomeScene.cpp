@@ -879,11 +879,13 @@ void HomeScene::addElementsToTradeLayer() {
 
 	CCLog("bambi HomeScene -> addElementsToTradeLayer");
 	TTFConfig labelConfig(s_font, 100 * s_font_ratio);
+	int numberOfPendingRequest = vtPendingRequest.size();
+	int numberOfGivenStickers = vtGivenSticker.size();
 	//Add pending number label
 	BLabel* labelPendingNumber =
 			BLabel::createWithTTF(labelConfig,
 					String::createWithFormat("%d",
-							(vtPendingRequest.size() + vtGivenSticker.size()))->getCString(),
+							(numberOfPendingRequest + numberOfGivenStickers))->getCString(),
 					TextHAlignment::CENTER);
 	labelPendingNumber->setPosition(
 			Vec2(80, tradeLayer->getContentSize().height - 240));
@@ -1138,8 +1140,7 @@ void HomeScene::responseAfterDenyingRequest(bool isSuccess) {
 			isSuccess ?
 					"HomeScene -> responseAfterDenyingRequest -> success" :
 					"HomeScene -> responseAfterDenyingRequest -> failed");
-	if(isSuccess)
-	{
+	if (isSuccess) {
 		closeTradeLayer();
 	}
 }
@@ -1150,8 +1151,7 @@ void HomeScene::responseAfterAcceptingRequest(bool isSuccess) {
 					"HomeScene -> responseAfterAcceptingRequest -> success" :
 					"HomeScene -> responseAfterDenyingRequest -> failed");
 
-	if(isSuccess)
-	{
+	if (isSuccess) {
 		closeTradeLayer();
 	}
 }
@@ -1242,13 +1242,15 @@ void HomeScene::rewardedButtonsCallback(Ref* pSender,
 
 void HomeScene::tradeButtonCallback(Ref* pSender,
 		ui::Widget::TouchEventType eEventType) {
+	int numberOfPendingRequest = vtPendingRequest.size();
+	int numberOfGivenStickers = vtGivenSticker.size();
 	if (eEventType == ui::Widget::TouchEventType::ENDED
 			&& !blurLayer->isVisible() && !friendLayer->isVisible()
 			&& !tradeLayer->isVisible()) {
 		if (backgroundLayer != nullptr && backgroundLayer->isVisible()) {
 			this->removeChild(backgroundLayer, false);
 			backgroundLayer = nullptr;
-		} else if (vtGivenSticker.size() + vtPendingRequest.size() > 0) {
+		} else if (numberOfGivenStickers > 0 || numberOfPendingRequest > 0) {
 			addElementsToTradeLayer();
 			tradeLayer->setVisible(true);
 			isMenuBarShowing = false;
@@ -1454,7 +1456,6 @@ void HomeScene::responseAfterCheckingGivenSticker(
 //				request->getObjectId().c_str(), request->getName().c_str(),
 //				request->getStickerId().c_str());
 //	}
-	addElementsToTradeLayer();
 }
 void HomeScene::responseAfterCheckingPendingRequest(
 		vector<PendingRequest*> _vtPendingRequest) {
@@ -1467,7 +1468,6 @@ void HomeScene::responseAfterCheckingPendingRequest(
 //				request->getObjectId().c_str(), request->getName().c_str(),
 //				request->getStickerId().c_str());
 //	}
-	addElementsToTradeLayer();
 }
 
 void HomeScene::responseAfterCheckFacebookIdExistOnFirebase() {
