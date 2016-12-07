@@ -1252,7 +1252,9 @@ void HomeScene::tradeButtonCallback(Ref* pSender,
 			backgroundLayer = nullptr;
 		} else if (numberOfGivenStickers > 0 || numberOfPendingRequest > 0) {
 			addElementsToTradeLayer();
-			tradeLayer->setVisible(true);
+			if(tradeLayer != nullptr){
+				tradeLayer->setVisible(true);
+			}
 			isMenuBarShowing = false;
 			invalidateMenuBarPosition();
 		} else {
