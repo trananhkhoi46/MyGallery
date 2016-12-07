@@ -1,2 +1,2 @@
 obj/local/armeabi/objs-debug/bullet_static/LinearMath/btSerializer.o: \
- /Users/Kskull/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/../cocos2d/external/bullet/LinearMath/btSerializer.cpp
+ /Users/TAnh/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/../cocos2d/external/bullet/LinearMath/btSerializer.cpp

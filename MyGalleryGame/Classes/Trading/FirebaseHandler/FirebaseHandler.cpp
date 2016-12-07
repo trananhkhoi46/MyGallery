@@ -30,6 +30,21 @@ FirebaseHandler* FirebaseHandler::getInstance() {
 	}
 	return instance;
 }
+void FirebaseHandler::acceptSendingSticker(PendingRequest* request)
+{
+
+}
+
+void FirebaseHandler::denySendingSticker(PendingRequest* request)
+{
+
+}
+
+void FirebaseHandler::acceptReceivingSticker(PendingRequest* request)
+{
+
+}
+
 void FirebaseHandler::checkPendingRequest() {
 	//Get pendingRequest from server
 	string url =

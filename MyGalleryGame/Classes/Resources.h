@@ -47,6 +47,13 @@ static const char s_homescene_board_friends[] = "homescene/board_friends.png";
 static const char s_homescene_btn_close[] = "homescene/btn_close.png";
 static const char s_homescene_btn_invite[] = "homescene/btn_invite.png";
 static const char s_homescene_btn_friend_name_background[] = "homescene/btn_friend_name_background.png";
+//Trade popup
+static const char s_homescene_btn_ok[] = "homescene/trade/btn_ok.png";
+static const char s_homescene_btn_deny[] = "homescene/trade/btn_deny.png";
+static const char s_homescene_bg_number[] = "homescene/trade/background_number.png";
+static const char s_homescene_arrow_down[] = "homescene/trade/arrow_down.png";
+static const char s_homescene_board_trade[] = "homescene/trade/board_trade.png";
+
 
 //Trade Scene elements
 static const char s_tradescene_background[] = "tradescene/bg_trade.png";

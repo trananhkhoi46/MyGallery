@@ -49,6 +49,8 @@ public:
 	void setVisibilityViewsOfTradingFeature();
 	void openStickerDetailLayer(Sticker* sticker);
 	void closeFriendLayer();
+	void closeTradeLayer();
+	void addElementsToTradeLayer();
 
 	int currentStickers;
 	int maxStickers;
@@ -57,11 +59,13 @@ public:
 	bool isFreePacketAvailable;
 	bool isRequestDone;
 	bool isOpeningAnotherScene;
+	bool isTradeLayerHasContent;
 	Vec2 menuBarVisiblePosition;
 	Vec2 menuBarInvisiblePosition;
 
 	LayerColor* backgroundLayer;
 	Layer* blurLayer;
+	Layer* tradeLayer;
 	Layer* friendLayer;
 	Label* labelSticker;
 	Label* labelTimeToGetFreeSticker;
@@ -87,6 +91,8 @@ public:
 	Button* btnTrade;
 	LoadingBar* progressBar;
 	vector<BUserInfor*> vt_Friends;
+	vector<PendingRequest*> vtPendingRequest;
+	vector<PendingRequest*> vtGivenSticker;
 
 	//FacebookConnectDelegate response
 	virtual void responseWhenLoginOrLogoutFacebook();

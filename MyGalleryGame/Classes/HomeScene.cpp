@@ -15,6 +15,7 @@
 #define kTagRarePacket 8
 #define kTagNewSticker 9
 #define kTagFriendList 10
+#define kTagTradeLayerElements 11
 
 TTFConfig configControlButton(s_font, 65 * s_font_ratio);
 TTFConfig configLabelSticker(s_font, 60 * s_font_ratio);
@@ -120,6 +121,7 @@ bool HomeScene::init() {
 //---------------------------------------------------------------------Init methods
 void HomeScene::initDefaultVariables() {
 	isRequestDone = true;
+	isTradeLayerHasContent = false;
 	currentStickers = StickerHelper::getCurrentExistStickerNumber(true);
 
 	timeToGetFreeStickerInSecond = UserDefault::getInstance()->getIntegerForKey(
@@ -194,6 +196,8 @@ void HomeScene::setVisibilityViewsOfTradingFeature() {
 }
 
 bool isInviting = false;
+bool isAcceptingRequest = false;
+bool isDenyingRequest = false;
 void HomeScene::initOtherViews() {
 	//Add btnFacebookConnect
 	btnFacebookConnect = Button::create(s_homescene_btn_facebook_connect);
@@ -232,6 +236,7 @@ void HomeScene::initOtherViews() {
 	btnFriend->addTouchEventListener(
 			CC_CALLBACK_2(HomeScene::friendButtonCallback, this));
 	this->addChild(btnFriend);
+	btnFriend->setEnabled(false);
 
 	//Add btn trade
 	btnTrade = Button::create(s_homescene_btn_trade);
@@ -245,6 +250,7 @@ void HomeScene::initOtherViews() {
 	btnTrade->addTouchEventListener(
 			CC_CALLBACK_2(HomeScene::tradeButtonCallback, this));
 	this->addChild(btnTrade);
+	btnTrade->setEnabled(false);
 
 	//Set show btnFacebookConnect if user hasn't logged in Facebook, vice versa
 	setVisibilityViewsOfTradingFeature();
@@ -388,6 +394,49 @@ void HomeScene::initOtherViews() {
 							"http://www.cocos2d-x.org/attachments/801/cocos2dx_portrait.png");
 				}});
 	friendLayer->addChild(btnInviteFacebook);
+
+	//Add layer to show trade list
+	tradeLayer = LayerColor::create(Color4B(0, 0, 0, 100));
+	tradeLayer->setContentSize(winSize);
+	tradeLayer->setPosition(Vec2::ZERO);
+	tradeLayer->setAnchorPoint(Vec2(0.0f, 0.0f));
+	tradeLayer->setVisible(false);
+	this->addChild(tradeLayer);
+
+	//Add board
+	Sprite* boardTrade = Sprite::create(s_homescene_board_trade);
+	boardTrade->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
+	boardTrade->setPosition(winSize / 2);
+	tradeLayer->addChild(boardTrade);
+
+	//Add btn close
+	Button* btnClose2 = Button::create(s_homescene_btn_close);
+	btnClose2->setPosition(
+			Vec2(
+					boardTrade->getPositionX()
+							+ boardTrade->getContentSize().width / 2 - 40,
+					boardTrade->getPositionY()
+							+ boardTrade->getContentSize().height / 2 - 10));
+	btnClose2->setTouchEnabled(true);
+	btnClose2->setPressedActionEnabled(true);
+	btnClose2->addTouchEventListener([this](Ref *pSender,
+			Widget::TouchEventType type) {
+		if (type == cocos2d::ui::Widget::TouchEventType::ENDED)
+		{
+			closeTradeLayer();
+		}});
+	tradeLayer->addChild(btnClose2);
+
+	//Add number of pending request
+	Sprite* backgroundNumber = Sprite::create(s_homescene_bg_number);
+	backgroundNumber->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
+	backgroundNumber->setPosition(
+			Vec2(
+					boardTrade->getPositionX()
+							- boardTrade->getContentSize().width / 2 + 40,
+					boardTrade->getPositionY()
+							+ boardTrade->getContentSize().height / 2 - 10));
+	tradeLayer->addChild(backgroundNumber);
 }
 
 void HomeScene::initSettingMenu() {
@@ -596,6 +645,21 @@ void HomeScene::invalidateMenuBarPosition() {
 
 void HomeScene::closeFriendLayer() {
 	friendLayer->setVisible(false);
+}
+
+void HomeScene::closeTradeLayer() {
+	Vector<Node*> layerChildren = tradeLayer->getChildren();
+	for (const auto child : layerChildren) {
+		if (child && child->getTag() == kTagTradeLayerElements) {
+			tradeLayer->removeChild(child, false);
+		}
+	}
+	tradeLayer->setVisible(false);
+	CCLog(
+			"bambi HomeScene -> closeTradeLayer, vtGivenSticker size: %d, vtPendingRequest size: %s",
+			vtGivenSticker.size(), vtPendingRequest.size());
+	btnTrade->setEnabled(vtGivenSticker.size() + vtPendingRequest.size() > 0);
+	isTradeLayerHasContent = false;
 }
 
 void HomeScene::closeBlurLayer() {
@@ -808,13 +872,275 @@ void HomeScene::openStickerDetailLayer(Sticker* sticker) {
 	backgroundLayer->addChild(labelStickerRarity);
 }
 
+void HomeScene::addElementsToTradeLayer() {
+	if (isTradeLayerHasContent) {
+		return;
+	}
+
+	CCLog("bambi HomeScene -> addElementsToTradeLayer");
+	TTFConfig labelConfig(s_font, 100 * s_font_ratio);
+	//Add pending number label
+	BLabel* labelPendingNumber =
+			BLabel::createWithTTF(labelConfig,
+					String::createWithFormat("%d",
+							vtPendingRequest.size() + vtGivenSticker.size())->getCString(),
+					TextHAlignment::CENTER);
+	labelPendingNumber->setPosition(
+			Vec2(80, tradeLayer->getContentSize().height - 240));
+	labelPendingNumber->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
+	labelPendingNumber->setColor(Color3B::BLACK);
+	labelPendingNumber->setTag(kTagTradeLayerElements);
+	tradeLayer->addChild(labelPendingNumber, 2);
+
+	if (vtPendingRequest.size() > 0) {
+		isTradeLayerHasContent = true;
+		CCLog(
+				"bambi HomeScene -> addElementsToTradeLayer -> adding pending request");
+		PendingRequest* pendingRequest = vtPendingRequest.at(0);
+		Sticker* sticker = StickerHelper::getStickerFromId(
+				CppUtils::stringToDouble(pendingRequest->getStickerId()));
+
+		//Add btn friend name
+		Sprite*backgroundName = Sprite::create(
+				s_homescene_btn_friend_name_background);
+		backgroundName->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
+		backgroundName->setPosition(tradeLayer->getContentSize().width / 2,
+				tradeLayer->getContentSize().height * 0.8 - 150);
+		backgroundName->setTag(kTagTradeLayerElements);
+		tradeLayer->addChild(backgroundName);
+
+		//Add friend name label
+		BLabel* labelName = BLabel::createWithTTF(labelConfig,
+				String::createWithFormat("%s",
+						pendingRequest->getName().c_str())->getCString(),
+				TextHAlignment::CENTER);
+		labelName->setPosition(
+				Vec2(backgroundName->getContentSize().width / 2,
+						backgroundName->getContentSize().height / 2));
+		labelName->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
+		labelName->setColor(Color3B::BLACK);
+		labelName->setTag(kTagTradeLayerElements);
+		backgroundName->addChild(labelName);
+
+		//Add btn my name
+		Sprite*backgroundMyName = Sprite::create(
+				s_homescene_btn_friend_name_background);
+		backgroundMyName->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
+		backgroundMyName->setPosition(tradeLayer->getContentSize().width / 2,
+				tradeLayer->getContentSize().height * 0.3 + 30);
+		backgroundMyName->setTag(kTagTradeLayerElements);
+		tradeLayer->addChild(backgroundMyName);
+
+		//Add friend my label
+		BLabel* labelMyName = BLabel::createWithTTF(labelConfig, "Me!",
+				TextHAlignment::CENTER);
+		labelMyName->setPosition(
+				Vec2(backgroundMyName->getContentSize().width / 2,
+						backgroundMyName->getContentSize().height / 2));
+		labelMyName->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
+		labelMyName->setColor(Color3B::BLACK);
+		labelMyName->setTag(kTagTradeLayerElements);
+		backgroundMyName->addChild(labelMyName);
+
+		//Add sprite arrow down
+		Sprite* arrowDown = Sprite::create(s_homescene_arrow_down);
+		arrowDown->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
+		arrowDown->setPosition(170,
+				tradeLayer->getContentSize().height / 2 + 20);
+		arrowDown->setTag(kTagTradeLayerElements);
+		tradeLayer->addChild(arrowDown);
+
+		//Add sticker sprite
+		Sprite* stickerSprite = Sprite::create(sticker->sticker_image);
+		stickerSprite->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
+		stickerSprite->setPosition(tradeLayer->getContentSize().width / 2,
+				tradeLayer->getContentSize().height / 2 - 20);
+		stickerSprite->setScale(0.8f);
+		stickerSprite->setTag(kTagTradeLayerElements);
+		tradeLayer->addChild(stickerSprite);
+
+		//Add asking label
+		BLabel* labelAsking = BLabel::createWithTTF(labelConfig,
+				String::createWithFormat("Ask you for the sticker \"%s\"",
+						sticker->sticker_name.c_str())->getCString(),
+				TextHAlignment::CENTER);
+		labelAsking->setPosition(
+				Vec2(tradeLayer->getContentSize().width / 2,
+						tradeLayer->getContentSize().height / 2 + 200));
+		labelAsking->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
+		labelAsking->setColor(Color3B::BLACK);
+		labelAsking->setTag(kTagTradeLayerElements);
+		tradeLayer->addChild(labelAsking);
+
+		//Add btn accept request
+		Button* btnAcceptRequest = Button::create(s_homescene_btn_ok);
+		btnAcceptRequest->setPosition(
+				Vec2(
+						winSize.width / 2
+								- btnAcceptRequest->getContentSize().width / 2
+								- 20, 350));
+		btnAcceptRequest->setTouchEnabled(true);
+		btnAcceptRequest->setPressedActionEnabled(true);
+		btnAcceptRequest->addTouchEventListener(
+				[this, pendingRequest](Ref *pSender,
+						Widget::TouchEventType type) {
+					if (type == cocos2d::ui::Widget::TouchEventType::ENDED && !isAcceptingRequest)
+					{
+						isAcceptingRequest = true;
+						auto func = CallFunc::create([=]() {
+									isAcceptingRequest = false;
+								});
+						this->runAction(Sequence::create(DelayTime::create(1), func, nullptr));
+
+						FirebaseHandler::getInstance()->acceptSendingSticker(pendingRequest);
+					}});
+		btnAcceptRequest->setTag(kTagTradeLayerElements);
+		tradeLayer->addChild(btnAcceptRequest);
+
+		//Add btn deny request
+		Button* btnDenyRequest = Button::create(s_homescene_btn_deny);
+		btnDenyRequest->setPosition(
+				Vec2(
+						winSize.width / 2
+								+ btnDenyRequest->getContentSize().width / 2
+								+ 20, 350));
+		btnDenyRequest->setTouchEnabled(true);
+		btnDenyRequest->setPressedActionEnabled(true);
+		btnDenyRequest->addTouchEventListener(
+				[this,pendingRequest](Ref *pSender,
+						Widget::TouchEventType type) {
+					if (type == cocos2d::ui::Widget::TouchEventType::ENDED && !isDenyingRequest)
+					{
+						isDenyingRequest = true;
+						auto func = CallFunc::create([=]() {
+									isDenyingRequest = false;
+								});
+						this->runAction(Sequence::create(DelayTime::create(1), func, nullptr));
+
+						FirebaseHandler::getInstance()->denySendingSticker(pendingRequest);
+					}});
+		btnDenyRequest->setTag(kTagTradeLayerElements);
+		tradeLayer->addChild(btnDenyRequest);
+		vtPendingRequest.erase(
+				std::remove(vtPendingRequest.begin(), vtPendingRequest.end(),
+						pendingRequest), vtPendingRequest.end());
+	} else if (vtGivenSticker.size() > 0) {
+		isTradeLayerHasContent = true;
+		CCLog(
+				"bambi HomeScene -> addElementsToTradeLayer -> adding given sticker request");
+		PendingRequest* pendingRequest = vtGivenSticker.at(0);
+		Sticker* sticker = StickerHelper::getStickerFromId(
+				CppUtils::stringToDouble(pendingRequest->getStickerId()));
+
+		//Add btn friend name
+		Sprite*backgroundName = Sprite::create(
+				s_homescene_btn_friend_name_background);
+		backgroundName->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
+		backgroundName->setPosition(tradeLayer->getContentSize().width / 2,
+				tradeLayer->getContentSize().height * 0.8 - 150);
+		backgroundName->setTag(kTagTradeLayerElements);
+		tradeLayer->addChild(backgroundName);
+
+		//Add friend name label
+		BLabel* labelName = BLabel::createWithTTF(labelConfig,
+				String::createWithFormat("%s",
+						pendingRequest->getName().c_str())->getCString(),
+				TextHAlignment::CENTER);
+		labelName->setPosition(
+				Vec2(backgroundName->getContentSize().width / 2,
+						backgroundName->getContentSize().height / 2));
+		labelName->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
+		labelName->setColor(Color3B::BLACK);
+		labelName->setTag(kTagTradeLayerElements);
+		backgroundName->addChild(labelName);
+
+		//Add btn my name
+		Sprite*backgroundMyName = Sprite::create(
+				s_homescene_btn_friend_name_background);
+		backgroundMyName->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
+		backgroundMyName->setPosition(tradeLayer->getContentSize().width / 2,
+				tradeLayer->getContentSize().height * 0.3 + 30);
+		backgroundMyName->setTag(kTagTradeLayerElements);
+		tradeLayer->addChild(backgroundMyName);
+
+		//Add friend my label
+		BLabel* labelMyName = BLabel::createWithTTF(labelConfig, "Me!",
+				TextHAlignment::CENTER);
+		labelMyName->setPosition(
+				Vec2(backgroundMyName->getContentSize().width / 2,
+						backgroundMyName->getContentSize().height / 2));
+		labelMyName->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
+		labelMyName->setColor(Color3B::BLACK);
+		labelMyName->setTag(kTagTradeLayerElements);
+		backgroundMyName->addChild(labelMyName);
+
+		//Add sprite arrow down
+		Sprite* arrowDown = Sprite::create(s_homescene_arrow_down);
+		arrowDown->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
+		arrowDown->setPosition(170,
+				tradeLayer->getContentSize().height / 2 + 20);
+		arrowDown->setTag(kTagTradeLayerElements);
+		tradeLayer->addChild(arrowDown);
+
+		//Add sticker sprite
+		Sprite* stickerSprite = Sprite::create(sticker->sticker_image);
+		stickerSprite->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
+		stickerSprite->setPosition(tradeLayer->getContentSize().width / 2,
+				tradeLayer->getContentSize().height / 2 - 20);
+		stickerSprite->setScale(0.8f);
+		stickerSprite->setTag(kTagTradeLayerElements);
+		tradeLayer->addChild(stickerSprite);
+
+		//Add asking label
+		BLabel* labelAsking = BLabel::createWithTTF(labelConfig,
+				String::createWithFormat("Sent you the sticker \"%s\"",
+						sticker->sticker_name.c_str())->getCString(),
+				TextHAlignment::CENTER);
+		labelAsking->setPosition(
+				Vec2(tradeLayer->getContentSize().width / 2,
+						tradeLayer->getContentSize().height / 2 + 200));
+		labelAsking->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
+		labelAsking->setColor(Color3B::BLACK);
+		labelAsking->setTag(kTagTradeLayerElements);
+		tradeLayer->addChild(labelAsking);
+
+		//Add btn accept request
+		Button* btnAcceptRequest = Button::create(s_homescene_btn_ok);
+		btnAcceptRequest->setPosition(
+				Vec2(
+						winSize.width / 2
+								- btnAcceptRequest->getContentSize().width / 2,
+						350));
+		btnAcceptRequest->setTouchEnabled(true);
+		btnAcceptRequest->setPressedActionEnabled(true);
+		btnAcceptRequest->addTouchEventListener(
+				[this, pendingRequest](Ref *pSender,
+						Widget::TouchEventType type) {
+					if (type == cocos2d::ui::Widget::TouchEventType::ENDED && !isAcceptingRequest)
+					{
+						isAcceptingRequest = true;
+						auto func = CallFunc::create([=]() {
+									isAcceptingRequest = false;
+								});
+						this->runAction(Sequence::create(DelayTime::create(1), func, nullptr));
+
+						FirebaseHandler::getInstance()->acceptReceivingSticker(pendingRequest);
+					}});
+		btnAcceptRequest->setTag(kTagTradeLayerElements);
+		tradeLayer->addChild(btnAcceptRequest);
+		vtGivenSticker.erase(
+				std::remove(vtGivenSticker.begin(), vtGivenSticker.end(),
+						pendingRequest), vtGivenSticker.end());
+	}
+}
+
 //---------------------------------------------------------------------End of game logic methods
 //---------------------------------------------------------------------Callback methods
 void HomeScene::packetButtonsCallback(Ref* pSender,
 		ui::Widget::TouchEventType eEventType) {
 	if (eEventType == ui::Widget::TouchEventType::BEGAN
 			&& !blurLayer->isVisible() && !friendLayer->isVisible()
-			&& cut->numberOfRunningActions() == 0) {
+			&& !tradeLayer->isVisible() && cut->numberOfRunningActions() == 0) {
 		int animationDuration = 3;
 		Button* button = dynamic_cast<Button*>(pSender);
 		int tag = (int) button->getTag();
@@ -870,7 +1196,8 @@ void HomeScene::packetButtonsCallback(Ref* pSender,
 void HomeScene::iapButtonsCallback(Ref* pSender,
 		ui::Widget::TouchEventType eEventType) {
 	if (eEventType == ui::Widget::TouchEventType::ENDED
-			&& !blurLayer->isVisible() && !friendLayer->isVisible()) {
+			&& !blurLayer->isVisible() && !friendLayer->isVisible()
+			&& !tradeLayer->isVisible()) {
 		if (backgroundLayer != nullptr && backgroundLayer->isVisible()) {
 			this->removeChild(backgroundLayer, false);
 			backgroundLayer = nullptr;
@@ -882,7 +1209,8 @@ void HomeScene::iapButtonsCallback(Ref* pSender,
 void HomeScene::rewardedButtonsCallback(Ref* pSender,
 		ui::Widget::TouchEventType eEventType) {
 	if (eEventType == ui::Widget::TouchEventType::ENDED
-			&& !blurLayer->isVisible() && !friendLayer->isVisible()) {
+			&& !blurLayer->isVisible() && !friendLayer->isVisible()
+			&& !tradeLayer->isVisible()) {
 		if (backgroundLayer != nullptr && backgroundLayer->isVisible()) {
 			this->removeChild(backgroundLayer, false);
 			backgroundLayer = nullptr;
@@ -895,12 +1223,19 @@ void HomeScene::rewardedButtonsCallback(Ref* pSender,
 void HomeScene::tradeButtonCallback(Ref* pSender,
 		ui::Widget::TouchEventType eEventType) {
 	if (eEventType == ui::Widget::TouchEventType::ENDED
-			&& !blurLayer->isVisible() && !friendLayer->isVisible()) {
+			&& !blurLayer->isVisible() && !friendLayer->isVisible()
+			&& !tradeLayer->isVisible()) {
 		if (backgroundLayer != nullptr && backgroundLayer->isVisible()) {
 			this->removeChild(backgroundLayer, false);
 			backgroundLayer = nullptr;
+		} else if (vtGivenSticker.size() + vtPendingRequest.size() > 0) {
+			addElementsToTradeLayer();
+			tradeLayer->setVisible(true);
+			isMenuBarShowing = false;
+			invalidateMenuBarPosition();
 		} else {
-			SocialPlugin::showToast("Doesn't support at the moment");
+			SocialPlugin::showToast(
+					"Your inbox is empty right now. Ask your friends for more stickers!");
 		}
 	}
 }
@@ -908,7 +1243,8 @@ void HomeScene::tradeButtonCallback(Ref* pSender,
 void HomeScene::friendButtonCallback(Ref* pSender,
 		ui::Widget::TouchEventType eEventType) {
 	if (eEventType == ui::Widget::TouchEventType::ENDED
-			&& !blurLayer->isVisible() && !friendLayer->isVisible()) {
+			&& !blurLayer->isVisible() && !friendLayer->isVisible()
+			&& !tradeLayer->isVisible()) {
 		if (backgroundLayer != nullptr && backgroundLayer->isVisible()) {
 			this->removeChild(backgroundLayer, false);
 			backgroundLayer = nullptr;
@@ -925,7 +1261,7 @@ void HomeScene::facebookConnectButtonCallback(Ref* pSender,
 		ui::Widget::TouchEventType eEventType) {
 	if (eEventType == ui::Widget::TouchEventType::ENDED
 			&& !blurLayer->isVisible() && !friendLayer->isVisible()
-			&& !isLoggingInFacebook) {
+			&& !tradeLayer->isVisible() && !isLoggingInFacebook) {
 		if (backgroundLayer != nullptr && backgroundLayer->isVisible()) {
 			this->removeChild(backgroundLayer, false);
 			backgroundLayer = nullptr;
@@ -964,12 +1300,14 @@ void HomeScene::responseForQuerryTopFriend(vector<BUserInfor*> friendList) {
 	vt_Friends = friendList;
 	friendLayer->removeChildByTag(kTagFriendList, false);
 
-	//Scrollview configuration
+	btnFriend->setEnabled(vt_Friends.size() > 0);
+
+//Scrollview configuration
 	int numberOfItems = friendList.size();
 	float itemMargin = 170;
 	Size scrollFrameSize = Size(winSize.width, 880);
 
-	//Create scrollview
+//Create scrollview
 	BScrollView* scrollview = BScrollView::createVertical(numberOfItems,
 			itemMargin, scrollFrameSize);
 	scrollview->setPosition(Vec2(winSize.width / 2, winSize.height / 2 - 70));
@@ -977,7 +1315,7 @@ void HomeScene::responseForQuerryTopFriend(vector<BUserInfor*> friendList) {
 	scrollview->setScrollBarEnabled(false);
 	friendLayer->addChild(scrollview);
 
-	//Add sth to scroll view
+//Add sth to scroll view
 	float positionX = scrollview->leftPosition;
 	float positionY = scrollview->topPosition;
 	for (int i = 1; i <= numberOfItems; i++) {
@@ -1041,7 +1379,7 @@ void HomeScene::responseForQuerryTopFriend(vector<BUserInfor*> friendList) {
 
 void HomeScene::responseAfterGetStickersDataFromFirebase(string facebookId,
 		string stickerData, string stickedStickerData) {
-	//TODO get pending request from server here
+//TODO get pending request from server here
 	FirebaseHandler::getInstance()->checkPendingRequest(); //responseAfterCheckingPendingRequest will be called
 	FirebaseHandler::getInstance()->checkGivenStickers(); //responseAfterCheckingGivenSticker will be called
 
@@ -1082,26 +1420,34 @@ void HomeScene::responseAfterGetStickersDataFromFirebase(string facebookId,
 }
 
 void HomeScene::responseAfterAskingSticker(int stickerId, bool isSuccess) {
-	//Required null
+//Required null
 }
 
 void HomeScene::responseAfterCheckingGivenSticker(
-		vector<PendingRequest*> vtGivenStickers) {
-	for (PendingRequest* request : vtGivenStickers) {
-		CCLog(
-				"bambi responseAfterCheckingGivenSticker, object id: %s - name: %s - stickerId: %s",
-				request->getObjectId().c_str(), request->getName().c_str(),
-				request->getStickerId().c_str());
-	}
+		vector<PendingRequest*> _vtGivenStickers) {
+	vtGivenSticker = _vtGivenStickers;
+	btnTrade->setEnabled(vtGivenSticker.size() + vtPendingRequest.size() > 0);
+
+//	for (PendingRequest* request : vtGivenStickers) {
+//		CCLog(
+//				"bambi responseAfterCheckingGivenSticker, object id: %s - name: %s - stickerId: %s",
+//				request->getObjectId().c_str(), request->getName().c_str(),
+//				request->getStickerId().c_str());
+//	}
+	addElementsToTradeLayer();
 }
 void HomeScene::responseAfterCheckingPendingRequest(
-		vector<PendingRequest*> vtPendingRequest) {
-	for (PendingRequest* request : vtPendingRequest) {
-		CCLog(
-				"bambi responseAfterCheckingPendingRequest, object id: %s - name: %s - stickerId: %s",
-				request->getObjectId().c_str(), request->getName().c_str(),
-				request->getStickerId().c_str());
-	}
+		vector<PendingRequest*> _vtPendingRequest) {
+	vtPendingRequest = _vtPendingRequest;
+	btnTrade->setEnabled(vtGivenSticker.size() + vtPendingRequest.size() > 0);
+
+//	for (PendingRequest* request : vtPendingRequest) {
+//		CCLog(
+//				"bambi responseAfterCheckingPendingRequest, object id: %s - name: %s - stickerId: %s",
+//				request->getObjectId().c_str(), request->getName().c_str(),
+//				request->getStickerId().c_str());
+//	}
+	addElementsToTradeLayer();
 }
 
 void HomeScene::responseAfterCheckFacebookIdExistOnFirebase() {

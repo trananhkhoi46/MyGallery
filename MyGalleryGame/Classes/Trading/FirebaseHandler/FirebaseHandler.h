@@ -101,6 +101,12 @@ public:
 	void getStickersDataFromFirebase();
 	void getStickersDataFromFirebase(string objectID);
 
+	void acceptSendingSticker(PendingRequest* request);
+
+	void denySendingSticker(PendingRequest* request);
+
+	void acceptReceivingSticker(PendingRequest* request);
+
 	void getProbabilityFreePacket();
 	void getProbability(string url, vector<string> probabilityKeys,
 			STICKER_RARITY rarity);
