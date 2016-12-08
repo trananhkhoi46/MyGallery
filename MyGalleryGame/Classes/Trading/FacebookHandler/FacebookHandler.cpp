@@ -80,6 +80,7 @@ void FacebookHandler::onAPI(const std::string& tag,
 	if (isGettingMyProfle) {
 		BUserInfor* user = BUserInfor::parseUserFrom(jsonData);
 		user->setAllStickers(UserDefault::getInstance()->getStringForKey(CURRENT_STICKER, ""));
+		UserDefault::getInstance()->setStringForKey(KEY_WORLD_NAME, user->getName());
 		if (_facebookDelegate != nullptr) {
 			_facebookDelegate->responseWhenGetMyInfoSuccessfully(user);
 		}
@@ -137,6 +138,7 @@ void FacebookHandler::onGetUserInfo(const sdkbox::FBGraphUser& userInfo) {
 		user->setId(userInfo.getUserId());
 		user->setName(userInfo.getName());
 		user->setAllStickers(UserDefault::getInstance()->getStringForKey(CURRENT_STICKER, ""));
+		UserDefault::getInstance()->setStringForKey(KEY_WORLD_NAME, user->getName());
 		if (_facebookDelegate != nullptr) {
 			_facebookDelegate->responseWhenGetMyInfoSuccessfully(user);
 		}

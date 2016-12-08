@@ -173,6 +173,7 @@ void SettingScene::settingButtonsCallback(Ref* pSender,
 		int tag = (int) button->getTag();
 		switch (tag) {
 		case kTagBack: {
+			isTouchedOnFacebookConnect = true;
 			if (!isTouchedOnFacebookConnect) {
 				CustomDirector *director =
 						(CustomDirector *) CustomDirector::getInstance();
@@ -231,6 +232,7 @@ void SettingScene::settingButtonsCallback(Ref* pSender,
 }
 void SettingScene::onKeyReleased(EventKeyboard::KeyCode keycode, Event* event) {
 	if (keycode == EventKeyboard::KeyCode::KEY_ESCAPE) {
+		isTouchedOnFacebookConnect = true;
 		if (!isTouchedOnFacebookConnect) {
 			CustomDirector *director =
 					(CustomDirector *) CustomDirector::getInstance();

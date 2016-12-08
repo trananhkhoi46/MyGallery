@@ -20,18 +20,19 @@ Scene* TradingScene::scene(BUserInfor* userInfor) {
 }
 
 void TradingScene::parseAllStickers() {
-	vector < string > vtSplitAllStickerStrings = CppUtils::splitStringByDelim(
+	vector < string > splitAllStickerStrings = CppUtils::splitStringByDelim(
 			user->getAllStickers(), ',');
-	set < string
-			> splitAllStickerStrings(vtSplitAllStickerStrings.begin(),
-					vtSplitAllStickerStrings.end());
+
 	vector < string > splitStickedStickerStrings = CppUtils::splitStringByDelim(
 			user->getStickedStickers(), ',');
+
 	string loggedInUserObjectId = UserDefault::getInstance()->getStringForKey(
 	KEY_WORLD_OJECTID);
+
 	vector<PendingRequest*> vtPendingRequest;
 	vector < string > listStringPendingRequest = CppUtils::splitStringByDelim(
 			user->getPendingRequest(), ',');
+
 	for (string pendingRequestString : listStringPendingRequest) {
 		PendingRequest* request = new PendingRequest();
 		vector < string > requestData = CppUtils::splitStringByDelim(
@@ -42,23 +43,33 @@ void TradingScene::parseAllStickers() {
 		vtPendingRequest.push_back(request);
 	}
 
-	CCLog("bambi parseAllStickers, pending request size: %d", vtPendingRequest.size());
+	CCLog("bambi parseAllStickers, pending request size: %d",
+			vtPendingRequest.size());
 	//Remove all sticked stickers from vector stickers & pending request
 	for (string record : splitAllStickerStrings) {
+		CCLog("bambi parseAllStickers 2, record: %s",record.c_str());
 		Sticker* sticker = StickerHelper::getStickerFromId(
 				CppUtils::stringToDouble(record));
+		CCLog("bambi parseAllStickers 3");
+
 		if (sticker != nullptr) {
+			CCLog("bambi parseAllStickers 4");
+
 			bool isRecordExistInStickedVector = false;
 			for (string stickedRecord : splitStickedStickerStrings) {
 				if (stickedRecord == record) {
+					CCLog("bambi parseAllStickers 4.2, %s, %d",stickedRecord.c_str(), splitStickedStickerStrings.size());
 					isRecordExistInStickedVector = true;
 					splitStickedStickerStrings.erase(
 							std::remove(splitStickedStickerStrings.begin(),
 									splitStickedStickerStrings.end(),
 									stickedRecord),
 							splitStickedStickerStrings.end());
+					break;
 				}
 			}
+			CCLog("bambi parseAllStickers 5");
+
 			for (PendingRequest* request : vtPendingRequest) {
 				CCLog(
 						"bambi parseAllStickers - pendingRequest loop - requestStickerId: %s",
@@ -74,12 +85,23 @@ void TradingScene::parseAllStickers() {
 								std::remove(vtPendingRequest.begin(),
 										vtPendingRequest.end(), request),
 								vtPendingRequest.end());
+						break;
 					}
 				}
 			}
+			CCLog("bambi parseAllStickers 6");
 
 			if (!isRecordExistInStickedVector) {
-				vt_stickers_of_user.push_back(sticker);
+				bool isRecordExistInTradingVector = false;
+				for (Sticker* stickerTrading : vt_stickers_of_user) {
+					if (sticker->sticker_id == stickerTrading->sticker_id) {
+						isRecordExistInTradingVector = true;
+					}
+				}
+
+				if (!isRecordExistInTradingVector) {
+					vt_stickers_of_user.push_back(sticker);
+				}
 			}
 		}
 	}
@@ -100,6 +122,7 @@ bool TradingScene::init() {
 	isDataChanged = false;
 	parseAllStickers();
 	TTFConfig config(s_font, 120 * s_font_ratio);
+	CCLog("bambi adding background trading scene");
 
 //Add background
 	Sprite* background = Sprite::create(s_tradescene_background);
@@ -480,6 +503,7 @@ void TradingScene::onKeyReleased(EventKeyboard::KeyCode keycode, Event* event) {
 			backgroundLayer = nullptr;
 			scrollview->setVisible(true);
 		} else {
+			isDataChanged = true;
 			if (isDataChanged) {
 				auto *newScene = HomeScene::scene();
 				auto transition = TransitionFade::create(1.0, newScene);
@@ -496,6 +520,7 @@ void TradingScene::onKeyReleased(EventKeyboard::KeyCode keycode, Event* event) {
 void TradingScene::backToHome(Ref* pSender,
 		ui::Widget::TouchEventType eEventType) {
 	if (eEventType == ui::Widget::TouchEventType::ENDED) {
+		isDataChanged = true;
 		if (isDataChanged) {
 			auto *newScene = HomeScene::scene();
 			auto transition = TransitionFade::create(1.0, newScene);

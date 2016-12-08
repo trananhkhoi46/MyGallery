@@ -647,8 +647,15 @@ void HomeScene::closeFriendLayer() {
 	friendLayer->setVisible(false);
 }
 
+bool isClosingTradeLayer;
 void HomeScene::closeTradeLayer() {
-	if (tradeLayer != nullptr) {
+	if (tradeLayer != nullptr && !isClosingTradeLayer) {
+		isClosingTradeLayer = true;
+		auto func = CallFunc::create([=]() {
+			isClosingTradeLayer = false;
+		});
+		this->runAction(Sequence::create(DelayTime::create(1), func, nullptr));
+
 		CCLog("bambi HomeScene -> closeTradeLayer");
 		Vector<Node*> layerChildren = tradeLayer->getChildren();
 		for (Node* child : layerChildren) {
@@ -1402,14 +1409,14 @@ void HomeScene::responseForQuerryTopFriend(vector<BUserInfor*> friendList) {
 							auto *newScene = SettingScene::scene();
 							auto transition = TransitionFade::create(1.0, newScene);
 							Director *pDirector = Director::getInstance();
-							pDirector->pushScene(transition);
+							pDirector->replaceScene(transition);
 						} else
 						{
 							CCLog("bambi go to trade scene - objectId: %s",vt_Friends.at(index - 1)->getObjectId().c_str());
 							auto *newScene = TradingScene::scene(vt_Friends.at(index - 1));
 							auto transition = TransitionFade::create(1.0, newScene);
 							Director *pDirector = Director::getInstance();
-							pDirector->pushScene(transition);
+							pDirector->replaceScene(transition);
 						}
 						instance = nullptr;
 					}});
@@ -1437,10 +1444,6 @@ void HomeScene::responseForQuerryTopFriend(vector<BUserInfor*> friendList) {
 
 void HomeScene::responseAfterGetStickersDataFromFirebase(string facebookId,
 		string stickerData, string stickedStickerData) {
-//TODO get pending request from server here
-	FirebaseHandler::getInstance()->checkPendingRequest(); //responseAfterCheckingPendingRequest will be called
-	FirebaseHandler::getInstance()->checkGivenStickers(); //responseAfterCheckingGivenSticker will be called
-
 	CCLog(
 			"bambi HomeScene responseAfterGetStickersDataFromFirebase - facebookID: %s, stickerData: %s",
 			facebookId.c_str(), stickerData.c_str());
@@ -1466,15 +1469,20 @@ void HomeScene::responseAfterGetStickersDataFromFirebase(string facebookId,
 			} else {
 				CCLog(
 						"bambi HomeScene responseAfterGetStickersDataFromFirebase - has no data from server -> save stickers from local to server");
-				FirebaseHandler::getInstance()->saveToMyStickerList(
-						UserDefault::getInstance()->getStringForKey(
-						CURRENT_STICKER));
 				FirebaseHandler::getInstance()->saveToMyStickedStickerList(
 						UserDefault::getInstance()->getStringForKey(
 						STICKED_STICKER));
+				FirebaseHandler::getInstance()->saveToMyStickerList(
+						UserDefault::getInstance()->getStringForKey(
+						CURRENT_STICKER));
 			}
 		}
 	}
+
+	//TODO get pending request from server here
+		FirebaseHandler::getInstance()->checkPendingRequest(); //responseAfterCheckingPendingRequest will be called
+		FirebaseHandler::getInstance()->checkGivenStickers(); //responseAfterCheckingGivenSticker will be called
+
 }
 
 void HomeScene::responseAfterAskingSticker(int stickerId, bool isSuccess) {
@@ -1564,7 +1572,7 @@ void HomeScene::settingButtonsCallback(Ref* pSender,
 				auto *newScene = SettingScene::scene();
 				auto transition = TransitionFade::create(1.0, newScene);
 				Director *pDirector = Director::getInstance();
-				pDirector->pushScene(transition);
+				pDirector->replaceScene(transition);
 				instance = nullptr;
 			}
 				break;
