@@ -262,7 +262,7 @@ void FirebaseHandler::checkPendingRequest() {
 				{
 					CCLog("bambi checkPendingRequest after splitting: %s", pendingRequestString.c_str());
 					PendingRequest* request = new PendingRequest();
-					vector<string> requestData = CppUtils::splitStringByDelim(pendingRequest, '#');
+					vector<string> requestData = CppUtils::splitStringByDelim(pendingRequestString, '#');
 					request->setObjectId(requestData.at(0));
 					request->setName(requestData.at(1));
 					request->setStickerId(requestData.at(2));
@@ -315,7 +315,7 @@ void FirebaseHandler::checkGivenStickers() {
 				for(string pendingRequestString : listStringPendingRequest)
 				{
 					PendingRequest* request = new PendingRequest();
-					vector<string> requestData = CppUtils::splitStringByDelim(pendingRequest, '#');
+					vector<string> requestData = CppUtils::splitStringByDelim(pendingRequestString, '#');
 					request->setObjectId(requestData.at(0));
 					request->setName(requestData.at(1));
 					request->setStickerId(requestData.at(2));

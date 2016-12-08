@@ -648,18 +648,26 @@ void HomeScene::closeFriendLayer() {
 }
 
 void HomeScene::closeTradeLayer() {
-	Vector<Node*> layerChildren = tradeLayer->getChildren();
-	for (const auto child : layerChildren) {
-		if (child && child->getTag() == kTagTradeLayerElements) {
-			tradeLayer->removeChild(child, false);
+	if (tradeLayer != nullptr) {
+		CCLog("bambi HomeScene -> closeTradeLayer");
+		Vector<Node*> layerChildren = tradeLayer->getChildren();
+		for (Node* child : layerChildren) {
+			if (child && child->getTag() == kTagTradeLayerElements) {
+				CCLog("bambi HomeScene -> closeTradeLayer: child: %d",
+						child->getTag());
+				tradeLayer->removeChild(child, false);
+			}
 		}
+		CCLog(
+				"bambi HomeScene -> closeTradeLayer -> set layer visible = false");
+		tradeLayer->setVisible(false);
+		CCLog(
+				"bambi HomeScene -> closeTradeLayer, vtGivenSticker size: %d, vtPendingRequest size: %d",
+				vtGivenSticker.size(), vtPendingRequest.size());
+		btnTrade->setEnabled(
+				vtGivenSticker.size() + vtPendingRequest.size() > 0);
+		isTradeLayerHasContent = false;
 	}
-	tradeLayer->setVisible(false);
-	CCLog(
-			"bambi HomeScene -> closeTradeLayer, vtGivenSticker size: %d, vtPendingRequest size: %s",
-			vtGivenSticker.size(), vtPendingRequest.size());
-	btnTrade->setEnabled(vtGivenSticker.size() + vtPendingRequest.size() > 0);
-	isTradeLayerHasContent = false;
 }
 
 void HomeScene::closeBlurLayer() {
@@ -896,12 +904,15 @@ void HomeScene::addElementsToTradeLayer() {
 
 	if (vtPendingRequest.size() > 0) {
 		isTradeLayerHasContent = true;
-		CCLog(
-				"bambi HomeScene -> addElementsToTradeLayer -> adding pending request");
 		PendingRequest* pendingRequest = vtPendingRequest.at(0);
+		CCLog(
+				"bambi HomeScene -> addElementsToTradeLayer -> adding pending request: stickerID: %s, %d",
+				pendingRequest->getStickerId().c_str(),
+				CppUtils::stringToDouble(pendingRequest->getStickerId()));
 		Sticker* sticker = StickerHelper::getStickerFromId(
 				CppUtils::stringToDouble(pendingRequest->getStickerId()));
-
+		CCLog(
+				"bambi HomeScene -> addElementsToTradeLayer -> adding pending request -> 2");
 		//Add btn friend name
 		Sprite*backgroundName = Sprite::create(
 				s_homescene_btn_friend_name_background);
@@ -911,6 +922,8 @@ void HomeScene::addElementsToTradeLayer() {
 		backgroundName->setTag(kTagTradeLayerElements);
 		tradeLayer->addChild(backgroundName);
 
+		CCLog(
+				"bambi HomeScene -> addElementsToTradeLayer -> adding pending request -> 3");
 		//Add friend name label
 		BLabel* labelName = BLabel::createWithTTF(labelConfig,
 				String::createWithFormat("%s",
@@ -924,6 +937,8 @@ void HomeScene::addElementsToTradeLayer() {
 		labelName->setTag(kTagTradeLayerElements);
 		backgroundName->addChild(labelName);
 
+		CCLog(
+				"bambi HomeScene -> addElementsToTradeLayer -> adding pending request -> 4");
 		//Add btn my name
 		Sprite*backgroundMyName = Sprite::create(
 				s_homescene_btn_friend_name_background);
@@ -933,6 +948,8 @@ void HomeScene::addElementsToTradeLayer() {
 		backgroundMyName->setTag(kTagTradeLayerElements);
 		tradeLayer->addChild(backgroundMyName);
 
+		CCLog(
+				"bambi HomeScene -> addElementsToTradeLayer -> adding pending request -> 5");
 		//Add friend my label
 		BLabel* labelMyName = BLabel::createWithTTF(labelConfig, "Me!",
 				TextHAlignment::CENTER);
@@ -944,6 +961,8 @@ void HomeScene::addElementsToTradeLayer() {
 		labelMyName->setTag(kTagTradeLayerElements);
 		backgroundMyName->addChild(labelMyName);
 
+		CCLog(
+				"bambi HomeScene -> addElementsToTradeLayer -> adding pending request -> 6");
 		//Add sprite arrow down
 		Sprite* arrowDown = Sprite::create(s_homescene_arrow_down);
 		arrowDown->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
@@ -952,6 +971,8 @@ void HomeScene::addElementsToTradeLayer() {
 		arrowDown->setTag(kTagTradeLayerElements);
 		tradeLayer->addChild(arrowDown);
 
+		CCLog(
+				"bambi HomeScene -> addElementsToTradeLayer -> adding pending request -> 7");
 		//Add sticker sprite
 		Sprite* stickerSprite = Sprite::create(sticker->sticker_image);
 		stickerSprite->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
@@ -961,6 +982,8 @@ void HomeScene::addElementsToTradeLayer() {
 		stickerSprite->setTag(kTagTradeLayerElements);
 		tradeLayer->addChild(stickerSprite);
 
+		CCLog(
+				"bambi HomeScene -> addElementsToTradeLayer -> adding pending request -> 8");
 		//Add asking label
 		BLabel* labelAsking = BLabel::createWithTTF(labelConfig,
 				String::createWithFormat("Ask you for the sticker \"%s\"",
@@ -974,6 +997,8 @@ void HomeScene::addElementsToTradeLayer() {
 		labelAsking->setTag(kTagTradeLayerElements);
 		tradeLayer->addChild(labelAsking);
 
+		CCLog(
+				"bambi HomeScene -> addElementsToTradeLayer -> adding pending request -> 9");
 		//Add btn accept request
 		Button* btnAcceptRequest = Button::create(s_homescene_btn_ok);
 		btnAcceptRequest->setPosition(
@@ -999,6 +1024,8 @@ void HomeScene::addElementsToTradeLayer() {
 		btnAcceptRequest->setTag(kTagTradeLayerElements);
 		tradeLayer->addChild(btnAcceptRequest);
 
+		CCLog(
+				"bambi HomeScene -> addElementsToTradeLayer -> adding pending request -> 10");
 		//Add btn deny request
 		Button* btnDenyRequest = Button::create(s_homescene_btn_deny);
 		btnDenyRequest->setPosition(
@@ -1023,6 +1050,10 @@ void HomeScene::addElementsToTradeLayer() {
 					}});
 		btnDenyRequest->setTag(kTagTradeLayerElements);
 		tradeLayer->addChild(btnDenyRequest);
+
+		CCLog(
+				"bambi HomeScene -> addElementsToTradeLayer -> added pending request -> going to erase it from vector");
+
 		vtPendingRequest.erase(
 				std::remove(vtPendingRequest.begin(), vtPendingRequest.end(),
 						pendingRequest), vtPendingRequest.end());
@@ -1242,17 +1273,20 @@ void HomeScene::rewardedButtonsCallback(Ref* pSender,
 
 void HomeScene::tradeButtonCallback(Ref* pSender,
 		ui::Widget::TouchEventType eEventType) {
-	int numberOfPendingRequest = vtPendingRequest.size();
-	int numberOfGivenStickers = vtGivenSticker.size();
 	if (eEventType == ui::Widget::TouchEventType::ENDED
 			&& !blurLayer->isVisible() && !friendLayer->isVisible()
 			&& !tradeLayer->isVisible()) {
+		int numberOfPendingRequest = vtPendingRequest.size();
+		int numberOfGivenStickers = vtGivenSticker.size();
 		if (backgroundLayer != nullptr && backgroundLayer->isVisible()) {
 			this->removeChild(backgroundLayer, false);
 			backgroundLayer = nullptr;
 		} else if (numberOfGivenStickers > 0 || numberOfPendingRequest > 0) {
+			CCLog(
+					"bambi HomeScene -> tradeButtonCallback -> going to addElementsToTradeLayer, numberOfGivenStickers: %d, numberOfPendingRequest: %d",
+					numberOfGivenStickers, numberOfPendingRequest);
 			addElementsToTradeLayer();
-			if(tradeLayer != nullptr){
+			if (tradeLayer != nullptr) {
 				tradeLayer->setVisible(true);
 			}
 			isMenuBarShowing = false;
