@@ -46,6 +46,7 @@
 /Users/TAnh/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/bin/dexedLibs/nineoldandroids-2.4.0-6532ba19ba0dc871c4ce68a1d24b8862.jar \
 /Users/TAnh/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/bin/dexedLibs/facebook-android-4.12.1-b5aabd93b4d552178321a0347a43b239.jar \
 /Users/TAnh/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/bin/dexedLibs/google-play-services-38c221b719d909115f00b4a9ef0b1a07.jar \
+/Users/TAnh/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/bin/dexedLibs/PluginIAP-1171db95d690cda0ecdd65f33104e5a5.jar \
 /Users/TAnh/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/bin/dexedLibs/com.android.vending.expansion.zipfile-b66281a10302aa79fb8aa12bdfd28cf2.jar \
 /Users/TAnh/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/bin/dexedLibs/sdkbox-0affdd739c1c4d7436be470ac9a9a5d2.jar \
 /Users/TAnh/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/bin/dexedLibs/httpclient-4.4.1.1-1816fc889442e72e7c5e2dee505d9322.jar \
@@ -57,3 +58,4 @@
 /Users/TAnh/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/bin/dexedLibs/PluginVungle-664f859880e78347c87d3128d65269de.jar \
 /Users/TAnh/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/bin/dexedLibs/vungle-publisher-adaptive-id-3.3.5-9e1c94d65d2144a65a8b52c704166499.jar \
 /Users/TAnh/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/bin/dexedLibs/chartboost-a33c8a8c9ce143bbef721dbdd708090e.jar \
+/Users/TAnh/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/bin/dexedLibs/PluginGooglePlay-c130ed98c10af8507e6926d312cc57bc.jar \

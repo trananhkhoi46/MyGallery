@@ -94,6 +94,35 @@ public:
 		CCLog("bambi chartboost onChartboostCompleteStore");
 	}
 };
+class IIAPListener : public sdkbox::IAPListener
+{
+public:
+	virtual void onInitialized(bool ok) {
+		CCLog("bambi IAP onInitialized, success: %s",ok?"true":"false");
+	}
+	virtual void onSuccess(sdkbox::Product const& p) {
+		CCLog("bambi IAP onSuccess: %s", p.name.c_str());
+		HomeScene::getInstance()->onVideoAdsPlayed(); //To earn a packet
+	}
+	virtual void onFailure(sdkbox::Product const& p, const std::string &msg) {
+		CCLog("bambi IAP onFailure: %s", p.name.c_str());
+	}
+	virtual void onCanceled(sdkbox::Product const& p) {
+		CCLog("bambi IAP onCanceled: %s", p.name.c_str());
+	}
+	virtual void onRestored(sdkbox::Product const& p) {
+		CCLog("bambi IAP onRestored: %s", p.name.c_str());
+	}
+	virtual void onProductRequestSuccess(std::vector<sdkbox::Product> const &products) {
+		CCLog("bambi IAP onProductRequestSuccess");
+	}
+	virtual void onProductRequestFailure(const std::string &msg) {
+		CCLog("bambi IAP onProductRequestFailure: %s", msg.c_str());
+	}
+	void onRestoreComplete(bool ok, const std::string &msg) {
+		CCLog("bambi IAP onRestoreComplete, ok: %s, msg: %s", ok?"true":"false", msg.c_str());
+	}
+};
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
 class IVungleListener : public sdkbox::VungleListener, public Ref
 {
@@ -273,6 +302,8 @@ bool BaseScene::init() {
 #ifdef SDKBOX_ENABLED
 		sdkbox::PluginAdMob::setListener(new IAdmobListener());
 		sdkbox::PluginChartboost::setListener(new IChartboostListener());
+		sdkbox::IAP::setDebug(true);
+		sdkbox::IAP::setListener(new IIAPListener());
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
 		sdkbox::PluginVungle::setListener(new IVungleListener());
 		sdkbox::PluginVungle::setDebug(true);

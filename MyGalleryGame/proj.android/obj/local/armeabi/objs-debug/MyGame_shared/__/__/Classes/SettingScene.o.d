@@ -462,8 +462,8 @@ obj/local/armeabi/objs-debug/MyGame_shared/__/__/Classes/SettingScene.o: \
  jni/../../Classes/Trading/FacebookHandler/FacebookHandler.h \
  jni/../../Classes/Trading/Model/BUserInfor.h \
  jni/../../Classes/CustomDirector.h jni/PluginAdMob/PluginAdMob.h \
- jni/PluginChartboost/PluginChartboost.h jni/PluginVungle/PluginVungle.h \
- jni/../../Classes/HomeScene.h
+ jni/PluginChartboost/PluginChartboost.h jni/PluginIAP/PluginIAP.h \
+ jni/PluginVungle/PluginVungle.h jni/../../Classes/HomeScene.h
 
 jni/../../Classes/SettingScene.h:
 
@@ -1400,6 +1400,8 @@ jni/../../Classes/CustomDirector.h:
 jni/PluginAdMob/PluginAdMob.h:
 
 jni/PluginChartboost/PluginChartboost.h:
+
+jni/PluginIAP/PluginIAP.h:
 
 jni/PluginVungle/PluginVungle.h:
 

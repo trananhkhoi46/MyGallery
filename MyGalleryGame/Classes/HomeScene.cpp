@@ -1260,7 +1260,7 @@ void HomeScene::iapButtonsCallback(Ref* pSender,
 			this->removeChild(backgroundLayer, false);
 			backgroundLayer = nullptr;
 		} else {
-			SocialPlugin::showToast("Doesn't support at the moment");
+			sdkbox::IAP::purchase("remove_ads");
 		}
 	}
 }

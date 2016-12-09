@@ -11,6 +11,7 @@
 /Users/TAnh/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/cocos2d/cocos/platform/android/java/libs/nineoldandroids-2.4.0.jar \
 /Users/TAnh/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/cocos2d/cocos/platform/android/java/libs/facebook_lib/libs/facebook-android-4.12.1.jar \
 /Users/TAnh/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/cocos2d/cocos/platform/android/java/libs/gps/libs/google-play-services.jar \
+/Users/TAnh/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/cocos2d/cocos/platform/android/java/libs/PluginIAP.jar \
 /Users/TAnh/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/cocos2d/cocos/platform/android/java/libs/com.android.vending.expansion.zipfile.jar \
 /Users/TAnh/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/cocos2d/cocos/platform/android/java/libs/sdkbox.jar \
 /Users/TAnh/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/cocos2d/cocos/platform/android/java/libs/httpclient-4.4.1.1.jar \
@@ -22,5 +23,6 @@
 /Users/TAnh/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/cocos2d/cocos/platform/android/java/libs/PluginVungle.jar \
 /Users/TAnh/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/cocos2d/cocos/platform/android/java/libs/vungle-publisher-adaptive-id-3.3.5.jar \
 /Users/TAnh/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/cocos2d/cocos/platform/android/java/libs/chartboost.jar \
+/Users/TAnh/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/cocos2d/cocos/platform/android/java/libs/PluginGooglePlay.jar \
 /Users/TAnh/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/libs/armeabi/gdbserver \
 /Users/TAnh/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/libs/armeabi/libMyGame.so \

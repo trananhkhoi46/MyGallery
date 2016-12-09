@@ -21,6 +21,7 @@
 #ifdef SDKBOX_ENABLED
 #include "PluginAdMob/PluginAdMob.h"
 #include "PluginChartboost/PluginChartboost.h"
+#include "PluginIAP/PluginIAP.h"
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
 #include "PluginVungle/PluginVungle.h"
 #endif

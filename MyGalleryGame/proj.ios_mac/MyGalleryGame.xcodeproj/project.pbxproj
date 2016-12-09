@@ -14,6 +14,7 @@
 		1D60589F0D05DD5A006BFB54 /* Foundation.framework */ = {isa = PBXBuildFile; fileRef = 1D30AB110D05D00D00671497 /* Foundation.framework */; };
 		1DF5F4E00D08C38300B7A737 /* UIKit.framework */ = {isa = PBXBuildFile; fileRef = 1DF5F4DF0D08C38300B7A737 /* UIKit.framework */; };
 		22B94A93BFFE42CCFC6E3AA7 /* sdkbox_config.json */ = {isa = PBXBuildFile; fileRef = 88B142C2967C81137A383726 /* sdkbox_config.json */; };
+		234B422DBA581ED33613EBEA /* PluginIAP.framework */ = {isa = PBXBuildFile; fileRef = F12C4A668732911C0B6EC182 /* PluginIAP.framework */; };
 		288765A50DF7441C002DB57D /* CoreGraphics.framework */ = {isa = PBXBuildFile; fileRef = 288765A40DF7441C002DB57D /* CoreGraphics.framework */; };
 		294D0D641D0D56D500F7F5D4 /* CoreText.framework */ = {isa = PBXBuildFile; fileRef = 294D0D631D0D56D500F7F5D4 /* CoreText.framework */; };
 		3B1A49F0AE7B80CC7F390956 /* FBSDKCoreKit.framework */ = {isa = PBXBuildFile; fileRef = F34D404B973F5E0825A6F12F /* FBSDKCoreKit.framework */; };
@@ -181,6 +182,7 @@
 		DE774DF395989FF6116184A8 /* GLKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLKit.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/System/Library/Frameworks/GLKit.framework; sourceTree = DEVELOPER_DIR; };
 		ED545A7B1B68A1F400C3958E /* libiconv.dylib */ = {isa = PBXFileReference; lastKnownFileType = compiled.mach-o.dylib; name = libiconv.dylib; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS8.4.sdk/usr/lib/libiconv.dylib; sourceTree = DEVELOPER_DIR; };
 		ED545A7D1B68A1FA00C3958E /* libiconv.dylib */ = {isa = PBXFileReference; lastKnownFileType = compiled.mach-o.dylib; name = libiconv.dylib; path = usr/lib/libiconv.dylib; sourceTree = SDKROOT; };
+		F12C4A668732911C0B6EC182 /* PluginIAP.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = PluginIAP.framework; path = PluginIAP.framework; sourceTree = SOURCE_ROOT; };
 		F32C43A1AE3C253C739CCF91 /* GameController.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GameController.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/System/Library/Frameworks/GameController.framework; sourceTree = DEVELOPER_DIR; };
 		F34D404B973F5E0825A6F12F /* FBSDKCoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FBSDKCoreKit.framework; path = FBSDKCoreKit.framework; sourceTree = SOURCE_ROOT; };
 		F70747E3A243DE6FFCD20BC9 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/System/Library/Frameworks/SystemConfiguration.framework; sourceTree = DEVELOPER_DIR; };
@@ -229,6 +231,7 @@
 				B8B647A0B29B27414D040B1F /* MobileCoreServices.framework */,
 				5EFC4FEAB376D1C17FC4F989 /* PluginChartboost.framework */,
 				BC084BE3A4313335B23982A8 /* Chartboost.framework */,
+				234B422DBA581ED33613EBEA /* PluginIAP.framework */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -348,6 +351,7 @@
 				0A0D4343ABA99530ADCDE64B /* MobileCoreServices.framework */,
 				8C3E4961828073CD7430138F /* PluginChartboost.framework */,
 				48C242EDB9F0AE76D0267B91 /* Chartboost.framework */,
+				F12C4A668732911C0B6EC182 /* PluginIAP.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -605,6 +609,7 @@
 					"\"GoogleMobileAds.framework\"",
 					"\"PluginChartboost.framework\"",
 					"\"Chartboost.framework\"",
+					"\"PluginIAP.framework\"",
 				);
 				OTHER_CFLAGS = (
 					-DSDKBOX_ENABLED,
@@ -654,6 +659,7 @@
 					"\"GoogleMobileAds.framework\"",
 					"\"PluginChartboost.framework\"",
 					"\"Chartboost.framework\"",
+					"\"PluginIAP.framework\"",
 				);
 				OTHER_CFLAGS = (
 					-DSDKBOX_ENABLED,

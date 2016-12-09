@@ -56,7 +56,9 @@ LOCAL_WHOLE_STATIC_LIBRARIES := PluginFacebook \
 sdkbox \
 PluginAdMob \
 PluginVungle \
-PluginChartboost
+PluginChartboost \
+PluginIAP \
+android_native_app_glue
 
 # _COCOS_HEADER_ANDROID_BEGIN
 # _COCOS_HEADER_ANDROID_END
@@ -75,6 +77,7 @@ $(call import-module, ./pluginfacebook)
 $(call import-module, ./pluginadmob)
 $(call import-module, ./pluginchartboost)
 $(call import-module, ./pluginvungle)
+$(call import-module, ./pluginiap)
 
 # _COCOS_LIB_IMPORT_ANDROID_BEGIN
 # _COCOS_LIB_IMPORT_ANDROID_END
