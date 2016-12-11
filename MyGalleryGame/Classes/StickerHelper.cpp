@@ -14,7 +14,7 @@ vector<STICKER_RARITY> StickerHelper::getCurrentPacketsFromSharePreferences() {
 			result.push_back(packetRarity);
 		}
 	}
-	CCLog("bambi StickerHelper there are %d packets available", result.size());
+//	CCLog("bambi StickerHelper there are %d packets available", result.size());
 	return result;
 }
 void StickerHelper::appendAPacketToSharePreferences(STICKER_RARITY packet) {

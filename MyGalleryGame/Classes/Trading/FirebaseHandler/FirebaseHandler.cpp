@@ -594,6 +594,7 @@ void FirebaseHandler::saveToMyStickerList(string objectID,
 	HttpClient::getInstance()->send(request);
 	request->release();
 }
+
 void FirebaseHandler::getProbability(string url, vector<string> probabilityKeys,
 		STICKER_RARITY rarity) {
 	CCLog("bambi get Probability from Firebase - calling");

@@ -29,6 +29,8 @@ static const char s_homescene_btn_iap[] = "homescene/btn_iap.png";
 static const char s_homescene_btn_continue[] = "homescene/btn_continue.png";
 static const char s_homescene_sprite_facebook_connect[] = "homescene/sprite_facebook_connect.png";
 static const char s_homescene_btn_facebook_connect[] = "homescene/btn_facebook_connect.png";
+static const char s_homescene_board_iap[] = "homescene/iap_board.png";
+static const char s_homescene_btn_iap_sub[] = "homescene/iap_button.png";
 
 static char* s_homescene_cut_sheet[] = {"homescene/cut_1.png","homescene/cut_2.png"};
 static const char s_homescene_btn_free_packet_top[] = "homescene/free_packet_top.png";
@@ -78,6 +80,7 @@ static const char s_settingscene_rdb_unselected[] = "settingscene/rdb_unselected
 //Sticker Scene elements
 static const char s_stickerscene_background[] = "stickerscene/bg_sticker.png";
 static const char s_stickerscene_btn_home[] = "stickerscene/btn_home.png";
+static const char s_stickerscene_btn_sell_sticker[] = "stickerscene/btn_sell_sticker.png";
 static const char s_stickerscene_btn_album[] = "stickerscene/btn_album.png";
 static const char s_stickerscene_btn_sticker[] = "stickerscene/btn_sticker.png";
 static const char s_stickerscene_btn_stick[] = "stickerscene/btn_stick.png";

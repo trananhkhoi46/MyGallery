@@ -939,6 +939,8 @@
 /Users/TAnh/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/assets/homescene/cut_2.png \
 /Users/TAnh/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/assets/homescene/free_packet_bottom.png \
 /Users/TAnh/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/assets/homescene/free_packet_top.png \
+/Users/TAnh/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/assets/homescene/iap_board.png \
+/Users/TAnh/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/assets/homescene/iap_button.png \
 /Users/TAnh/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/assets/homescene/menu_bar.png \
 /Users/TAnh/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/assets/homescene/progress.png \
 /Users/TAnh/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/assets/homescene/rare_packet_bottom.png \
@@ -1116,6 +1118,7 @@
 /Users/TAnh/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/assets/stickerscene/btn_all.png \
 /Users/TAnh/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/assets/stickerscene/btn_home.png \
 /Users/TAnh/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/assets/stickerscene/btn_sell.png \
+/Users/TAnh/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/assets/stickerscene/btn_sell_sticker.png \
 /Users/TAnh/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/assets/stickerscene/btn_stick.png \
 /Users/TAnh/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/assets/stickerscene/btn_sticker.png \
 /Users/TAnh/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/assets/stickerscene/sprite_exclamation.png \

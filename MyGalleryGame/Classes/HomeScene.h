@@ -6,7 +6,8 @@
 class HomeScene: public BaseScene,
 		FacebookConnectDelegate,
 		FirebaseDelegate,
-		FirebaseTradeFeatureDelegate {
+		FirebaseTradeFeatureDelegate,
+		sdkbox::IAPListener {
 private:
 	static HomeScene* instance;
 public:
@@ -62,6 +63,7 @@ public:
 	bool isRequestDone;
 	bool isOpeningAnotherScene;
 	bool isTradeLayerHasContent;
+	bool isPacketRunningTransactionDone;
 	Vec2 menuBarVisiblePosition;
 	Vec2 menuBarInvisiblePosition;
 
@@ -69,6 +71,7 @@ public:
 	Layer* blurLayer;
 	Layer* tradeLayer;
 	Layer* friendLayer;
+	Layer* iapLayer;
 	Label* labelSticker;
 	Label* labelTimeToGetFreeSticker;
 	Sprite* menuBar;
@@ -111,9 +114,19 @@ public:
 	virtual void responseAfterCheckingPendingRequest(
 			vector<PendingRequest*> vtPendingRequest); //From FirebaseTradeFeatureDelegate
 	virtual void responseAfterCheckingGivenSticker(
-				vector<PendingRequest*> vtGivenStickers); //From FirebaseTradeFeatureDelegate
+			vector<PendingRequest*> vtGivenStickers); //From FirebaseTradeFeatureDelegate
 	virtual void responseAfterDenyingRequest(bool isSuccess); //From FirebaseTradeFeatureDelegate
 	virtual void responseAfterAcceptingRequest(bool isSuccess); //From FirebaseTradeFeatureDelegate
+
+	//IAP listener
+	virtual void onInitialized(bool success);
+	virtual void onSuccess(const sdkbox::Product& p);
+	virtual void onFailure(const sdkbox::Product& p, const std::string& msg);
+	virtual void onCanceled(const sdkbox::Product& p);
+	virtual void onRestored(const sdkbox::Product& p);
+	virtual void onProductRequestSuccess(const std::vector<sdkbox::Product>& products);
+	virtual void onProductRequestFailure(const std::string& msg);
+	virtual void onRestoreComplete(bool ok, const std::string &msg);
 };
 
 #endif // __HOME_SCENE_H__

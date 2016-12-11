@@ -53,6 +53,9 @@ bool HomeScene::init() {
 	FirebaseHandler::getInstance()->setFirebaseDelegate(this);
 	FirebaseHandler::getInstance()->setFirebaseTradeFeatureDelegate(this);
 	FacebookHandler::getInstance()->setFacebookConnectDelegate(this);
+#ifdef SDKBOX_ENABLED
+	sdkbox::IAP::setListener(this);
+#endif
 
 	//Show ads
 	auto funcShowAds = CallFunc::create([=]() {
@@ -230,7 +233,7 @@ void HomeScene::initPacketButtons() {
 		btnPacketBottom->setVisible(false);
 		this->addChild(btnPacketBottom);
 
-		MoveTo* actionMoveTo = MoveTo::create(2,
+		MoveTo* actionMoveTo = MoveTo::create(1,
 				Vec2(
 						CppUtils::randomBetween(winSize.width * 0.3,
 								winSize.width * 0.7),
@@ -249,6 +252,12 @@ void HomeScene::initPacketButtons() {
 		}
 		index++;
 	}
+	isPacketRunningTransactionDone = false;
+	auto func = CallFunc::create([=]() {
+		isPacketRunningTransactionDone = true;
+	});
+	this->runAction(Sequence::create(DelayTime::create(1), func, nullptr));
+
 }
 
 void HomeScene::setVisibilityViewsOfTradingFeature() {
@@ -501,6 +510,91 @@ void HomeScene::initOtherViews() {
 					boardTrade->getPositionY()
 							+ boardTrade->getContentSize().height / 2 - 10));
 	tradeLayer->addChild(backgroundNumber);
+
+	//Add layer to show IAP list
+	iapLayer = LayerColor::create(Color4B(0, 0, 0, 100));
+	iapLayer->setContentSize(winSize);
+	iapLayer->setPosition(Vec2::ZERO);
+	iapLayer->setAnchorPoint(Vec2(0.0f, 0.0f));
+	iapLayer->setVisible(false);
+	this->addChild(iapLayer);
+
+	//Add board
+	Sprite* boardIAP = Sprite::create(s_homescene_board_iap);
+	boardIAP->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
+	boardIAP->setPosition(winSize / 2);
+	iapLayer->addChild(boardIAP);
+
+	//Add btn close
+	Button* btnClose3 = Button::create(s_homescene_btn_close);
+	btnClose3->setPosition(
+			Vec2(
+					boardIAP->getPositionX()
+							+ boardIAP->getContentSize().width / 2 - 40,
+					boardIAP->getPositionY()
+							+ boardIAP->getContentSize().height / 2 - 10));
+	btnClose3->setTouchEnabled(true);
+	btnClose3->setPressedActionEnabled(true);
+	btnClose3->addTouchEventListener([this](Ref *pSender,
+			Widget::TouchEventType type) {
+		if (type == cocos2d::ui::Widget::TouchEventType::ENDED)
+		{
+			iapLayer->setVisible(false);
+		}});
+	iapLayer->addChild(btnClose3);
+
+	//Add btn iap 1
+	Button* btnIAP1 = Button::create(s_homescene_btn_iap_sub);
+	btnIAP1->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
+	btnIAP1->setPosition(
+			Vec2(iapLayer->getContentSize().width / 2 - 300,
+					iapLayer->getContentSize().height / 2 - 350));
+	btnIAP1->setTouchEnabled(true);
+	btnIAP1->setPressedActionEnabled(true);
+	btnIAP1->addTouchEventListener([this](Ref *pSender,
+			Widget::TouchEventType type) {
+		if (type == cocos2d::ui::Widget::TouchEventType::ENDED)
+		{
+			sdkbox::IAP::purchase("pack_1");
+
+//			//FIXME for testing
+//			sdkbox::Product product;
+//			product.name = "pack_1";
+//			onSuccess(product);
+		}});
+	iapLayer->addChild(btnIAP1);
+
+	//Add btn iap 2
+	Button* btnIAP2 = Button::create(s_homescene_btn_iap_sub);
+	btnIAP2->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
+	btnIAP2->setPosition(
+			Vec2(iapLayer->getContentSize().width / 2,
+					iapLayer->getContentSize().height / 2 - 350));
+	btnIAP2->setTouchEnabled(true);
+	btnIAP2->setPressedActionEnabled(true);
+	btnIAP2->addTouchEventListener([this](Ref *pSender,
+			Widget::TouchEventType type) {
+		if (type == cocos2d::ui::Widget::TouchEventType::ENDED)
+		{
+			sdkbox::IAP::purchase("pack_2");
+		}});
+	iapLayer->addChild(btnIAP2);
+
+	//Add btn iap 3
+	Button* btnIAP3 = Button::create(s_homescene_btn_iap_sub);
+	btnIAP3->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
+	btnIAP3->setPosition(
+			Vec2(iapLayer->getContentSize().width / 2 + 300,
+					iapLayer->getContentSize().height / 2 - 350));
+	btnIAP3->setTouchEnabled(true);
+	btnIAP3->setPressedActionEnabled(true);
+	btnIAP3->addTouchEventListener([this](Ref *pSender,
+			Widget::TouchEventType type) {
+		if (type == cocos2d::ui::Widget::TouchEventType::ENDED)
+		{
+			sdkbox::IAP::purchase("pack_3");
+		}});
+	iapLayer->addChild(btnIAP3);
 }
 
 void HomeScene::initSettingMenu() {
@@ -819,23 +913,20 @@ void HomeScene::closeTradeLayer() {
 }
 
 void HomeScene::closeBlurLayer() {
-	Vector<Node*> layerChildren = blurLayer->getChildren();
-	for (const auto child : layerChildren) {
-		if (child && child->getTag() == kTagNewSticker) {
-			blurLayer->removeChild(child, false);
+	if (backgroundLayer == nullptr || !backgroundLayer->isVisible()) {
+		Vector<Node*> layerChildren = blurLayer->getChildren();
+		for (const auto child : layerChildren) {
+			if (child && child->getTag() == kTagNewSticker) {
+				blurLayer->removeChild(child, false);
+			}
 		}
+		blurLayer->setVisible(false);
 	}
-	blurLayer->setVisible(false);
 }
 
 //---------------------------------------------------------------------End of invalidate views methods
 //---------------------------------------------------------------------Game logic methods
 void HomeScene::earn3RandomStickers() {
-	timeToGetFreeStickerInSecond = time(
-			nullptr) + TIME_TO_GET_FREE_PACKET_IN_SECOND;
-	UserDefault::getInstance()->setIntegerForKey(
-	TIME_TO_GET_FREE_STICKER_IN_SECOND, timeToGetFreeStickerInSecond);
-
 	earn3Stickers(STICKER_RARITY::UNKNOWN);
 }
 
@@ -943,6 +1034,11 @@ void HomeScene::earn3Stickers(STICKER_RARITY rarity) {
 	StickerHelper::saveToMyStickerList(stickerIdString);
 
 	invalidateProgressBar();
+
+	timeToGetFreeStickerInSecond = time(
+			nullptr) + TIME_TO_GET_FREE_PACKET_IN_SECOND;
+	UserDefault::getInstance()->setIntegerForKey(
+	TIME_TO_GET_FREE_STICKER_IN_SECOND, timeToGetFreeStickerInSecond);
 }
 
 void HomeScene::openStickerDetailLayer(Sticker* sticker) {
@@ -1343,7 +1439,8 @@ void HomeScene::packetButtonsCallback(Ref* pSender,
 		ui::Widget::TouchEventType eEventType) {
 	if (eEventType == ui::Widget::TouchEventType::BEGAN
 			&& !blurLayer->isVisible() && !friendLayer->isVisible()
-			&& !tradeLayer->isVisible() && cut->numberOfRunningActions() == 0) {
+			&& !tradeLayer->isVisible() && !iapLayer->isVisible() && isPacketRunningTransactionDone
+			&& cut->numberOfRunningActions() == 0) {
 		int animationDuration = 3;
 		Button* btnPacketBottom = dynamic_cast<Button*>(pSender);
 		int tag = (int) btnPacketBottom->getTag();
@@ -1437,12 +1534,12 @@ void HomeScene::iapButtonsCallback(Ref* pSender,
 		ui::Widget::TouchEventType eEventType) {
 	if (eEventType == ui::Widget::TouchEventType::ENDED
 			&& !blurLayer->isVisible() && !friendLayer->isVisible()
-			&& !tradeLayer->isVisible()) {
+			&& !tradeLayer->isVisible() && !iapLayer->isVisible()) {
 		if (backgroundLayer != nullptr && backgroundLayer->isVisible()) {
 			this->removeChild(backgroundLayer, false);
 			backgroundLayer = nullptr;
 		} else {
-			sdkbox::IAP::purchase("remove_ads");
+			iapLayer->setVisible(true);
 		}
 	}
 }
@@ -1450,7 +1547,7 @@ void HomeScene::rewardedButtonsCallback(Ref* pSender,
 		ui::Widget::TouchEventType eEventType) {
 	if (eEventType == ui::Widget::TouchEventType::ENDED
 			&& !blurLayer->isVisible() && !friendLayer->isVisible()
-			&& !tradeLayer->isVisible()) {
+			&& !tradeLayer->isVisible() && !iapLayer->isVisible()) {
 		if (backgroundLayer != nullptr && backgroundLayer->isVisible()) {
 			this->removeChild(backgroundLayer, false);
 			backgroundLayer = nullptr;
@@ -1464,7 +1561,7 @@ void HomeScene::tradeButtonCallback(Ref* pSender,
 		ui::Widget::TouchEventType eEventType) {
 	if (eEventType == ui::Widget::TouchEventType::ENDED
 			&& !blurLayer->isVisible() && !friendLayer->isVisible()
-			&& !tradeLayer->isVisible()) {
+			&& !tradeLayer->isVisible() && !iapLayer->isVisible()) {
 		int numberOfPendingRequest = vtPendingRequest.size();
 		int numberOfGivenStickers = vtGivenSticker.size();
 		if (backgroundLayer != nullptr && backgroundLayer->isVisible()) {
@@ -1491,7 +1588,7 @@ void HomeScene::friendButtonCallback(Ref* pSender,
 		ui::Widget::TouchEventType eEventType) {
 	if (eEventType == ui::Widget::TouchEventType::ENDED
 			&& !blurLayer->isVisible() && !friendLayer->isVisible()
-			&& !tradeLayer->isVisible()) {
+			&& !tradeLayer->isVisible() && !iapLayer->isVisible()) {
 		if (backgroundLayer != nullptr && backgroundLayer->isVisible()) {
 			this->removeChild(backgroundLayer, false);
 			backgroundLayer = nullptr;
@@ -1508,7 +1605,8 @@ void HomeScene::facebookConnectButtonCallback(Ref* pSender,
 		ui::Widget::TouchEventType eEventType) {
 	if (eEventType == ui::Widget::TouchEventType::ENDED
 			&& !blurLayer->isVisible() && !friendLayer->isVisible()
-			&& !tradeLayer->isVisible() && !isLoggingInFacebook) {
+			&& !tradeLayer->isVisible() && !iapLayer->isVisible()
+			&& !isLoggingInFacebook) {
 		if (backgroundLayer != nullptr && backgroundLayer->isVisible()) {
 			this->removeChild(backgroundLayer, false);
 			backgroundLayer = nullptr;
@@ -1788,6 +1886,49 @@ bool HomeScene::onTouchBegan(Touch* touch, Event* event) {
 		backgroundLayer = nullptr;
 	}
 	return true;
+}
+
+void HomeScene::onInitialized(bool success) {
+	CCLog("bambi IAP onInitialized, success: %s", success ? "true" : "false");
+}
+void HomeScene::onSuccess(const sdkbox::Product& p) {
+	CCLog("bambi IAP onSuccess: %s", p.name.c_str());
+	if (p.name == "pack_1") {
+		StickerHelper::appendAPacketToSharePreferences(
+				STICKER_RARITY::UNCOMMON);
+		iapLayer->setVisible(false);
+	} else if (p.name == "pack_2") {
+		StickerHelper::appendAPacketToSharePreferences(STICKER_RARITY::COMMON);
+		StickerHelper::appendAPacketToSharePreferences(
+				STICKER_RARITY::UNCOMMON);
+		iapLayer->setVisible(false);
+	} else if (p.name == "pack_3") {
+		StickerHelper::appendAPacketToSharePreferences(STICKER_RARITY::COMMON);
+		StickerHelper::appendAPacketToSharePreferences(
+				STICKER_RARITY::UNCOMMON);
+		StickerHelper::appendAPacketToSharePreferences(STICKER_RARITY::RARE);
+		iapLayer->setVisible(false);
+	}
+}
+void HomeScene::onFailure(const sdkbox::Product& p, const std::string& msg) {
+	CCLog("bambi IAP onFailure: %s", p.name.c_str());
+}
+void HomeScene::onCanceled(const sdkbox::Product& p) {
+	CCLog("bambi IAP onCanceled: %s", p.name.c_str());
+}
+void HomeScene::onRestored(const sdkbox::Product& p) {
+	CCLog("bambi IAP onRestored: %s", p.name.c_str());
+}
+void HomeScene::onProductRequestSuccess(
+		const std::vector<sdkbox::Product>& products) {
+	CCLog("bambi IAP onProductRequestSuccess");
+}
+void HomeScene::onProductRequestFailure(const std::string& msg) {
+	CCLog("bambi IAP onProductRequestFailure: %s", msg.c_str());
+}
+void HomeScene::onRestoreComplete(bool ok, const std::string &msg) {
+	CCLog("bambi IAP onRestoreComplete, ok: %s, msg: %s", ok ? "true" : "false",
+			msg.c_str());
 }
 
 //TODO exist game if press back twice in 2 seconds
