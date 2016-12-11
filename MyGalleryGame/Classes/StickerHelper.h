@@ -15,10 +15,12 @@ public:
 
 	static bool isStickerHasAlreadyExisted(int stickerId);
 	static bool isStickerHasNotSticked(int stickerId);
+	static bool isStickerAbleToSell(int stickerId);
 	static void saveToMyStickerList(int stickerId);
 	static void saveToMyStickerList(string stickerIdString);
 	static void saveToMyGluedStickerList(int stickerId);
 	static void saveToMyGluedStickerList(string stickerIdString);
+	static void sellSticker(Sticker* sticker);
 	static int getCurrentExistStickerNumber(bool withUniqueElements);
 	static vector<Sticker*> getCurrentExistSticker(bool withUniqueElements, bool getHasNotGluedStickersOnly);
 	static vector<Sticker*> getCurrentExistSticker(bool withUniqueElements);

@@ -17,6 +17,29 @@ vector<STICKER_RARITY> StickerHelper::getCurrentPacketsFromSharePreferences() {
 //	CCLog("bambi StickerHelper there are %d packets available", result.size());
 	return result;
 }
+void StickerHelper::sellSticker(Sticker* sticker) {
+	//Remove stickers
+	string stickerIdString = CppUtils::doubleToString(sticker->sticker_id);
+	string currentStickerIdString = UserDefault::getInstance()->getStringForKey(
+	CURRENT_STICKER);
+
+	for (int index = 0; index < 4; index++) {
+		std::string::size_type i = currentStickerIdString.find(stickerIdString);
+		if (i != std::string::npos) {
+			currentStickerIdString.erase(i, stickerIdString.length());
+		}
+
+		std::string::size_type i2 = currentStickerIdString.find(",,"); //Replace ,, to ,
+		if (i2 != std::string::npos) {
+			currentStickerIdString.erase(i2, 1);
+		}
+	}
+	UserDefault::getInstance()->setStringForKey(
+	CURRENT_STICKER, currentStickerIdString);
+
+	//Get a packet
+	appendAPacketToSharePreferences(sticker->rarity);
+}
 void StickerHelper::appendAPacketToSharePreferences(STICKER_RARITY packet) {
 	string packetString = CppUtils::doubleToString(static_cast<int>(packet));
 	string currentPacketString = UserDefault::getInstance()->getStringForKey(
@@ -71,6 +94,17 @@ bool StickerHelper::isStickerHasNotSticked(int stickerId) {
 		}
 	}
 	return true;
+}
+
+bool StickerHelper::isStickerAbleToSell(int stickerId) {
+	vector<Sticker*> vtSticker = getCurrentExistSticker(false);
+	int count = 0;
+	for (Sticker* sticker : vtSticker) {
+		if (sticker->sticker_id == stickerId) {
+			count++;
+		}
+	}
+	return count >= 4;
 }
 
 Sticker* StickerHelper::getStickerFromId(int stickerId) {

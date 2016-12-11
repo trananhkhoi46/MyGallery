@@ -482,6 +482,26 @@ void StickerScene::openStickerDetailLayer(Sticker* sticker) {
 		backgroundLayer->addChild(btnAlbumScene);
 	}
 
+	//Add button sell
+	if (StickerHelper::isStickerAbleToSell(sticker->sticker_id)) {
+		Button* btnSellSticker = Button::create(s_stickerscene_btn_sell_sticker);
+		btnSellSticker->setPosition(
+				Vec2(btnSellSticker->getContentSize().width / 2 - 20,
+						winSize.height * 0.1f));
+		btnSellSticker->setTouchEnabled(true);
+		btnSellSticker->setPressedActionEnabled(true);
+		btnSellSticker->addTouchEventListener([this, sticker](Ref *pSender,
+				Widget::TouchEventType type) {
+			if (type == cocos2d::ui::Widget::TouchEventType::ENDED)
+			{
+				StickerHelper::sellSticker(sticker);
+				auto *newScene = StickerScene::scene(searchingType);
+				Director *pDirector = Director::getInstance();
+				pDirector->replaceScene(newScene);
+			}});
+		backgroundLayer->addChild(btnSellSticker);
+	}
+
 	//Hide scrollview to make onTouchBegan works
 	scrollview->setVisible(false);
 }
