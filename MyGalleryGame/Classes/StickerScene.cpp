@@ -23,6 +23,15 @@ Scene* StickerScene::scene(int searchType) {
 				true);
 	} else if (searchType == SEARCH_TYPE_SELL) //Type sell
 	{
+		vt_stickers_searching.clear();
+		vector<Sticker*> vt_stickers_temp =
+				StickerHelper::getCurrentExistSticker(true);
+		for (Sticker* sticker : vt_stickers_temp) {
+			if (StickerHelper::isStickerAbleToSell(sticker->sticker_id)) {
+				CCLog("bambi StickerScene -> Sell mode -> pushback: %d", sticker->sticker_id);
+				vt_stickers_searching.push_back(sticker);
+			}
+		}
 	}
 
 	// 'scene' is an autorelease object
@@ -159,11 +168,10 @@ void StickerScene::initMenuBottom() {
 			Widget::TouchEventType type) {
 		if (type == cocos2d::ui::Widget::TouchEventType::ENDED)
 		{
-//			auto *newScene = StickerScene::scene(SEARCH_TYPE_SELL);
-//			auto transition = TransitionFade::create(1.0, newScene);
-//			Director *pDirector = Director::getInstance();
-//			pDirector->replaceScene(transition);
-			SocialPlugin::showToast("Isn't supported this feature");
+			auto *newScene = StickerScene::scene(SEARCH_TYPE_SELL);
+			auto transition = TransitionFade::create(1.0, newScene);
+			Director *pDirector = Director::getInstance();
+			pDirector->replaceScene(transition);
 		}});
 	this->addChild(btnSell);
 	if (searchingType == SEARCH_TYPE_SELL) {
@@ -484,7 +492,8 @@ void StickerScene::openStickerDetailLayer(Sticker* sticker) {
 
 	//Add button sell
 	if (StickerHelper::isStickerAbleToSell(sticker->sticker_id)) {
-		Button* btnSellSticker = Button::create(s_stickerscene_btn_sell_sticker);
+		Button* btnSellSticker = Button::create(
+				s_stickerscene_btn_sell_sticker);
 		btnSellSticker->setPosition(
 				Vec2(btnSellSticker->getContentSize().width / 2 - 20,
 						winSize.height * 0.1f));
