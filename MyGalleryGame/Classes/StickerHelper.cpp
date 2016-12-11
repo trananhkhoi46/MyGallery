@@ -1,5 +1,54 @@
 #include "StickerHelper.h"
 
+vector<STICKER_RARITY> StickerHelper::getCurrentPacketsFromSharePreferences() {
+	vector<STICKER_RARITY> result;
+	string currentPacketString = UserDefault::getInstance()->getStringForKey(
+	CURRENT_PACKET, "0,1,2");
+	vector < string > vtPackets = CppUtils::splitStringByDelim(
+			currentPacketString, ',');
+	for (string packetString : vtPackets) {
+		if (packetString != "") {
+			STICKER_RARITY packetRarity =
+					static_cast<STICKER_RARITY>(CppUtils::stringToDouble(
+							packetString));
+			result.push_back(packetRarity);
+		}
+	}
+	CCLog("bambi StickerHelper there are %d packets available", result.size());
+	return result;
+}
+void StickerHelper::appendAPacketToSharePreferences(STICKER_RARITY packet) {
+	string packetString = CppUtils::doubleToString(static_cast<int>(packet));
+	string currentPacketString = UserDefault::getInstance()->getStringForKey(
+	CURRENT_PACKET, "0,1,2");
+
+	currentPacketString = "," + packetString;
+
+	std::string::size_type i2 = currentPacketString.find(",,"); //Replace ,, to ,
+	if (i2 != std::string::npos) {
+		currentPacketString.erase(i2, 1);
+	}
+	UserDefault::getInstance()->setStringForKey(
+	CURRENT_PACKET, currentPacketString);
+}
+void StickerHelper::removeAPacketFromSharePerferences(STICKER_RARITY packet) {
+	string packetString = CppUtils::doubleToString(static_cast<int>(packet));
+	string currentPacketString = UserDefault::getInstance()->getStringForKey(
+	CURRENT_PACKET, "0,1,2");
+
+	std::string::size_type i = currentPacketString.find(packetString);
+	if (i != std::string::npos) {
+		currentPacketString.erase(i, packetString.length());
+	}
+
+	std::string::size_type i2 = currentPacketString.find(",,"); //Replace ,, to ,
+	if (i2 != std::string::npos) {
+		currentPacketString.erase(i2, 1);
+	}
+	UserDefault::getInstance()->setStringForKey(
+	CURRENT_PACKET, currentPacketString);
+}
+
 bool StickerHelper::isStickerHasAlreadyExisted(int stickerId) {
 	string stickerIdString = CppUtils::doubleToString(stickerId);
 	vector < string > listString = CppUtils::splitStringByDelim(
@@ -67,7 +116,8 @@ void StickerHelper::saveToMyStickerList(string stickerIdString) {
 
 	//Save to server
 	if (FacebookHandler::getInstance()->isFacebookLoggedIn()) {
-		FirebaseHandler::getInstance()->saveToMyStickerList(UserDefault::getInstance()->getStringForKey(CURRENT_STICKER));
+		FirebaseHandler::getInstance()->saveToMyStickerList(
+				UserDefault::getInstance()->getStringForKey(CURRENT_STICKER));
 	}
 }
 void StickerHelper::saveToMyStickerList(int stickerId) {
@@ -83,7 +133,8 @@ void StickerHelper::saveToMyGluedStickerList(string stickerIdString) {
 
 	//Save to server
 	if (FacebookHandler::getInstance()->isFacebookLoggedIn()) {
-		FirebaseHandler::getInstance()->saveToMyStickedStickerList(UserDefault::getInstance()->getStringForKey(STICKED_STICKER));
+		FirebaseHandler::getInstance()->saveToMyStickedStickerList(
+				UserDefault::getInstance()->getStringForKey(STICKED_STICKER));
 	}
 }
 void StickerHelper::saveToMyGluedStickerList(int stickerId) {

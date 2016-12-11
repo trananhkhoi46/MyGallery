@@ -40,7 +40,7 @@ public:
 	void initControlButtons();
 	void initOtherViews();
 	void initDefaultVariables();
-	void setVisibilityFreePacket();
+	void setVisibilityPacket();
 	void earn3RandomStickers();
 	void earn3Stickers(STICKER_RARITY rarity);
 	void closeBlurLayer();
@@ -51,12 +51,14 @@ public:
 	void closeFriendLayer();
 	void closeTradeLayer();
 	void addElementsToTradeLayer();
+	bool isAPacketAvailableFunc();
+	Sticker* getARandomSticker(STICKER_RARITY rarity);
 
 	int currentStickers;
 	int maxStickers;
 	int timeToGetFreeStickerInSecond;
 	bool isMenuBarShowing;
-	bool isFreePacketAvailable;
+	bool isAPacketAvailable;
 	bool isRequestDone;
 	bool isOpeningAnotherScene;
 	bool isTradeLayerHasContent;
@@ -73,16 +75,18 @@ public:
 	Sprite* cut;
 	Sprite* spriteTimeFreeSticker;
 	Animate* cut_animate;
-	Button* btnFreePacketTop;
-	Button* btnFreePacketBottom;
-	Button* btnCommonPacketTop;
-	Button* btnCommonPacketBottom;
-	Button* btnUncommonPacketTop;
-	Button* btnUncommonPacketBottom;
-	Button* btnRarePacketTop;
-	Button* btnRarePacketBottom;
-	Button* btnBundlePacketTop;
-	Button* btnBundlePacketBottom;
+
+//	Button* btnFreePacketTop;
+//	Button* btnFreePacketBottom;
+//	Button* btnCommonPacketTop;
+//	Button* btnCommonPacketBottom;
+//	Button* btnUncommonPacketTop;
+//	Button* btnUncommonPacketBottom;
+//	Button* btnRarePacketTop;
+//	Button* btnRarePacketBottom;
+//	Button* btnBundlePacketTop;
+//	Button* btnBundlePacketBottom;
+
 	Button* btnRewardedAds;
 	Button* btnIAP;
 	Button* btnContinue;
@@ -93,6 +97,8 @@ public:
 	vector<BUserInfor*> vt_Friends;
 	vector<PendingRequest*> vtPendingRequest;
 	vector<PendingRequest*> vtGivenSticker;
+	vector<Button*> vtButtonTopPackets;
+	vector<Button*> vtButtonBottomPackets;
 
 	//FacebookConnectDelegate response
 	virtual void responseWhenLoginOrLogoutFacebook();

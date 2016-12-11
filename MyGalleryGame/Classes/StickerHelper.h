@@ -24,6 +24,11 @@ public:
 	static vector<Sticker*> getCurrentExistSticker(bool withUniqueElements);
 	static vector<Sticker*> getStickerOfPage(StickerPage* page);
 	static vector<Sticker*> getStickerAvailableToGlueOfPage(StickerPage* page);
+
+	static vector<STICKER_RARITY> getCurrentPacketsFromSharePreferences();
+	static void appendAPacketToSharePreferences(STICKER_RARITY packet);
+	static void removeAPacketFromSharePerferences(STICKER_RARITY packet);
+
 	static int getStickerQuantityInMyList(int stickerId);
 	static Sticker* getStickerFromId(int stickerId);
 	static StickerPage* getStickerPageFromId(int stickerPageId);

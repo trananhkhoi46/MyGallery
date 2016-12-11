@@ -9,13 +9,14 @@
 #define kTagRating 2
 #define kTagSetting 3
 #define kTagFreePacket 4
-#define kTagBundlePacket 5
 #define kTagCommonPacket 6
 #define kTagUncommonPacket 7
 #define kTagRarePacket 8
 #define kTagNewSticker 9
 #define kTagFriendList 10
 #define kTagTradeLayerElements 11
+#define kTagVeryRarePacket 12
+#define kTagRarestPacket 13
 
 TTFConfig configControlButton(s_font, 65 * s_font_ratio);
 TTFConfig configLabelSticker(s_font, 60 * s_font_ratio);
@@ -58,7 +59,7 @@ bool HomeScene::init() {
 		showFullscreenAds();
 	});
 	this->runAction(
-			Sequence::create(DelayTime::create(3), funcShowAds, nullptr));
+			Sequence::create(DelayTime::create(2), funcShowAds, nullptr));
 
 	//////////////////////////////
 	// 1. super init first
@@ -82,7 +83,7 @@ bool HomeScene::init() {
 	initControlButtons();
 
 	//Set visibily for some views at first time
-	setVisibilityFreePacket();
+	setVisibilityPacket();
 
 	//Handling touch event
 	auto listener = EventListenerTouchOneByOne::create();
@@ -128,7 +129,7 @@ void HomeScene::initDefaultVariables() {
 	TIME_TO_GET_FREE_STICKER_IN_SECOND, time(nullptr));
 
 	isMenuBarShowing = false;
-	isFreePacketAvailable = time(nullptr) >= timeToGetFreeStickerInSecond;
+	isAPacketAvailable = isAPacketAvailableFunc();
 
 	//Cut animation
 	int frameAmount_cut = 2;
@@ -172,19 +173,82 @@ void HomeScene::initPacketButtons() {
 	spriteTimeFreeSticker->runAction(repeat);
 
 	//Add btn free packet
-	btnFreePacketTop = Button::create(s_homescene_btn_free_packet_top);
-	btnFreePacketTop->setZoomScale(0);
-	btnFreePacketTop->setPosition(Vec2(winSize.width / 2, winSize.height / 2));
-	this->addChild(btnFreePacketTop);
-	btnFreePacketBottom = Button::create(s_homescene_btn_free_packet_bottom);
-	btnFreePacketBottom->setZoomScale(0);
-	btnFreePacketBottom->setPressedActionEnabled(false);
-	btnFreePacketBottom->setPosition(
-			Vec2(winSize.width / 2, winSize.height / 2));
-	btnFreePacketBottom->addTouchEventListener(
-			CC_CALLBACK_2(HomeScene::packetButtonsCallback, this));
-	btnFreePacketBottom->setTag(kTagFreePacket);
-	this->addChild(btnFreePacketBottom);
+	vector<STICKER_RARITY> vtStickerPacketRarity =
+			StickerHelper::getCurrentPacketsFromSharePreferences();
+	int index = 0;
+	for (int rarityInt = UNKNOWN; rarityInt != RAREST; rarityInt++) {
+		STICKER_RARITY packetRarity = static_cast<STICKER_RARITY>(rarityInt);
+
+		string imageResourceTop;
+		string imageResourceBottom;
+		int tag;
+
+		if (packetRarity == STICKER_RARITY::UNKNOWN) //Free packet
+				{
+			imageResourceTop = s_homescene_btn_free_packet_top;
+			imageResourceBottom = s_homescene_btn_free_packet_bottom;
+			tag = kTagFreePacket;
+		} else if (packetRarity == STICKER_RARITY::COMMON) {
+			imageResourceTop = s_homescene_btn_common_packet_top;
+			imageResourceBottom = s_homescene_btn_common_packet_bottom;
+			tag = kTagCommonPacket;
+		} else if (packetRarity == STICKER_RARITY::UNCOMMON) {
+			imageResourceTop = s_homescene_btn_uncommon_packet_top;
+			imageResourceBottom = s_homescene_btn_uncommon_packet_bottom;
+			tag = kTagUncommonPacket;
+		} else if (packetRarity == STICKER_RARITY::RARE) {
+			imageResourceTop = s_homescene_btn_rare_packet_top;
+			imageResourceBottom = s_homescene_btn_rare_packet_bottom;
+			tag = kTagRarePacket;
+		} else if (packetRarity == STICKER_RARITY::VERYRARE) {
+			imageResourceTop = s_homescene_btn_very_rare_packet_top;
+			imageResourceBottom = s_homescene_btn_very_rare_packet_bottom;
+			tag = kTagVeryRarePacket;
+		} else if (packetRarity == STICKER_RARITY::RAREST) {
+			imageResourceTop = s_homescene_btn_rarest_packet_top;
+			imageResourceBottom = s_homescene_btn_rarest_packet_bottom;
+			tag = kTagRarestPacket;
+		}
+
+		Button* btnPacketTop = Button::create(imageResourceTop);
+		btnPacketTop->setZoomScale(0);
+		btnPacketTop->setPosition(
+				Vec2(-btnPacketTop->getContentSize().width / 2,
+						btnPacketTop->getContentSize().height / 2));
+		btnPacketTop->setTag(tag);
+		btnPacketTop->setVisible(false);
+		this->addChild(btnPacketTop);
+		Button* btnPacketBottom = Button::create(imageResourceBottom);
+		btnPacketBottom->setZoomScale(0);
+		btnPacketBottom->setPressedActionEnabled(false);
+		btnPacketBottom->setPosition(
+				Vec2(-btnPacketBottom->getContentSize().width / 2,
+						btnPacketBottom->getContentSize().height / 2));
+		btnPacketBottom->addTouchEventListener(
+				CC_CALLBACK_2(HomeScene::packetButtonsCallback, this));
+		btnPacketBottom->setTag(tag);
+		btnPacketBottom->setVisible(false);
+		this->addChild(btnPacketBottom);
+
+		MoveTo* actionMoveTo = MoveTo::create(2,
+				Vec2(
+						CppUtils::randomBetween(winSize.width * 0.3,
+								winSize.width * 0.7),
+						CppUtils::randomBetween(winSize.height * 0.3,
+								winSize.height * 0.7)));
+		btnPacketBottom->runAction(actionMoveTo);
+		btnPacketTop->runAction(actionMoveTo->clone());
+		vtButtonBottomPackets.push_back(btnPacketBottom);
+		vtButtonTopPackets.push_back(btnPacketTop);
+
+		if (std::find(vtStickerPacketRarity.begin(),
+				vtStickerPacketRarity.end(), packetRarity)
+				!= vtStickerPacketRarity.end()) {
+			btnPacketBottom->setVisible(true);
+			btnPacketTop->setVisible(true);
+		}
+		index++;
+	}
 }
 
 void HomeScene::setVisibilityViewsOfTradingFeature() {
@@ -586,6 +650,10 @@ void HomeScene::initControlButtons() {
 
 }
 
+bool HomeScene::isAPacketAvailableFunc() {
+	return StickerHelper::getCurrentPacketsFromSharePreferences().size() > 0;
+}
+
 //---------------------------------------------------------------------End of init methods
 //---------------------------------------------------------------------Game loop methods
 void HomeScene::update(float dt) {
@@ -609,20 +677,93 @@ void HomeScene::timer(float interval) {
 						secondLeft)->getCString());
 	}
 
-	isFreePacketAvailable = time(nullptr) >= timeToGetFreeStickerInSecond;
-	if (isFreePacketAvailable) {
-		setVisibilityFreePacket();
+	isAPacketAvailable = isAPacketAvailableFunc();
+	if (isAPacketAvailable) {
+		setVisibilityPacket();
 		this->unschedule(schedule_selector(HomeScene::timer));
+	} else {
+		if (time(nullptr) >= timeToGetFreeStickerInSecond) {
+			StickerHelper::appendAPacketToSharePreferences(
+					STICKER_RARITY::UNKNOWN);
+
+			timeToGetFreeStickerInSecond = time(
+					nullptr) + TIME_TO_GET_FREE_PACKET_IN_SECOND;
+			UserDefault::getInstance()->setIntegerForKey(
+			TIME_TO_GET_FREE_STICKER_IN_SECOND, timeToGetFreeStickerInSecond);
+		}
 	}
 }
 //---------------------------------------------------------------------End of game loop methods
 //---------------------------------------------------------------------Invalidate views methods
-void HomeScene::setVisibilityFreePacket() {
-	btnRewardedAds->setVisible(!isFreePacketAvailable);
-	btnIAP->setVisible(!isFreePacketAvailable);
-	spriteTimeFreeSticker->setVisible(!isFreePacketAvailable);
-	btnFreePacketBottom->setVisible(isFreePacketAvailable);
-	btnFreePacketTop->setVisible(isFreePacketAvailable);
+void HomeScene::setVisibilityPacket() {
+	btnRewardedAds->setVisible(!isAPacketAvailable);
+	btnIAP->setVisible(!isAPacketAvailable);
+	spriteTimeFreeSticker->setVisible(!isAPacketAvailable);
+
+	vector<STICKER_RARITY> vtStickerPacketRarity =
+			StickerHelper::getCurrentPacketsFromSharePreferences();
+	for (Button* btnPacketBottom : vtButtonBottomPackets) {
+		STICKER_RARITY packetRarity;
+		int tag = btnPacketBottom->getTag();
+		switch (tag) {
+		case kTagFreePacket:
+			packetRarity = STICKER_RARITY::UNKNOWN;
+			break;
+		case kTagUncommonPacket:
+			packetRarity = STICKER_RARITY::UNCOMMON;
+			break;
+		case kTagCommonPacket:
+			packetRarity = STICKER_RARITY::COMMON;
+			break;
+		case kTagRarePacket:
+			packetRarity = STICKER_RARITY::RARE;
+			break;
+		case kTagVeryRarePacket:
+			packetRarity = STICKER_RARITY::VERYRARE;
+			break;
+		case kTagRarestPacket:
+			packetRarity = STICKER_RARITY::RAREST;
+			break;
+		}
+
+		if (std::find(vtStickerPacketRarity.begin(),
+				vtStickerPacketRarity.end(), packetRarity)
+				!= vtStickerPacketRarity.end()) {
+			btnPacketBottom->setVisible(true);
+		}
+	}
+	for (Button* btnPacketTop : vtButtonTopPackets) {
+		STICKER_RARITY packetRarity;
+		int tag = btnPacketTop->getTag();
+		switch (tag) {
+		case kTagFreePacket:
+			packetRarity = STICKER_RARITY::UNKNOWN;
+			break;
+		case kTagUncommonPacket:
+			packetRarity = STICKER_RARITY::UNCOMMON;
+			break;
+		case kTagCommonPacket:
+			packetRarity = STICKER_RARITY::COMMON;
+			break;
+		case kTagRarePacket:
+			packetRarity = STICKER_RARITY::RARE;
+			break;
+		case kTagVeryRarePacket:
+			packetRarity = STICKER_RARITY::VERYRARE;
+			break;
+		case kTagRarestPacket:
+			packetRarity = STICKER_RARITY::RAREST;
+			break;
+		}
+
+		if (std::find(vtStickerPacketRarity.begin(),
+				vtStickerPacketRarity.end(), packetRarity)
+				!= vtStickerPacketRarity.end()) {
+			btnPacketTop->setVisible(true);
+
+		}
+
+	}
 }
 
 void HomeScene::invalidateProgressBar() {
@@ -694,108 +835,112 @@ void HomeScene::earn3RandomStickers() {
 			nullptr) + TIME_TO_GET_FREE_PACKET_IN_SECOND;
 	UserDefault::getInstance()->setIntegerForKey(
 	TIME_TO_GET_FREE_STICKER_IN_SECOND, timeToGetFreeStickerInSecond);
-	isFreePacketAvailable = time(nullptr) >= timeToGetFreeStickerInSecond;
-	setVisibilityFreePacket();
-	schedule(schedule_selector(HomeScene::timer), 1);
 
 	earn3Stickers(STICKER_RARITY::UNKNOWN);
 }
 
-void HomeScene::earn3Stickers(STICKER_RARITY rarity) {
-	blurLayer->setVisible(true);
-
-	switch (rarity) {
-	case STICKER_RARITY::COMMON: {
-		CCLog("bambi earn3Stickers common");
-	}
-		break;
-	case STICKER_RARITY::UNCOMMON: {
-		CCLog("bambi earn3Stickers uncommon");
-	}
-		break;
-	case STICKER_RARITY::RARE: {
-		CCLog("bambi earn3Stickers rare");
-	}
-		break;
-	case STICKER_RARITY::UNKNOWN: {
-		string stickerIdString = "";
-		for (int i = 0; i < 3; i++) {
-			//Determine position of the sticker
-			Vec2 position;
-			if (i == 0) {
-				position = Vec2(winSize.width / 3 - 40, winSize.height * 0.65);
-			} else if (i == 1) {
-				position = Vec2(winSize.width * 2 / 3 + 40,
-						winSize.height * 0.65);
-			} else {
-				position = Vec2(winSize.width / 2, winSize.height * 0.3);
+Sticker* HomeScene::getARandomSticker(STICKER_RARITY rarity) {
+	while (true) {
+		Sticker* sticker = vt_stickers.at(
+				CppUtils::randomBetween(0, vt_stickers.size() - 1));
+		if (static_cast<int>(rarity) > 0) {
+			if (sticker->rarity == rarity
+					|| sticker->rarity
+							== static_cast<STICKER_RARITY>(static_cast<int>(rarity)
+									- 1) || rarity == STICKER_RARITY::UNKNOWN) {
+				return sticker;
 			}
-
-			//Add sticker sprite
-			Sticker * sticker = vt_stickers.at(
-					CppUtils::randomBetween(0, vt_stickers.size() - 1));
-
-			//Add btn sticker
-			Button* stickerBtn = Button::create(sticker->sticker_image);
-			stickerBtn->setTouchEnabled(true);
-			stickerBtn->setZoomScale(0);
-			stickerBtn->setPressedActionEnabled(true);
-			stickerBtn->addTouchEventListener(
-					[this, sticker](Ref *pSender,
-							Widget::TouchEventType type) {
-						if (type == cocos2d::ui::Widget::TouchEventType::ENDED)
-						{
-							if (backgroundLayer != nullptr && backgroundLayer->isVisible()) {
-								this->removeChild(backgroundLayer, false);
-								backgroundLayer = nullptr;
-							} else
-							{
-								openStickerDetailLayer(sticker);
-							}}});
-			stickerBtn->setTag(kTagNewSticker);
-
-			//Add sprite_new if needed
-			if (!StickerHelper::isStickerHasAlreadyExisted(
-					sticker->sticker_id)) {
-				Sprite* newSprite = Sprite::create(s_homescene_new);
-				newSprite->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
-				newSprite->setPosition(
-						Vec2(
-								stickerBtn->getContentSize().width
-										- newSprite->getContentSize().width / 2,
-								stickerBtn->getContentSize().height
-										- newSprite->getContentSize().height
-												/ 2));
-				stickerBtn->addChild(newSprite);
-			}
-
-			//Add a light below the sticker if type != common
-			if (sticker->rarity != STICKER_RARITY::COMMON) {
-				Sprite* lightSprite = Sprite::create(s_homescene_uncommon);
-				lightSprite->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
-				lightSprite->setPosition(position);
-				lightSprite->setTag(kTagNewSticker); //For being removed from blurLayer later
-				blurLayer->addChild(lightSprite);
-
-				lightSprite->runAction(
-						RepeatForever::create(RotateBy::create(5, 180)));
-				lightSprite->runAction(
-						RepeatForever::create(
-								Sequence::create(ScaleTo::create(0.5, 0.9),
-										ScaleTo::create(0.5, 1), nullptr)));
-			}
-
-			stickerBtn->setPosition(position);
-			blurLayer->addChild(stickerBtn);
-
-			stickerIdString += CppUtils::doubleToString(sticker->sticker_id);
-			if (i < 2) {
-				stickerIdString += ",";
-			}
+		} else if (sticker->rarity == rarity
+				|| rarity == STICKER_RARITY::UNKNOWN) {
+			return sticker;
 		}
-		StickerHelper::saveToMyStickerList(stickerIdString);
+
 	}
+	return nullptr;
+}
+
+void HomeScene::earn3Stickers(STICKER_RARITY rarity) {
+	StickerHelper::removeAPacketFromSharePerferences(rarity);
+
+	isAPacketAvailable = isAPacketAvailableFunc();
+	blurLayer->setVisible(true);
+	setVisibilityPacket();
+	if (!isAPacketAvailable) {
+		schedule(schedule_selector(HomeScene::timer), 1);
 	}
+
+	string stickerIdString = "";
+	for (int i = 0; i < 3; i++) {
+		//Determine position of the sticker
+		Vec2 position;
+		if (i == 0) {
+			position = Vec2(winSize.width / 3 - 40, winSize.height * 0.65);
+		} else if (i == 1) {
+			position = Vec2(winSize.width * 2 / 3 + 40, winSize.height * 0.65);
+		} else {
+			position = Vec2(winSize.width / 2, winSize.height * 0.3);
+		}
+
+		//Add sticker sprite
+		Sticker * sticker = getARandomSticker(rarity);
+
+		//Add btn sticker
+		Button* stickerBtn = Button::create(sticker->sticker_image);
+		stickerBtn->setTouchEnabled(true);
+		stickerBtn->setZoomScale(0);
+		stickerBtn->setPressedActionEnabled(true);
+		stickerBtn->addTouchEventListener(
+				[this, sticker](Ref *pSender,
+						Widget::TouchEventType type) {
+					if (type == cocos2d::ui::Widget::TouchEventType::ENDED)
+					{
+						if (backgroundLayer != nullptr && backgroundLayer->isVisible()) {
+							this->removeChild(backgroundLayer, false);
+							backgroundLayer = nullptr;
+						} else
+						{
+							openStickerDetailLayer(sticker);
+						}}});
+		stickerBtn->setTag(kTagNewSticker);
+
+		//Add sprite_new if needed
+		if (!StickerHelper::isStickerHasAlreadyExisted(sticker->sticker_id)) {
+			Sprite* newSprite = Sprite::create(s_homescene_new);
+			newSprite->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
+			newSprite->setPosition(
+					Vec2(
+							stickerBtn->getContentSize().width
+									- newSprite->getContentSize().width / 2,
+							stickerBtn->getContentSize().height
+									- newSprite->getContentSize().height / 2));
+			stickerBtn->addChild(newSprite);
+		}
+
+		//Add a light below the sticker if type != common
+		if (sticker->rarity != STICKER_RARITY::COMMON) {
+			Sprite* lightSprite = Sprite::create(s_homescene_uncommon);
+			lightSprite->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
+			lightSprite->setPosition(position);
+			lightSprite->setTag(kTagNewSticker); //For being removed from blurLayer later
+			blurLayer->addChild(lightSprite);
+
+			lightSprite->runAction(
+					RepeatForever::create(RotateBy::create(5, 180)));
+			lightSprite->runAction(
+					RepeatForever::create(
+							Sequence::create(ScaleTo::create(0.5, 0.9),
+									ScaleTo::create(0.5, 1), nullptr)));
+		}
+
+		stickerBtn->setPosition(position);
+		blurLayer->addChild(stickerBtn);
+
+		stickerIdString += CppUtils::doubleToString(sticker->sticker_id);
+		if (i < 2) {
+			stickerIdString += ",";
+		}
+	}
+	StickerHelper::saveToMyStickerList(stickerIdString);
 
 	invalidateProgressBar();
 }
@@ -1200,54 +1345,91 @@ void HomeScene::packetButtonsCallback(Ref* pSender,
 			&& !blurLayer->isVisible() && !friendLayer->isVisible()
 			&& !tradeLayer->isVisible() && cut->numberOfRunningActions() == 0) {
 		int animationDuration = 3;
-		Button* button = dynamic_cast<Button*>(pSender);
-		int tag = (int) button->getTag();
-		switch (tag) {
-		case kTagFreePacket: {
-			cut->runAction(
-					Sequence::create(
-							Spawn::createWithTwoActions(
-									Repeat::create(cut_animate, 20),
-									MoveBy::create(2,
-											Vec2(
-													winSize.width
-															+ cut->getContentSize().width,
-													0))),
-							MoveBy::create(0,
-									Vec2(
-											-winSize.width
-													- cut->getContentSize().width,
-											0)), nullptr));
+		Button* btnPacketBottom = dynamic_cast<Button*>(pSender);
+		int tag = (int) btnPacketBottom->getTag();
+		Button* btnPacketTop = nullptr;
+		for (Button* record : vtButtonTopPackets) {
+			if (record->getTag() == tag) {
+				btnPacketTop = record;
+			}
+		}
 
-			btnFreePacketTop->runAction(
+		cut->setPositionY(btnPacketBottom->getPositionY() + 200);
+		cut->runAction(
+				Sequence::create(
+						Spawn::createWithTwoActions(
+								Repeat::create(cut_animate, 20),
+								MoveBy::create(2,
+										Vec2(
+												winSize.width
+														+ cut->getContentSize().width,
+												0))),
+						MoveBy::create(0,
+								Vec2(
+										-winSize.width
+												- cut->getContentSize().width,
+										0)), nullptr));
+		CallFunc* funcResetScheduleGetSticker;
+		if (btnPacketTop != nullptr) {
+			btnPacketTop->runAction(
 					Sequence::create(DelayTime::create(0.85),
 							MoveBy::create(0.2, Vec2(0, 100)),
 							DelayTime::create(2),
 							MoveBy::create(0, Vec2(0, -100)), nullptr));
-
 		}
-			break;
-		case kTagBundlePacket: {
+
+		CallFunc* funcSetVisiblePacket = CallFunc::create([=]() {
+			btnPacketTop->setVisible(false);
+			btnPacketBottom->setVisible(false);
+		});
+
+		switch (tag) {
+		case kTagFreePacket: {
+			funcResetScheduleGetSticker = CallFunc::create([=]() {
+				earn3RandomStickers();
+			});
 		}
 			break;
 		case kTagCommonPacket: {
+			funcResetScheduleGetSticker = CallFunc::create([=]() {
+				earn3Stickers(STICKER_RARITY::COMMON);
+			});
 		}
 			break;
 		case kTagUncommonPacket: {
+			funcResetScheduleGetSticker = CallFunc::create([=]() {
+				earn3Stickers(STICKER_RARITY::UNCOMMON);
+			});
 		}
 			break;
 		case kTagRarePacket: {
+			funcResetScheduleGetSticker = CallFunc::create([=]() {
+				earn3Stickers(STICKER_RARITY::RARE);
+			});
 		}
 			break;
 
+		case kTagVeryRarePacket: {
+			funcResetScheduleGetSticker = CallFunc::create([=]() {
+				earn3Stickers(STICKER_RARITY::VERYRARE);
+			});
 		}
+			break;
 
-		auto funcResetScheduleGetFreeSticker = CallFunc::create([=]() {
-			earn3RandomStickers();
-		});
-		button->runAction(
+		case kTagRarestPacket: {
+			funcResetScheduleGetSticker = CallFunc::create([=]() {
+				earn3Stickers(STICKER_RARITY::RAREST);
+			});
+		}
+			break;
+		}
+		btnPacketBottom->runAction(
 				Sequence::create(DelayTime::create(animationDuration),
-						funcResetScheduleGetFreeSticker, nullptr));
+						funcResetScheduleGetSticker, nullptr));
+
+		btnPacketBottom->runAction(
+				Sequence::create(DelayTime::create(animationDuration),
+						funcSetVisiblePacket, nullptr));
 	}
 }
 
@@ -1480,8 +1662,8 @@ void HomeScene::responseAfterGetStickersDataFromFirebase(string facebookId,
 	}
 
 	//TODO get pending request from server here
-		FirebaseHandler::getInstance()->checkPendingRequest(); //responseAfterCheckingPendingRequest will be called
-		FirebaseHandler::getInstance()->checkGivenStickers(); //responseAfterCheckingGivenSticker will be called
+	FirebaseHandler::getInstance()->checkPendingRequest();//responseAfterCheckingPendingRequest will be called
+	FirebaseHandler::getInstance()->checkGivenStickers();//responseAfterCheckingGivenSticker will be called
 
 }
 
@@ -1585,8 +1767,8 @@ void HomeScene::settingButtonsCallback(Ref* pSender,
 }
 
 void HomeScene::onVideoAdsPlayed() {
-	isFreePacketAvailable = true;
-	setVisibilityFreePacket();
+	isAPacketAvailable = true;
+	setVisibilityPacket();
 	this->unschedule(schedule_selector(HomeScene::timer));
 
 }

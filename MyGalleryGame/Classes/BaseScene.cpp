@@ -76,10 +76,6 @@ public:
 	virtual void onChartboostFailedToLoad(const std::string& name, sdkbox::CB_LoadError e)
 	{
 		CCLog("bambi chartboost onChartboostFailedToLoad %s: ", name.c_str());
-		auto func = CallFunc::create([=]() {
-					sdkbox::PluginChartboost::show(kChartboostRewardedAds);
-				});
-		HomeScene::getInstance()->runAction(Sequence::create(DelayTime::create(1), func, nullptr));
 	}
 	virtual void onChartboostFailToRecordClick(const std::string& name, sdkbox::CB_ClickError e)
 	{
@@ -178,33 +174,6 @@ void BaseScene::showFullscreenAds() {
 //#endif
 //#endif
 }
-
-//bool BaseScene::isRewardedAdsAvailable() {
-//	bool result = false;
-//#ifdef SDKBOX_ENABLED
-//#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-//	result = isChartboostAdsAvailable || isVungleAdsAvailable;
-//	if(isChartboostAdsAvailable)
-//	{
-//		CCLog("bambi HomeScene -> isRewardedAdsAvailable -> chartboost ads is available");
-//	} else
-//	{
-//		CCLog("bambi HomeScene -> isRewardedAdsAvailable -> chartboost ads is not available");
-//	}
-//
-//	if(isVungleAdsAvailable)
-//	{
-//		CCLog("bambi HomeScene -> isRewardedAdsAvailable -> vungle ads is available");
-//	} else
-//	{
-//		CCLog("bambi HomeScene -> isRewardedAdsAvailable -> vungle ads is not available");
-//	}
-//#else
-//	result = sdkbox::PluginChartboost::isAvailable(kChartboostRewardedAds);
-//#endif
-//#endif
-//	return result;
-//}
 
 bool BaseScene::isRewardedAdsAvailable() {
 	bool result = false;

@@ -14,6 +14,7 @@
 #define MUSIC "music"
 #define ALERT "alert"
 #define CURRENT_STICKER "currentsticker"  //An array of gotten sticker id: 1,2,4,6,3,8,5
+#define CURRENT_PACKET "currentpacket"  //An array of packet rarity: 1,2,4
 #define STICKED_STICKER "stickedsticker"  //An array of gotten sticker id: 1,2,4,6,3,8,5
 #define TIME_TO_GET_FREE_STICKER_IN_SECOND "TIME_TO_GET_FREE_STICKER_IN_SECOND"
 
