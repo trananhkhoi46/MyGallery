@@ -149,6 +149,11 @@ void HomeScene::initDefaultVariables() {
 
 	//TODO get probability from Firebase
 	FirebaseHandler::getInstance()->getProbabilityFreePacket();
+	FirebaseHandler::getInstance()->getProbabilityCommonPacket();
+	FirebaseHandler::getInstance()->getProbabilityUncommonPacket();
+	FirebaseHandler::getInstance()->getProbabilityRarePacket();
+	FirebaseHandler::getInstance()->getProbabilityVeryRarePacket();
+	FirebaseHandler::getInstance()->getProbabilityRarestPacket();
 }
 
 void HomeScene::initPacketButtons() {
@@ -854,19 +859,57 @@ void HomeScene::earn3RandomStickers() {
 	earn3Stickers(STICKER_RARITY::UNKNOWN);
 }
 
-Sticker* HomeScene::getARandomSticker(STICKER_RARITY rarity) {
+Sticker* HomeScene::getARandomSticker(STICKER_RARITY packetRarity) {
+	STICKER_RARITY rarity;
+	int random = CppUtils::randomBetween(1, 100);
+	string userdefaultKeyCommon = StickerHelper::getRarityString(packetRarity)
+			+ "common";
+	string userdefaultKeyUncommon = StickerHelper::getRarityString(packetRarity)
+			+ "uncommon";
+	string userdefaultKeyRare = StickerHelper::getRarityString(packetRarity)
+			+ "rare";
+	string userdefaultKeyRarest = StickerHelper::getRarityString(packetRarity)
+			+ "rarest";
+	string userdefaultKeyVeryRare = StickerHelper::getRarityString(packetRarity)
+			+ "veryrare";
+
+	CCLog("bambi probability key: %s",userdefaultKeyCommon.c_str());
+	CCLog("bambi probability key: %s",userdefaultKeyUncommon.c_str());
+	CCLog("bambi probability key: %s",userdefaultKeyRare.c_str());
+	CCLog("bambi probability key: %s",userdefaultKeyRarest.c_str());
+	CCLog("bambi probability key: %s",userdefaultKeyVeryRare.c_str());
+
+	int commonProbability = UserDefault::getInstance()->getIntegerForKey(
+			userdefaultKeyCommon.c_str(), 0);
+	int uncommonProbability = UserDefault::getInstance()->getIntegerForKey(
+			userdefaultKeyUncommon.c_str(), 0);
+	int rareProbability = UserDefault::getInstance()->getIntegerForKey(
+			userdefaultKeyRare.c_str(), 0);
+	int veryRareProbability = UserDefault::getInstance()->getIntegerForKey(
+			userdefaultKeyVeryRare.c_str(), 0);
+	int rarestProbability = UserDefault::getInstance()->getIntegerForKey(
+			userdefaultKeyRarest.c_str(), 0);
+
+	CCLog("bambi HomeScene -> getARandomSticker: commonProb: %d, uncommonProb: %d, rareProb: %d, veryrareProb: %d, rarestProb: %d",commonProbability, uncommonProbability, rareProbability, veryRareProbability, rarestProbability);
+
+	if (random < commonProbability) {
+		rarity = STICKER_RARITY::COMMON;
+	}else if (random < commonProbability + uncommonProbability) {
+		rarity = STICKER_RARITY::UNCOMMON;
+	}else if (random < commonProbability + uncommonProbability + rareProbability) {
+		rarity = STICKER_RARITY::RARE;
+	}else if (random < commonProbability + uncommonProbability + rareProbability + veryRareProbability) {
+		rarity = STICKER_RARITY::VERYRARE;
+	}else if (random < commonProbability + uncommonProbability + rareProbability + veryRareProbability + rarestProbability) {
+		rarity = STICKER_RARITY::RAREST;
+	}else{
+		rarity = STICKER_RARITY::UNKNOWN;
+	}
+
 	while (true) {
 		Sticker* sticker = vt_stickers.at(
 				CppUtils::randomBetween(0, vt_stickers.size() - 1));
-		if (static_cast<int>(rarity) > 0) {
-			if (sticker->rarity == rarity
-					|| sticker->rarity
-							== static_cast<STICKER_RARITY>(static_cast<int>(rarity)
-									- 1) || rarity == STICKER_RARITY::UNKNOWN) {
-				return sticker;
-			}
-		} else if (sticker->rarity == rarity
-				|| rarity == STICKER_RARITY::UNKNOWN) {
+		if (sticker->rarity == rarity || rarity == STICKER_RARITY::UNKNOWN) {
 			return sticker;
 		}
 
@@ -1371,7 +1414,9 @@ void HomeScene::packetButtonsCallback(Ref* pSender,
 		int tag = (int) btnPacketBottom->getTag();
 		Button* btnPacketTop = nullptr;
 		for (Button* record : vtButtonTopPackets) {
-			if (record->getTag() == tag && record->getPosition() == btnPacketBottom->getPosition()) {
+			if (record->getTag() == tag
+					&& record->getPosition()
+							== btnPacketBottom->getPosition()) {
 				btnPacketTop = record;
 			}
 		}
@@ -1457,7 +1502,8 @@ void HomeScene::packetButtonsCallback(Ref* pSender,
 		}
 		btnPacketBottom->runAction(
 				Sequence::create(DelayTime::create(animationDuration),
-						funcResetScheduleGetSticker,funcSetVisiblePacket, nullptr));
+						funcResetScheduleGetSticker, funcSetVisiblePacket,
+						nullptr));
 	}
 }
 

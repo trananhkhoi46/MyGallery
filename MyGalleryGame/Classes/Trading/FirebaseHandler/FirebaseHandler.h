@@ -121,6 +121,11 @@ public:
 			PendingRequest* request);
 
 	void getProbabilityFreePacket();
+	void getProbabilityCommonPacket();
+	void getProbabilityUncommonPacket();
+	void getProbabilityRarePacket();
+	void getProbabilityVeryRarePacket();
+	void getProbabilityRarestPacket();
 	void getProbability(string url, vector<string> probabilityKeys,
 			STICKER_RARITY rarity);
 

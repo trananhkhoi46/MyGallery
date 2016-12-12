@@ -626,6 +626,7 @@ void FirebaseHandler::getProbability(string url, vector<string> probabilityKeys,
 						{
 							string userdefaultKey = StickerHelper::getRarityString(rarity) + key;
 							UserDefault::getInstance()->setIntegerForKey(userdefaultKey.c_str(), d[key.c_str()].GetInt());
+							CCLog("bambi probability key: %s",userdefaultKey.c_str());
 						}
 					}
 				}
@@ -634,6 +635,48 @@ void FirebaseHandler::getProbability(string url, vector<string> probabilityKeys,
 	request->release();
 }
 
+void FirebaseHandler::getProbabilityCommonPacket() {
+	string url = String::createWithFormat(firebaseURL.c_str(),
+			firebaseQuerry_Probability_Commonpacket.c_str())->getCString();
+	vector<string> probabilityKeys = {KEY_PROBABILITY_FREEPACKET_COMMON, KEY_PROBABILITY_FREEPACKET_UNCOMMON,
+		KEY_PROBABILITY_FREEPACKET_RARE, KEY_PROBABILITY_FREEPACKET_VERYRARE, KEY_PROBABILITY_FREEPACKET_RAREST};
+	FirebaseHandler::getProbability(url, probabilityKeys,
+			STICKER_RARITY::COMMON);
+}
+
+void FirebaseHandler::getProbabilityUncommonPacket() {
+	string url = String::createWithFormat(firebaseURL.c_str(),
+			firebaseQuerry_Probability_Uncommonpacket.c_str())->getCString();
+	vector<string> probabilityKeys = {KEY_PROBABILITY_FREEPACKET_COMMON, KEY_PROBABILITY_FREEPACKET_UNCOMMON,
+		KEY_PROBABILITY_FREEPACKET_RARE, KEY_PROBABILITY_FREEPACKET_VERYRARE, KEY_PROBABILITY_FREEPACKET_RAREST};
+	FirebaseHandler::getProbability(url, probabilityKeys,
+			STICKER_RARITY::UNCOMMON);
+}
+
+void FirebaseHandler::getProbabilityRarePacket() {
+	string url = String::createWithFormat(firebaseURL.c_str(),
+			firebaseQuerry_Probability_Rarepacket.c_str())->getCString();
+	vector<string> probabilityKeys = {KEY_PROBABILITY_FREEPACKET_COMMON, KEY_PROBABILITY_FREEPACKET_UNCOMMON,
+		KEY_PROBABILITY_FREEPACKET_RARE, KEY_PROBABILITY_FREEPACKET_VERYRARE, KEY_PROBABILITY_FREEPACKET_RAREST};
+	FirebaseHandler::getProbability(url, probabilityKeys,
+			STICKER_RARITY::RARE);
+}
+void FirebaseHandler::getProbabilityVeryRarePacket() {
+	string url = String::createWithFormat(firebaseURL.c_str(),
+			firebaseQuerry_Probability_Veryrarepacket.c_str())->getCString();
+	vector<string> probabilityKeys = {KEY_PROBABILITY_FREEPACKET_COMMON, KEY_PROBABILITY_FREEPACKET_UNCOMMON,
+		KEY_PROBABILITY_FREEPACKET_RARE, KEY_PROBABILITY_FREEPACKET_VERYRARE, KEY_PROBABILITY_FREEPACKET_RAREST};
+	FirebaseHandler::getProbability(url, probabilityKeys,
+			STICKER_RARITY::VERYRARE);
+}
+void FirebaseHandler::getProbabilityRarestPacket() {
+	string url = String::createWithFormat(firebaseURL.c_str(),
+			firebaseQuerry_Probability_Rarestpacket.c_str())->getCString();
+	vector<string> probabilityKeys = {KEY_PROBABILITY_FREEPACKET_COMMON, KEY_PROBABILITY_FREEPACKET_UNCOMMON,
+		KEY_PROBABILITY_FREEPACKET_RARE, KEY_PROBABILITY_FREEPACKET_VERYRARE, KEY_PROBABILITY_FREEPACKET_RAREST};
+	FirebaseHandler::getProbability(url, probabilityKeys,
+			STICKER_RARITY::RAREST);
+}
 void FirebaseHandler::getProbabilityFreePacket() {
 	string url = String::createWithFormat(firebaseURL.c_str(),
 			firebaseQuerry_Probability_Freepacket.c_str())->getCString();

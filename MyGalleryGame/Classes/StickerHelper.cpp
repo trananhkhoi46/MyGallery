@@ -37,7 +37,6 @@ void StickerHelper::sellSticker(Sticker* sticker) {
 	CURRENT_STICKER, currentStickerIdString);
 
 	//Get a packet
-
 	CCLog("bambi StickerHelper -> sellSticker : %d", sticker->rarity);
 	appendAPacketToSharePreferences(sticker->rarity);
 }
@@ -145,7 +144,7 @@ string StickerHelper::getRarityString(STICKER_RARITY rarity) {
 	case RAREST:
 		return "Rarest";
 	}
-	return "";
+	return "Unknown";
 }
 
 void StickerHelper::saveToMyStickerList(string stickerIdString) {
