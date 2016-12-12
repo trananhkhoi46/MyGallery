@@ -22,6 +22,16 @@ double CppUtils::myAbs(double inValue) {
 	return inValue;
 }
 
+std::string CppUtils::replaceString(std::string subject, const std::string& search,
+                          const std::string& replace) {
+    size_t pos = 0;
+    while ((pos = subject.find(search, pos)) != std::string::npos) {
+         subject.replace(pos, search.length(), replace);
+         pos += replace.length();
+    }
+    return subject;
+}
+
 bool CppUtils::isFloatFloatEqual(float x1, float x2, float epsilon) {
 	return myAbs(x1 - x2) <= epsilon;
 }

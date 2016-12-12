@@ -178,10 +178,7 @@ void HomeScene::initPacketButtons() {
 	//Add btn free packet
 	vector<STICKER_RARITY> vtStickerPacketRarity =
 			StickerHelper::getCurrentPacketsFromSharePreferences();
-	int index = 0;
-	for (int rarityInt = UNKNOWN; rarityInt != RAREST; rarityInt++) {
-		STICKER_RARITY packetRarity = static_cast<STICKER_RARITY>(rarityInt);
-
+	for (STICKER_RARITY packetRarity : vtStickerPacketRarity) {
 		string imageResourceTop;
 		string imageResourceBottom;
 		int tag;
@@ -219,7 +216,6 @@ void HomeScene::initPacketButtons() {
 				Vec2(-btnPacketTop->getContentSize().width / 2,
 						btnPacketTop->getContentSize().height / 2));
 		btnPacketTop->setTag(tag);
-		btnPacketTop->setVisible(false);
 		this->addChild(btnPacketTop);
 		Button* btnPacketBottom = Button::create(imageResourceBottom);
 		btnPacketBottom->setZoomScale(0);
@@ -230,27 +226,20 @@ void HomeScene::initPacketButtons() {
 		btnPacketBottom->addTouchEventListener(
 				CC_CALLBACK_2(HomeScene::packetButtonsCallback, this));
 		btnPacketBottom->setTag(tag);
-		btnPacketBottom->setVisible(false);
 		this->addChild(btnPacketBottom);
 
 		MoveTo* actionMoveTo = MoveTo::create(1,
 				Vec2(
-						CppUtils::randomBetween(winSize.width * 0.3,
-								winSize.width * 0.7),
-						CppUtils::randomBetween(winSize.height * 0.3,
-								winSize.height * 0.7)));
+						CppUtils::randomBetween(winSize.width * 0.15,
+								winSize.width * 0.85),
+						CppUtils::randomBetween(winSize.height * 0.15,
+								winSize.height * 0.85)));
 		btnPacketBottom->runAction(actionMoveTo);
 		btnPacketTop->runAction(actionMoveTo->clone());
 		vtButtonBottomPackets.push_back(btnPacketBottom);
 		vtButtonTopPackets.push_back(btnPacketTop);
 
-		if (std::find(vtStickerPacketRarity.begin(),
-				vtStickerPacketRarity.end(), packetRarity)
-				!= vtStickerPacketRarity.end()) {
-			btnPacketBottom->setVisible(true);
-			btnPacketTop->setVisible(true);
-		}
-		index++;
+		CCLog("bambi HomeScene - > init packet buttons: %d", tag);
 	}
 	isPacketRunningTransactionDone = false;
 	auto func = CallFunc::create([=]() {
@@ -793,71 +782,6 @@ void HomeScene::setVisibilityPacket() {
 	btnRewardedAds->setVisible(!isAPacketAvailable);
 	btnIAP->setVisible(!isAPacketAvailable);
 	spriteTimeFreeSticker->setVisible(!isAPacketAvailable);
-
-	vector<STICKER_RARITY> vtStickerPacketRarity =
-			StickerHelper::getCurrentPacketsFromSharePreferences();
-	for (Button* btnPacketBottom : vtButtonBottomPackets) {
-		STICKER_RARITY packetRarity;
-		int tag = btnPacketBottom->getTag();
-		switch (tag) {
-		case kTagFreePacket:
-			packetRarity = STICKER_RARITY::UNKNOWN;
-			break;
-		case kTagUncommonPacket:
-			packetRarity = STICKER_RARITY::UNCOMMON;
-			break;
-		case kTagCommonPacket:
-			packetRarity = STICKER_RARITY::COMMON;
-			break;
-		case kTagRarePacket:
-			packetRarity = STICKER_RARITY::RARE;
-			break;
-		case kTagVeryRarePacket:
-			packetRarity = STICKER_RARITY::VERYRARE;
-			break;
-		case kTagRarestPacket:
-			packetRarity = STICKER_RARITY::RAREST;
-			break;
-		}
-
-		if (std::find(vtStickerPacketRarity.begin(),
-				vtStickerPacketRarity.end(), packetRarity)
-				!= vtStickerPacketRarity.end()) {
-			btnPacketBottom->setVisible(true);
-		}
-	}
-	for (Button* btnPacketTop : vtButtonTopPackets) {
-		STICKER_RARITY packetRarity;
-		int tag = btnPacketTop->getTag();
-		switch (tag) {
-		case kTagFreePacket:
-			packetRarity = STICKER_RARITY::UNKNOWN;
-			break;
-		case kTagUncommonPacket:
-			packetRarity = STICKER_RARITY::UNCOMMON;
-			break;
-		case kTagCommonPacket:
-			packetRarity = STICKER_RARITY::COMMON;
-			break;
-		case kTagRarePacket:
-			packetRarity = STICKER_RARITY::RARE;
-			break;
-		case kTagVeryRarePacket:
-			packetRarity = STICKER_RARITY::VERYRARE;
-			break;
-		case kTagRarestPacket:
-			packetRarity = STICKER_RARITY::RAREST;
-			break;
-		}
-
-		if (std::find(vtStickerPacketRarity.begin(),
-				vtStickerPacketRarity.end(), packetRarity)
-				!= vtStickerPacketRarity.end()) {
-			btnPacketTop->setVisible(true);
-
-		}
-
-	}
 }
 
 void HomeScene::invalidateProgressBar() {
@@ -1439,14 +1363,15 @@ void HomeScene::packetButtonsCallback(Ref* pSender,
 		ui::Widget::TouchEventType eEventType) {
 	if (eEventType == ui::Widget::TouchEventType::BEGAN
 			&& !blurLayer->isVisible() && !friendLayer->isVisible()
-			&& !tradeLayer->isVisible() && !iapLayer->isVisible() && isPacketRunningTransactionDone
+			&& !tradeLayer->isVisible() && !iapLayer->isVisible()
+			&& isPacketRunningTransactionDone
 			&& cut->numberOfRunningActions() == 0) {
 		int animationDuration = 3;
 		Button* btnPacketBottom = dynamic_cast<Button*>(pSender);
 		int tag = (int) btnPacketBottom->getTag();
 		Button* btnPacketTop = nullptr;
 		for (Button* record : vtButtonTopPackets) {
-			if (record->getTag() == tag) {
+			if (record->getTag() == tag && record->getPosition() == btnPacketBottom->getPosition()) {
 				btnPacketTop = record;
 			}
 		}
@@ -1476,8 +1401,18 @@ void HomeScene::packetButtonsCallback(Ref* pSender,
 		}
 
 		CallFunc* funcSetVisiblePacket = CallFunc::create([=]() {
-			btnPacketTop->setVisible(false);
-			btnPacketBottom->setVisible(false);
+			this->removeChild(btnPacketTop, false);
+			this->removeChild(btnPacketBottom, false);
+
+			vtButtonBottomPackets.erase(
+					std::remove(vtButtonBottomPackets.begin(),
+							vtButtonBottomPackets.end(), btnPacketBottom),
+					vtButtonBottomPackets.end());
+
+			vtButtonTopPackets.erase(
+					std::remove(vtButtonTopPackets.begin(),
+							vtButtonTopPackets.end(), btnPacketTop),
+					vtButtonTopPackets.end());
 		});
 
 		switch (tag) {
@@ -1522,11 +1457,7 @@ void HomeScene::packetButtonsCallback(Ref* pSender,
 		}
 		btnPacketBottom->runAction(
 				Sequence::create(DelayTime::create(animationDuration),
-						funcResetScheduleGetSticker, nullptr));
-
-		btnPacketBottom->runAction(
-				Sequence::create(DelayTime::create(animationDuration),
-						funcSetVisiblePacket, nullptr));
+						funcResetScheduleGetSticker,funcSetVisiblePacket, nullptr));
 	}
 }
 

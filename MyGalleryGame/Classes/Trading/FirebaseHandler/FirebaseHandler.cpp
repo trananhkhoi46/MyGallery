@@ -118,10 +118,8 @@ void FirebaseHandler::acceptSendingSticker(
 								newCurrentStickerStringAfterRemoving.erase(i, request->getStickerId().length());
 							}
 
-							std::string::size_type i2 = newCurrentStickerStringAfterRemoving.find(",,"); //Replace ,, to ,
-							if (i2 != std::string::npos) {
-								newCurrentStickerStringAfterRemoving.erase(i2, 1);
-							}
+							newCurrentStickerStringAfterRemoving = CppUtils::replaceString(newCurrentStickerStringAfterRemoving, ",,", ",");
+
 
 							CCLog("bambi acceptSendingSticker on Firebase 2 callback: string sticker after removing: %s",
 									UserDefault::getInstance()->getStringForKey(CURRENT_STICKER).c_str());

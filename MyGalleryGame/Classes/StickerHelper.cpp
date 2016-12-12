@@ -3,7 +3,7 @@
 vector<STICKER_RARITY> StickerHelper::getCurrentPacketsFromSharePreferences() {
 	vector<STICKER_RARITY> result;
 	string currentPacketString = UserDefault::getInstance()->getStringForKey(
-	CURRENT_PACKET, "0,1,2");
+	CURRENT_PACKET, "0,1,2,2,2");
 	vector < string > vtPackets = CppUtils::splitStringByDelim(
 			currentPacketString, ',');
 	for (string packetString : vtPackets) {
@@ -14,7 +14,7 @@ vector<STICKER_RARITY> StickerHelper::getCurrentPacketsFromSharePreferences() {
 			result.push_back(packetRarity);
 		}
 	}
-//	CCLog("bambi StickerHelper there are %d packets available", result.size());
+	CCLog("bambi StickerHelper there are %d packets available", result.size());
 	return result;
 }
 void StickerHelper::sellSticker(Sticker* sticker) {
@@ -29,45 +29,52 @@ void StickerHelper::sellSticker(Sticker* sticker) {
 			currentStickerIdString.erase(i, stickerIdString.length());
 		}
 
-		std::string::size_type i2 = currentStickerIdString.find(",,"); //Replace ,, to ,
-		if (i2 != std::string::npos) {
-			currentStickerIdString.erase(i2, 1);
-		}
+		currentStickerIdString = CppUtils::replaceString(currentStickerIdString,
+				",,", ",");
+
 	}
 	UserDefault::getInstance()->setStringForKey(
 	CURRENT_STICKER, currentStickerIdString);
 
 	//Get a packet
+
+	CCLog("bambi StickerHelper -> sellSticker : %d", sticker->rarity);
 	appendAPacketToSharePreferences(sticker->rarity);
 }
 void StickerHelper::appendAPacketToSharePreferences(STICKER_RARITY packet) {
 	string packetString = CppUtils::doubleToString(static_cast<int>(packet));
 	string currentPacketString = UserDefault::getInstance()->getStringForKey(
-	CURRENT_PACKET, "0,1,2");
+	CURRENT_PACKET, "0,1,2,2,2");
+	CCLog("bambi StickerHelper -> appendAPacketToSharePreferences 1: %s",
+			currentPacketString.c_str());
 
-	currentPacketString = "," + packetString;
+	currentPacketString = currentPacketString + "," + packetString;
+	CCLog("bambi StickerHelper -> appendAPacketToSharePreferences 2: %s",
+			currentPacketString.c_str());
 
-	std::string::size_type i2 = currentPacketString.find(",,"); //Replace ,, to ,
-	if (i2 != std::string::npos) {
-		currentPacketString.erase(i2, 1);
-	}
+	currentPacketString = CppUtils::replaceString(currentPacketString, ",,",
+			",");
+
 	UserDefault::getInstance()->setStringForKey(
 	CURRENT_PACKET, currentPacketString);
+
+	CCLog("bambi StickerHelper -> appendAPacketToSharePreferences 3: %s",
+			UserDefault::getInstance()->getStringForKey(
+			CURRENT_PACKET, "0,1,2,2,2").c_str());
 }
 void StickerHelper::removeAPacketFromSharePerferences(STICKER_RARITY packet) {
 	string packetString = CppUtils::doubleToString(static_cast<int>(packet));
 	string currentPacketString = UserDefault::getInstance()->getStringForKey(
-	CURRENT_PACKET, "0,1,2");
+	CURRENT_PACKET, "0,1,2,2,2");
 
 	std::string::size_type i = currentPacketString.find(packetString);
 	if (i != std::string::npos) {
 		currentPacketString.erase(i, packetString.length());
 	}
 
-	std::string::size_type i2 = currentPacketString.find(",,"); //Replace ,, to ,
-	if (i2 != std::string::npos) {
-		currentPacketString.erase(i2, 1);
-	}
+	currentPacketString = CppUtils::replaceString(currentPacketString, ",,",
+			",");
+
 	UserDefault::getInstance()->setStringForKey(
 	CURRENT_PACKET, currentPacketString);
 }
