@@ -219,6 +219,12 @@ void BaseScene::showRewardedAds() {
 
 #endif
 }
+
+void BaseScene::setListenerNull(){
+    FirebaseHandler::getInstance()->setFirebaseDelegate(nullptr);
+    FirebaseHandler::getInstance()->setFirebaseTradeFeatureDelegate(nullptr);
+    FacebookHandler::getInstance()->setFacebookConnectDelegate(nullptr);
+}
 // on "init" you need to initialize your instance
 bool BaseScene::init() {
 	//////////////////////////////
@@ -227,6 +233,7 @@ bool BaseScene::init() {
 		return false;
 	}
 
+    setListenerNull();
 	isChartboostAdsAvailable = false;
 	isVungleAdsAvailable = false;
 	isSound = UserDefault::getInstance()->getBoolForKey(SOUND, true);

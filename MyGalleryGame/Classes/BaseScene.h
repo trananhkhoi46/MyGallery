@@ -43,6 +43,7 @@ public:
 	void showFullscreenAds();
 	void showRewardedAds();
 	void onVideoAdsPlayed();
+    void setListenerNull();
 	bool isRewardedAdsAvailable();
 
 	bool isHomeScene;

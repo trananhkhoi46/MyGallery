@@ -4,7 +4,7 @@
 
 int stickerInitPage;
 Scene* AlbumScene::scene() {
-	scene(0);
+	return scene(0);
 }
 Scene* AlbumScene::scene(int initPage) {
 	if (initPage < vt_sticker_pages.size()) {
@@ -377,7 +377,7 @@ void AlbumScene::initControlButtons() {
 					Widget::TouchEventType type) {
 				if (type == cocos2d::ui::Widget::TouchEventType::ENDED)
 				{
-					CCLog("bambi, currentPageIndex: %d",pageView->getCurrentPageIndex());
+					CCLog("bambi, AlbumScene -> currentPageIndex: %d",pageView->getCurrentPageIndex());
 					scrollToPageIndex(pageView->getCurrentPageIndex() + 1);
 				}});
 	this->addChild(btnRight);

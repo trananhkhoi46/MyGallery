@@ -156,13 +156,19 @@ void FirebaseHandler::acceptSendingSticker(
 											CCLog("bambi FirebaseHandler -> acceptSendingSticker on Firebase 3 - 2 callback: %s", clearData.c_str());
 
 											if (_firebaseTradeFeatureDelegate != nullptr) {
+                                                try{
 												_firebaseTradeFeatureDelegate->responseAfterAcceptingRequest(true);
+                                                }catch(exception e){}
+                                                
 											}
 
 										} else
 										{
 											if (_firebaseTradeFeatureDelegate != nullptr) {
+                                                try{
 												_firebaseTradeFeatureDelegate->responseAfterAcceptingRequest(false);
+                                                }catch(exception e){}
+                                                
 											}
 										}
 									});
@@ -170,7 +176,10 @@ void FirebaseHandler::acceptSendingSticker(
 							httpRequest->release();
 						} else {
 							if (_firebaseTradeFeatureDelegate != nullptr) {
+                                try{
 								_firebaseTradeFeatureDelegate->responseAfterAcceptingRequest(false);
+                                }catch(exception e){}
+                                
 							}
 						}
 					});
@@ -233,11 +242,17 @@ void FirebaseHandler::denySendingSticker(
 					CCLog("bambi FirebaseHandler -> denySendingSticker on Firebase callback: %s", clearData.c_str());
 
 					if (_firebaseTradeFeatureDelegate != nullptr) {
+                        try{
 						_firebaseTradeFeatureDelegate->responseAfterDenyingRequest(true);
+                        }catch(exception e){}
+                        
 					}
 				} else {
 					if (_firebaseTradeFeatureDelegate != nullptr) {
+                        try{
 						_firebaseTradeFeatureDelegate->responseAfterDenyingRequest(false);
+                        }catch(exception e){}
+                        
 					}
 				}
 			});
@@ -296,13 +311,19 @@ void FirebaseHandler::acceptReceivingSticker(
 					CCLog("bambi FirebaseHandler -> acceptReceivingSticker on Firebase callback: %s", clearData.c_str());
 
 					if (_firebaseTradeFeatureDelegate != nullptr) {
+                        try{
 						_firebaseTradeFeatureDelegate->responseAfterAcceptingRequest(true);
+                        }catch(exception e){}
+                        
 					}
 
 					StickerHelper::saveToMyStickerList(request->getStickerId());
 				} else {
 					if (_firebaseTradeFeatureDelegate != nullptr) {
+                        try{
 						_firebaseTradeFeatureDelegate->responseAfterAcceptingRequest(false);
+                        }catch(exception e){}
+                        
 					}
 				}
 			});
@@ -368,7 +389,10 @@ void FirebaseHandler::checkPendingRequest() {
 
 					if(_firebaseTradeFeatureDelegate != nullptr)
 					{
+                        try{
 						_firebaseTradeFeatureDelegate->responseAfterCheckingPendingRequest(vtPendingRequest);
+                        }catch(exception e){}
+                        
 					}
 				}
 			}
@@ -435,7 +459,10 @@ void FirebaseHandler::checkGivenStickers() {
 
 					if(_firebaseTradeFeatureDelegate != nullptr)
 					{
+                        try{
 						_firebaseTradeFeatureDelegate->responseAfterCheckingGivenSticker(vtPendingRequest);
+                        }catch(exception e){}
+                        
 					}
 				}
 			}
@@ -520,13 +547,19 @@ void FirebaseHandler::askTheStickerOfUer(int stickerId, BUserInfor* user) {
 							CCLog("bambi FirebaseHandler -> askTheStickerOfUer on Firebase 2 callback: %s", clearData.c_str());
 
 							if (_firebaseTradeFeatureDelegate != nullptr) {
+                                try{
 								_firebaseTradeFeatureDelegate->responseAfterAskingSticker(stickerId,
 										true);
+                                }catch(exception e){}
+                                
 							}
 						} else {
 							if (_firebaseTradeFeatureDelegate != nullptr) {
+                                try{
 								_firebaseTradeFeatureDelegate->responseAfterAskingSticker(stickerId,
 										false);
+                                }catch(exception e){}
+                                
 							}
 						}
 					});
@@ -791,8 +824,12 @@ void FirebaseHandler::checkFacebookIdExistOnFirebaseCallBack(HttpClient* client,
 			}
 
 			if (_firebaseDelegate != nullptr)
+            {
+                try{
 				_firebaseDelegate->responseAfterCheckFacebookIdExistOnFirebase(); //Response to home scene
-		} else
+                }catch(exception e){}
+            }
+        } else
 			FacebookHandler::getInstance()->getMyProfile();
 		//After getMyProfile, responseWhenGetMyInfoSuccessfully function will be called.
 	}
@@ -844,9 +881,12 @@ void FirebaseHandler::callBacksaveFacebookIdOnFirebase(HttpClient* client,
 					d["name"].GetString());
 		}
 
-		if (_firebaseDelegate != nullptr)
+        if (_firebaseDelegate != nullptr){
+            try{
 			_firebaseDelegate->responseAfterCheckFacebookIdExistOnFirebase(); //Respone to home scene
-
+            }catch(exception e){}
+            
+        }
 	}
 }
 
@@ -914,10 +954,12 @@ void FirebaseHandler::callBackFetchFriendsFromFirebase(HttpClient* client,
 		}
 		CCLog("bambi FirebaseHandler -> callBackFetchFriendsFromFirebase out the loop");
 	}
-	// Response to RankingScene
-	if (_firebaseDelegate != nullptr)
+	// Response to HomeScene
+    if (_firebaseDelegate != nullptr){
+        try{
 		_firebaseDelegate->responseForQuerryTopFriend(_friendList);
-
+        }catch(exception e){}
+    }
 	friendList = "";
 }
 
@@ -969,8 +1011,10 @@ void FirebaseHandler::getStickersDataFromFirebase(string facebookID) {
 						!= std::string::npos) {
 					if(_firebaseDelegate)
 					{
+                        try{
 						_firebaseDelegate->responseAfterGetStickersDataFromFirebase(facebookId, document[itr->name.GetString()][KEY_WORLD_ALL_STICKERS].GetString(),
 								document[itr->name.GetString()][KEY_WORLD_STICKED_STICKERS].GetString());
+                        }catch(exception e){}
 					}
 					break;
 				}
