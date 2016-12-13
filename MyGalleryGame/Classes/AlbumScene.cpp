@@ -141,7 +141,7 @@ void AlbumScene::initScrollView() {
 }
 
 void AlbumScene::scrollToPageIndex(int index) {
-	CCLog("bambi scrollToPageIndex: %d", index);
+	CCLog("bambi AlbumScene -> scrollToPageIndex: %d", index);
 	if (index >= 0 && index < vt_sticker_pages.size()) {
 		scrollview->scrollToPercentHorizontal(
 				(index > 0 ? (index + 1) : index) * 100.0f
@@ -263,7 +263,7 @@ void AlbumScene::initPageView() {
 }
 
 void AlbumScene::setVisibilityMenuBar() {
-	CCLog("bambi setVisibilityMenuBar, %s",
+	CCLog("bambi AlbumScene -> setVisibilityMenuBar, %s",
 			isMenuBarShowing ? "visible" : "invisible");
 	if (spriteMenuBarBottom->numberOfRunningActions() == 0
 			&& btnMenuBarTop->numberOfRunningActions() == 0

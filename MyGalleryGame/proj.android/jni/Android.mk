@@ -31,21 +31,23 @@ LOCAL_SRC_FILES := hellocpp/main.cpp \
 ../../Classes/jansson/value.c \
 ../../Classes/StickerScene.cpp \
 ../../Classes/AlbumScene.cpp \
-../../Classes/BScrollView.cpp \
-../../Classes/BLabel.cpp \
-../../Classes/StickerHelper.cpp \
+../../Classes/View/BScrollView.cpp \
+../../Classes/View/BLabel.cpp \
+../../Classes/Helper/StickerHelper.cpp \
 ../../Classes/AppDelegate.cpp \
 ../../Classes/HomeScene.cpp \
-../../Classes/SocialPlugin.cpp \
+../../Classes/Helper/SocialPlugin.cpp \
 ../../Classes/BaseScene.cpp \
 ../../Classes/SettingScene.cpp \
-../../Classes/CppUtils.cpp \
+../../Classes/Helper/CppUtils.cpp \
 ../../Classes/SplashScene.cpp
 
 LOCAL_CPPFLAGS := -DSDKBOX_ENABLED
 LOCAL_LDLIBS := -landroid \
 -llog
 LOCAL_C_INCLUDES := $(LOCAL_PATH)/../../Classes
+LOCAL_C_INCLUDES += $(LOCAL_PATH)/../../Classes/Helper
+LOCAL_C_INCLUDES += $(LOCAL_PATH)/../../Classes/View
 LOCAL_C_INCLUDES += $(LOCAL_PATH)/../../Classes/NDKHelper
 LOCAL_C_INCLUDES += $(LOCAL_PATH)/../../Classes/Trading
 LOCAL_C_INCLUDES += $(LOCAL_PATH)/../../Classes/Trading/FacebookHandler

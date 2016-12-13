@@ -423,14 +423,14 @@ obj/local/armeabi/objs-debug/MyGame_shared/__/__/Classes/Trading/FacebookHandler
  /Users/TAnh/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/../cocos2d/external/flatbuffers/../json/document.h \
  /Users/TAnh/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/../cocos2d/external/flatbuffers/../json/reader.h \
  /Users/TAnh/Documents/Cocos2dx/ndk/sources/cxx-stl/gnu-libstdc++/4.9/include/iterator \
- jni/../../Classes/Trading/FacebookHandler/../Model/../BLeaderBoardContanst.h \
+ jni/../../Classes/Trading/FacebookHandler/../Model/../../Constants/Constants.h \
  jni/PluginFacebook/PluginFacebook.h \
  /Users/TAnh/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/../cocos2d/extensions/../cocos/network/HttpRequest.h \
  /Users/TAnh/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/../cocos2d/extensions/../cocos/network/HttpClient.h \
  /Users/TAnh/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/../cocos2d/cocos/3d/../network/HttpRequest.h \
  /Users/TAnh/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/../cocos2d/cocos/3d/../network/HttpResponse.h \
  /Users/TAnh/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/../cocos2d/cocos/3d/../network/HttpCookie.h \
- jni/../../Classes/Trading/FacebookHandler/../../Constants.h \
+ jni/../../Classes/Trading/FacebookHandler/../../Constants/Constants.h \
  /Users/TAnh/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/../cocos2d/external/flatbuffers/../curl/include/ios/curl/curl.h \
  /Users/TAnh/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/../cocos2d/external/flatbuffers/../curl/include/ios/curl/curlver.h \
  /Users/TAnh/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/../cocos2d/external/flatbuffers/../curl/include/ios/curl/curlbuild.h \
@@ -444,20 +444,19 @@ obj/local/armeabi/objs-debug/MyGame_shared/__/__/Classes/Trading/FacebookHandler
  /Users/TAnh/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/../cocos2d/extensions/../cocos/network/HttpResponse.h \
  jni/../../Classes/Trading/FacebookHandler/../FirebaseHandler/../Model/BUserInfor.h \
  jni/../../Classes/Trading/FacebookHandler/../FirebaseHandler/../Model/PendingRequest.h \
- jni/../../Classes/Trading/FacebookHandler/../FirebaseHandler/../Model/../BLeaderBoardContanst.h \
+ jni/../../Classes/Trading/FacebookHandler/../FirebaseHandler/../Model/../../Constants/Constants.h \
  jni/../../Classes/Trading/FacebookHandler/../FirebaseHandler/../FacebookHandler/FacebookHandler.h \
- jni/../../Classes/Trading/FacebookHandler/../FirebaseHandler/../../Constants.h \
- jni/../../Classes/Trading/FacebookHandler/../FirebaseHandler/../../Resources.h \
- jni/../../Classes/Trading/FacebookHandler/../FirebaseHandler/../../StickerResource.h \
- jni/../../Classes/Trading/FacebookHandler/../FirebaseHandler/../../StickerHelper.h \
- jni/../../Classes/Trading/FacebookHandler/../FirebaseHandler/../../StickerResource.h \
- jni/../../Classes/Trading/FacebookHandler/../FirebaseHandler/../../Constants.h \
- jni/../../Classes/Trading/FacebookHandler/../FirebaseHandler/../../CppUtils.h \
+ jni/../../Classes/Trading/FacebookHandler/../FirebaseHandler/../../Constants/Constants.h \
+ jni/../../Classes/Trading/FacebookHandler/../FirebaseHandler/../../Constants/Resources.h \
+ jni/../../Classes/Trading/FacebookHandler/../FirebaseHandler/../../Constants/StickerResource.h \
+ jni/../../Classes/Trading/FacebookHandler/../FirebaseHandler/../../Helper/StickerHelper.h \
+ jni/../../Classes/Trading/FacebookHandler/../FirebaseHandler/../../Helper/../Constants/StickerResource.h \
+ jni/../../Classes/Trading/FacebookHandler/../FirebaseHandler/../../Helper/../Constants/Constants.h \
+ jni/../../Classes/Trading/FacebookHandler/../FirebaseHandler/../../Helper/../Helper/CppUtils.h \
  /Users/TAnh/Documents/Cocos2dx/ndk/sources/cxx-stl/gnu-libstdc++/4.9/include/iostream \
- jni/../../Classes/Trading/FacebookHandler/../FirebaseHandler/../../Trading/FirebaseHandler/FirebaseHandler.h \
+ jni/../../Classes/Trading/FirebaseHandler/FirebaseHandler.h \
  /Users/TAnh/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/../cocos2d/extensions/../external/json/rapidjson.h \
  /Users/TAnh/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/../cocos2d/extensions/../external/json/document.h \
- jni/../../Classes/Trading/BLeaderBoardContanst.h \
  jni/../../Classes/Trading/Model/BUserInfor.h
 
 jni/../../Classes/Trading/FacebookHandler/FacebookHandler.h:
@@ -1306,7 +1305,7 @@ jni/../../Classes/Trading/FacebookHandler/../Model/BUserInfor.h:
 
 /Users/TAnh/Documents/Cocos2dx/ndk/sources/cxx-stl/gnu-libstdc++/4.9/include/iterator:
 
-jni/../../Classes/Trading/FacebookHandler/../Model/../BLeaderBoardContanst.h:
+jni/../../Classes/Trading/FacebookHandler/../Model/../../Constants/Constants.h:
 
 jni/PluginFacebook/PluginFacebook.h:
 
@@ -1320,7 +1319,7 @@ jni/PluginFacebook/PluginFacebook.h:
 
 /Users/TAnh/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/../cocos2d/cocos/3d/../network/HttpCookie.h:
 
-jni/../../Classes/Trading/FacebookHandler/../../Constants.h:
+jni/../../Classes/Trading/FacebookHandler/../../Constants/Constants.h:
 
 /Users/TAnh/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/../cocos2d/external/flatbuffers/../curl/include/ios/curl/curl.h:
 
@@ -1348,32 +1347,30 @@ jni/../../Classes/Trading/FacebookHandler/../FirebaseHandler/../Model/BUserInfor
 
 jni/../../Classes/Trading/FacebookHandler/../FirebaseHandler/../Model/PendingRequest.h:
 
-jni/../../Classes/Trading/FacebookHandler/../FirebaseHandler/../Model/../BLeaderBoardContanst.h:
+jni/../../Classes/Trading/FacebookHandler/../FirebaseHandler/../Model/../../Constants/Constants.h:
 
 jni/../../Classes/Trading/FacebookHandler/../FirebaseHandler/../FacebookHandler/FacebookHandler.h:
 
-jni/../../Classes/Trading/FacebookHandler/../FirebaseHandler/../../Constants.h:
+jni/../../Classes/Trading/FacebookHandler/../FirebaseHandler/../../Constants/Constants.h:
 
-jni/../../Classes/Trading/FacebookHandler/../FirebaseHandler/../../Resources.h:
+jni/../../Classes/Trading/FacebookHandler/../FirebaseHandler/../../Constants/Resources.h:
 
-jni/../../Classes/Trading/FacebookHandler/../FirebaseHandler/../../StickerResource.h:
+jni/../../Classes/Trading/FacebookHandler/../FirebaseHandler/../../Constants/StickerResource.h:
 
-jni/../../Classes/Trading/FacebookHandler/../FirebaseHandler/../../StickerHelper.h:
+jni/../../Classes/Trading/FacebookHandler/../FirebaseHandler/../../Helper/StickerHelper.h:
 
-jni/../../Classes/Trading/FacebookHandler/../FirebaseHandler/../../StickerResource.h:
+jni/../../Classes/Trading/FacebookHandler/../FirebaseHandler/../../Helper/../Constants/StickerResource.h:
 
-jni/../../Classes/Trading/FacebookHandler/../FirebaseHandler/../../Constants.h:
+jni/../../Classes/Trading/FacebookHandler/../FirebaseHandler/../../Helper/../Constants/Constants.h:
 
-jni/../../Classes/Trading/FacebookHandler/../FirebaseHandler/../../CppUtils.h:
+jni/../../Classes/Trading/FacebookHandler/../FirebaseHandler/../../Helper/../Helper/CppUtils.h:
 
 /Users/TAnh/Documents/Cocos2dx/ndk/sources/cxx-stl/gnu-libstdc++/4.9/include/iostream:
 
-jni/../../Classes/Trading/FacebookHandler/../FirebaseHandler/../../Trading/FirebaseHandler/FirebaseHandler.h:
+jni/../../Classes/Trading/FirebaseHandler/FirebaseHandler.h:
 
 /Users/TAnh/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/../cocos2d/extensions/../external/json/rapidjson.h:
 
 /Users/TAnh/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/../cocos2d/extensions/../external/json/document.h:
-
-jni/../../Classes/Trading/BLeaderBoardContanst.h:
 
 jni/../../Classes/Trading/Model/BUserInfor.h:

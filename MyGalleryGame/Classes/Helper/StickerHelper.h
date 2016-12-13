@@ -2,9 +2,9 @@
 #define __StickerHelper__
 
 #include "cocos2d.h"
-#include "StickerResource.h"
-#include "Constants.h"
-#include "CppUtils.h"
+#include "../Constants/StickerResource.h"
+#include "../Constants/Constants.h"
+#include "../Helper/CppUtils.h"
 #include "Trading/FirebaseHandler/FirebaseHandler.h"
 
 USING_NS_CC;

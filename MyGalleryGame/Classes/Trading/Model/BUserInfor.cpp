@@ -21,7 +21,7 @@ BUserInfor* BUserInfor::parseUserFrom(const rapidjson::Value& json) //Parse the 
 
 BUserInfor* BUserInfor::parseUserFrom(string json, string facebookIDToCheck) //Parse the data from Firebase
 		{
-	cocos2d::CCLog("bambi in BUserInfor parser");
+	cocos2d::CCLog("bambi BUserInfor -> parseUserFrom");
 	BUserInfor* user = new BUserInfor();
 	//Process data
 	rapidjson::Document document;
@@ -39,7 +39,7 @@ BUserInfor* BUserInfor::parseUserFrom(string json, string facebookIDToCheck) //P
 			user->setObjectId(itr->name.GetString());
 			user->setName(
 					document[itr->name.GetString()][KEY_WORLD_NAME].GetString());
-			cocos2d::CCLog("bambi in BUserInfor parser, objectId: %s", user->getObjectId().c_str());
+			cocos2d::CCLog("bambi BUserInfor -> parser, objectId: %s", user->getObjectId().c_str());
 			break;
 		}
 	}
@@ -48,7 +48,7 @@ BUserInfor* BUserInfor::parseUserFrom(string json, string facebookIDToCheck) //P
 
 vector<BUserInfor*> BUserInfor::parseListUserFrom(string json) //Parse the data from Firebase
 		{
-	cocos2d::CCLog("bambi in BUserInfor parser");
+	cocos2d::CCLog("bambi BUserInfor -> parser");
 	vector<BUserInfor*> result;
 	//Process data
 	rapidjson::Document document;
@@ -66,7 +66,7 @@ vector<BUserInfor*> BUserInfor::parseListUserFrom(string json) //Parse the data 
 				document[itr->name.GetString()][KEY_WORLD_NAME].GetString());
 		result.push_back(user);
 
-		cocos2d::CCLog("bambi in BUserInfor parser, objectId: %s", user->getObjectId().c_str());
+		cocos2d::CCLog("bambi BUserInfor -> parser, objectId: %s", user->getObjectId().c_str());
 	}
 	return result;
 }

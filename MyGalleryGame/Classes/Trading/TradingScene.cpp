@@ -1,6 +1,5 @@
 #include "SimpleAudioEngine.h"
-#include "BLeaderBoardResources.h"
-#include "CppUtils.h"
+#include "../Helper/CppUtils.h"
 #include "TradingScene.h"
 #include "../HomeScene.h"
 
@@ -43,22 +42,22 @@ void TradingScene::parseAllStickers() {
 		vtPendingRequest.push_back(request);
 	}
 
-	CCLog("bambi parseAllStickers, pending request size: %d",
+	CCLog("bambi TradingScene -> parseAllStickers, pending request size: %d",
 			vtPendingRequest.size());
 	//Remove all sticked stickers from vector stickers & pending request
 	for (string record : splitAllStickerStrings) {
-		CCLog("bambi parseAllStickers 2, record: %s",record.c_str());
+		CCLog("bambi TradingScene -> parseAllStickers 2, record: %s",record.c_str());
 		Sticker* sticker = StickerHelper::getStickerFromId(
 				CppUtils::stringToDouble(record));
-		CCLog("bambi parseAllStickers 3");
+		CCLog("bambi TradingScene -> parseAllStickers 3");
 
 		if (sticker != nullptr) {
-			CCLog("bambi parseAllStickers 4");
+			CCLog("bambi TradingScene -> parseAllStickers 4");
 
 			bool isRecordExistInStickedVector = false;
 			for (string stickedRecord : splitStickedStickerStrings) {
 				if (stickedRecord == record) {
-					CCLog("bambi parseAllStickers 4.2, %s, %d",stickedRecord.c_str(), splitStickedStickerStrings.size());
+					CCLog("bambi TradingScene -> parseAllStickers 4.2, %s, %d",stickedRecord.c_str(), splitStickedStickerStrings.size());
 					isRecordExistInStickedVector = true;
 					splitStickedStickerStrings.erase(
 							std::remove(splitStickedStickerStrings.begin(),
@@ -68,18 +67,18 @@ void TradingScene::parseAllStickers() {
 					break;
 				}
 			}
-			CCLog("bambi parseAllStickers 5");
+			CCLog("bambi TradingScene -> parseAllStickers 5");
 
 			for (PendingRequest* request : vtPendingRequest) {
 				CCLog(
-						"bambi parseAllStickers - pendingRequest loop - requestStickerId: %s",
+						"bambi TradingScene -> parseAllStickers - pendingRequest loop - requestStickerId: %s",
 						request->getStickerId().c_str());
 				if (record == request->getStickerId()) {
 					CCLog(
-							"bambi parseAllStickers - pendingRequest loop - record == stickerId");
+							"bambi TradingScene -> parseAllStickers - pendingRequest loop - record == stickerId");
 					if (request->getObjectId() != loggedInUserObjectId) {
 						CCLog(
-								"bambi parseAllStickers - pendingRequest loop - record == stickerId - objectID != requestObjectId");
+								"bambi TradingScene -> parseAllStickers - pendingRequest loop - record == stickerId - objectID != requestObjectId");
 						isRecordExistInStickedVector = true;
 						vtPendingRequest.erase(
 								std::remove(vtPendingRequest.begin(),
@@ -89,7 +88,7 @@ void TradingScene::parseAllStickers() {
 					}
 				}
 			}
-			CCLog("bambi parseAllStickers 6");
+			CCLog("bambi TradingScene -> parseAllStickers 6");
 
 			if (!isRecordExistInStickedVector) {
 				bool isRecordExistInTradingVector = false;
@@ -122,7 +121,7 @@ bool TradingScene::init() {
 	isDataChanged = false;
 	parseAllStickers();
 	TTFConfig config(s_font, 120 * s_font_ratio);
-	CCLog("bambi adding background trading scene");
+	CCLog("bambi TradingScene -> adding background trading scene");
 
 //Add background
 	Sprite* background = Sprite::create(s_tradescene_background);
@@ -252,7 +251,7 @@ void TradingScene::addAllStickersToScrollView() {
 					if (type == cocos2d::ui::Widget::TouchEventType::ENDED)
 					{
 						int tag = (int) dynamic_cast<Button*>(pSender)->getTag();
-						CCLog("bambi btnStickerScene->addTouchEventListener, tag: %d",tag);
+						CCLog("bambi TradingScene -> btnStickerScene->addTouchEventListener, tag: %d",tag);
 						openStickerDetailLayer(StickerHelper::getStickerFromId(tag));
 					}});
 		scrollview->addChild(btnStickerScene);
@@ -330,7 +329,7 @@ void TradingScene::openStickerDetailLayer(Sticker* sticker) {
 		return;
 	}
 
-	CCLog("bambi openStickerDetailLayer");
+	CCLog("bambi TradingScene -> openStickerDetailLayer");
 	TTFConfig configStickerDetailLabel(s_font, 100 * s_font_ratio);
 
 //Add blur layer
@@ -423,7 +422,7 @@ void TradingScene::openStickerDetailLayer(Sticker* sticker) {
 					Widget::TouchEventType type) {
 				if (type == cocos2d::ui::Widget::TouchEventType::ENDED)
 				{
-					CCLog("bambi btnStickerScene->addTouchEventListener, tag: %d - userobjectId: %s",sticker->sticker_id, user->getObjectId().c_str());
+					CCLog("bambi TradingScene -> btnStickerScene->addTouchEventListener, tag: %d - userobjectId: %s",sticker->sticker_id, user->getObjectId().c_str());
 					FirebaseHandler::getInstance()->askTheStickerOfUer(sticker->sticker_id, user);
 				}});
 	backgroundLayer->addChild(btnAsk);
@@ -433,7 +432,7 @@ void TradingScene::openStickerDetailLayer(Sticker* sticker) {
 }
 
 bool TradingScene::onTouchBegan(Touch* touch, Event* event) {
-	CCLog("bambi onTouchBegan");
+	CCLog("bambi TradingScene -> onTouchBegan");
 	if (backgroundLayer != nullptr && backgroundLayer->isVisible()) {
 		this->removeChild(backgroundLayer, false);
 		backgroundLayer = nullptr;
@@ -450,7 +449,7 @@ void TradingScene::responseAfterCheckingGivenSticker(
 
 }
 void TradingScene::responseAfterAskingSticker(int stickerId, bool isSuccess) {
-	CCLog("bambi responseAfterAskingSticker");
+	CCLog("bambi TradingScene -> responseAfterAskingSticker");
 	if (backgroundLayer != nullptr && backgroundLayer->isVisible()) {
 		this->removeChild(backgroundLayer, false);
 		backgroundLayer = nullptr;

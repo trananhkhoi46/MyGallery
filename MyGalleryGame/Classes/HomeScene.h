@@ -52,6 +52,7 @@ public:
 	void closeFriendLayer();
 	void closeTradeLayer();
 	void addElementsToTradeLayer();
+	void addPacketFromUserDefault();
 	bool isAPacketAvailableFunc();
 	Sticker* getARandomSticker(STICKER_RARITY rarity);
 

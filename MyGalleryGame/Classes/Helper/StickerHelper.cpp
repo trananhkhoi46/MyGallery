@@ -3,7 +3,7 @@
 vector<STICKER_RARITY> StickerHelper::getCurrentPacketsFromSharePreferences() {
 	vector<STICKER_RARITY> result;
 	string currentPacketString = UserDefault::getInstance()->getStringForKey(
-	CURRENT_PACKET, "0,1,2,2,2");
+	CURRENT_PACKET, GIVEN_PACKETS_AT_FIRST_INSTALL);
 	vector < string > vtPackets = CppUtils::splitStringByDelim(
 			currentPacketString, ',');
 	for (string packetString : vtPackets) {
@@ -14,7 +14,7 @@ vector<STICKER_RARITY> StickerHelper::getCurrentPacketsFromSharePreferences() {
 			result.push_back(packetRarity);
 		}
 	}
-	CCLog("bambi StickerHelper there are %d packets available", result.size());
+//	CCLog("bambi StickerHelper -> there are %d packets available", result.size());
 	return result;
 }
 void StickerHelper::sellSticker(Sticker* sticker) {
@@ -23,7 +23,7 @@ void StickerHelper::sellSticker(Sticker* sticker) {
 	string currentStickerIdString = UserDefault::getInstance()->getStringForKey(
 	CURRENT_STICKER);
 
-	for (int index = 0; index < 4; index++) {
+	for (int index = 0; index < SELLING_STICKER_NUMBER_TO_GET_A_PACKET; index++) {
 		std::string::size_type i = currentStickerIdString.find(stickerIdString);
 		if (i != std::string::npos) {
 			currentStickerIdString.erase(i, stickerIdString.length());
@@ -43,7 +43,7 @@ void StickerHelper::sellSticker(Sticker* sticker) {
 void StickerHelper::appendAPacketToSharePreferences(STICKER_RARITY packet) {
 	string packetString = CppUtils::doubleToString(static_cast<int>(packet));
 	string currentPacketString = UserDefault::getInstance()->getStringForKey(
-	CURRENT_PACKET, "0,1,2,2,2");
+	CURRENT_PACKET, GIVEN_PACKETS_AT_FIRST_INSTALL);
 	CCLog("bambi StickerHelper -> appendAPacketToSharePreferences 1: %s",
 			currentPacketString.c_str());
 
@@ -59,12 +59,12 @@ void StickerHelper::appendAPacketToSharePreferences(STICKER_RARITY packet) {
 
 	CCLog("bambi StickerHelper -> appendAPacketToSharePreferences 3: %s",
 			UserDefault::getInstance()->getStringForKey(
-			CURRENT_PACKET, "0,1,2,2,2").c_str());
+			CURRENT_PACKET, GIVEN_PACKETS_AT_FIRST_INSTALL).c_str());
 }
 void StickerHelper::removeAPacketFromSharePerferences(STICKER_RARITY packet) {
 	string packetString = CppUtils::doubleToString(static_cast<int>(packet));
 	string currentPacketString = UserDefault::getInstance()->getStringForKey(
-	CURRENT_PACKET, "0,1,2,2,2");
+	CURRENT_PACKET, GIVEN_PACKETS_AT_FIRST_INSTALL);
 
 	std::string::size_type i = currentPacketString.find(packetString);
 	if (i != std::string::npos) {
@@ -110,7 +110,7 @@ bool StickerHelper::isStickerAbleToSell(int stickerId) {
 			count++;
 		}
 	}
-	return count >= 4;
+	return count >= SELLING_STICKER_NUMBER_TO_GET_A_PACKET;
 }
 
 Sticker* StickerHelper::getStickerFromId(int stickerId) {
@@ -151,7 +151,7 @@ void StickerHelper::saveToMyStickerList(string stickerIdString) {
 	UserDefault::getInstance()->setStringForKey(CURRENT_STICKER,
 			UserDefault::getInstance()->getStringForKey(CURRENT_STICKER, "")
 					+ "," + stickerIdString);
-	CCLog("bambi saveToMyStickerList - after saving successfully: %s",
+	CCLog("bambi StickerHelper -> saveToMyStickerList - after saving successfully: %s",
 			UserDefault::getInstance()->getStringForKey(CURRENT_STICKER).c_str());
 
 	//Save to server
@@ -168,7 +168,7 @@ void StickerHelper::saveToMyGluedStickerList(string stickerIdString) {
 	UserDefault::getInstance()->setStringForKey(STICKED_STICKER,
 			UserDefault::getInstance()->getStringForKey(STICKED_STICKER, "")
 					+ "," + stickerIdString);
-	CCLog("bambi saveToMyStickerList - after saving successfully: %s",
+	CCLog("bambi StickerHelper -> saveToMyStickerList - after saving successfully: %s",
 			UserDefault::getInstance()->getStringForKey(STICKED_STICKER).c_str());
 
 	//Save to server

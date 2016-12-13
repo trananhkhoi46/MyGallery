@@ -180,7 +180,24 @@ void HomeScene::initPacketButtons() {
 	auto repeat = RepeatForever::create(seq);
 	spriteTimeFreeSticker->runAction(repeat);
 
-	//Add btn free packet
+	//Add btn packets
+	addPacketFromUserDefault();
+}
+
+void HomeScene::addPacketFromUserDefault() {
+	for (Button* button : vtButtonBottomPackets) {
+		if (button->getParent() != nullptr) {
+			button->getParent()->removeChild(button, true);
+		}
+	}
+	for (Button* button : vtButtonTopPackets) {
+		if (button->getParent() != nullptr) {
+			button->getParent()->removeChild(button, true);
+		}
+	}
+	vtButtonBottomPackets.clear();
+	vtButtonTopPackets.clear();
+
 	vector<STICKER_RARITY> vtStickerPacketRarity =
 			StickerHelper::getCurrentPacketsFromSharePreferences();
 	for (STICKER_RARITY packetRarity : vtStickerPacketRarity) {
@@ -233,12 +250,12 @@ void HomeScene::initPacketButtons() {
 		btnPacketBottom->setTag(tag);
 		this->addChild(btnPacketBottom);
 
-		MoveTo* actionMoveTo = MoveTo::create(1,
+		Sequence* actionMoveTo = Sequence::create(DelayTime::create(0.5),MoveTo::create(1,
 				Vec2(
 						CppUtils::randomBetween(winSize.width * 0.15,
 								winSize.width * 0.85),
 						CppUtils::randomBetween(winSize.height * 0.15,
-								winSize.height * 0.85)));
+								winSize.height * 0.85))), nullptr);
 		btnPacketBottom->runAction(actionMoveTo);
 		btnPacketTop->runAction(actionMoveTo->clone());
 		vtButtonBottomPackets.push_back(btnPacketBottom);
@@ -250,7 +267,7 @@ void HomeScene::initPacketButtons() {
 	auto func = CallFunc::create([=]() {
 		isPacketRunningTransactionDone = true;
 	});
-	this->runAction(Sequence::create(DelayTime::create(1), func, nullptr));
+	this->runAction(Sequence::create(DelayTime::create(1.5), func, nullptr));
 
 }
 
@@ -873,11 +890,15 @@ Sticker* HomeScene::getARandomSticker(STICKER_RARITY packetRarity) {
 	string userdefaultKeyVeryRare = StickerHelper::getRarityString(packetRarity)
 			+ "veryrare";
 
-	CCLog("bambi probability key: %s",userdefaultKeyCommon.c_str());
-	CCLog("bambi probability key: %s",userdefaultKeyUncommon.c_str());
-	CCLog("bambi probability key: %s",userdefaultKeyRare.c_str());
-	CCLog("bambi probability key: %s",userdefaultKeyRarest.c_str());
-	CCLog("bambi probability key: %s",userdefaultKeyVeryRare.c_str());
+	CCLog("bambi HomeScene -> probability key: %s",
+			userdefaultKeyCommon.c_str());
+	CCLog("bambi HomeScene -> probability key: %s",
+			userdefaultKeyUncommon.c_str());
+	CCLog("bambi HomeScene -> probability key: %s", userdefaultKeyRare.c_str());
+	CCLog("bambi HomeScene -> probability key: %s",
+			userdefaultKeyRarest.c_str());
+	CCLog("bambi HomeScene -> probability key: %s",
+			userdefaultKeyVeryRare.c_str());
 
 	int commonProbability = UserDefault::getInstance()->getIntegerForKey(
 			userdefaultKeyCommon.c_str(), 0);
@@ -890,19 +911,27 @@ Sticker* HomeScene::getARandomSticker(STICKER_RARITY packetRarity) {
 	int rarestProbability = UserDefault::getInstance()->getIntegerForKey(
 			userdefaultKeyRarest.c_str(), 0);
 
-	CCLog("bambi HomeScene -> getARandomSticker: commonProb: %d, uncommonProb: %d, rareProb: %d, veryrareProb: %d, rarestProb: %d",commonProbability, uncommonProbability, rareProbability, veryRareProbability, rarestProbability);
+	CCLog(
+			"bambi HomeScene -> getARandomSticker: commonProb: %d, uncommonProb: %d, rareProb: %d, veryrareProb: %d, rarestProb: %d",
+			commonProbability, uncommonProbability, rareProbability,
+			veryRareProbability, rarestProbability);
 
 	if (random < commonProbability) {
 		rarity = STICKER_RARITY::COMMON;
-	}else if (random < commonProbability + uncommonProbability) {
+	} else if (random < commonProbability + uncommonProbability) {
 		rarity = STICKER_RARITY::UNCOMMON;
-	}else if (random < commonProbability + uncommonProbability + rareProbability) {
+	} else if (random
+			< commonProbability + uncommonProbability + rareProbability) {
 		rarity = STICKER_RARITY::RARE;
-	}else if (random < commonProbability + uncommonProbability + rareProbability + veryRareProbability) {
+	} else if (random
+			< commonProbability + uncommonProbability + rareProbability
+					+ veryRareProbability) {
 		rarity = STICKER_RARITY::VERYRARE;
-	}else if (random < commonProbability + uncommonProbability + rareProbability + veryRareProbability + rarestProbability) {
+	} else if (random
+			< commonProbability + uncommonProbability + rareProbability
+					+ veryRareProbability + rarestProbability) {
 		rarity = STICKER_RARITY::RAREST;
-	}else{
+	} else {
 		rarity = STICKER_RARITY::UNKNOWN;
 	}
 
@@ -1013,7 +1042,7 @@ void HomeScene::openStickerDetailLayer(Sticker* sticker) {
 		return;
 	}
 
-	CCLog("bambi openStickerDetailLayer");
+	CCLog("bambi HomeScene -> openStickerDetailLayer");
 	TTFConfig configStickerDetailLabel(s_font, 100 * s_font_ratio);
 
 	//Add blur layer
@@ -1588,7 +1617,7 @@ void HomeScene::facebookConnectButtonCallback(Ref* pSender,
 			this->removeChild(backgroundLayer, false);
 			backgroundLayer = nullptr;
 		} else {
-			CCLog("bambi logging in");
+			CCLog("bambi HomeScene -> logging in");
 			isLoggingInFacebook = true;
 			auto func = CallFunc::create([=]() {
 				isLoggingInFacebook = false;
@@ -1603,10 +1632,12 @@ void HomeScene::facebookConnectButtonCallback(Ref* pSender,
 
 void HomeScene::responseWhenLoginOrLogoutFacebook() {
 	if (FacebookHandler::getInstance()->isFacebookLoggedIn()) {
-		CCLog("bambi responseWhenLoginOrLogoutFacebook: logged in");
+		CCLog(
+				"bambi HomeScene -> responseWhenLoginOrLogoutFacebook: logged in");
 		FirebaseHandler::getInstance()->checkFacebookIdExistOnFirebase();
 	} else {
-		CCLog("bambi responseWhenLoginOrLogoutFacebook: not logged in");
+		CCLog(
+				"bambi HomeScene -> responseWhenLoginOrLogoutFacebook: not logged in");
 		//							loadingSprite->setVisible(false);
 		//							loadingSprite_child->setVisible(false);
 		isRequestDone = true;
@@ -1617,7 +1648,10 @@ void HomeScene::responseWhenLoginOrLogoutFacebook() {
 void HomeScene::responseForQuerryTopFriend(vector<BUserInfor*> friendList) {
 	FirebaseHandler::getInstance()->getStickersDataFromFirebase();
 
-	CCLog("bambi responseForQuerryTopFriend");
+	CCLog("bambi HomeScene -> responseForQuerryTopFriend");
+	if (friendLayer == nullptr) {
+		return;
+	}
 	TTFConfig labelConfig(s_font, 100 * s_font_ratio);
 	vt_Friends = friendList;
 	friendLayer->removeChildByTag(kTagFriendList, false);
@@ -1634,6 +1668,7 @@ void HomeScene::responseForQuerryTopFriend(vector<BUserInfor*> friendList) {
 			itemMargin, scrollFrameSize);
 	scrollview->setPosition(Vec2(winSize.width / 2, winSize.height / 2 - 70));
 	scrollview->setBounceEnabled(false);
+	scrollview->setTag(kTagFriendList);
 	scrollview->setScrollBarEnabled(false);
 	friendLayer->addChild(scrollview);
 
@@ -1662,14 +1697,14 @@ void HomeScene::responseForQuerryTopFriend(vector<BUserInfor*> friendList) {
 						int index = (int) dynamic_cast<Button*>(pSender)->getTag();
 						if(vt_Friends.at(index - 1)->getObjectId().compare(UserDefault::getInstance()->getStringForKey(KEY_WORLD_OJECTID)) == 0)
 						{
-							CCLog("bambi go to setting scene - objectId: %s",vt_Friends.at(index - 1)->getObjectId().c_str());
+							CCLog("bambi HomeScene -> go to setting scene - objectId: %s",vt_Friends.at(index - 1)->getObjectId().c_str());
 							auto *newScene = SettingScene::scene();
 							auto transition = TransitionFade::create(1.0, newScene);
 							Director *pDirector = Director::getInstance();
 							pDirector->replaceScene(transition);
 						} else
 						{
-							CCLog("bambi go to trade scene - objectId: %s",vt_Friends.at(index - 1)->getObjectId().c_str());
+							CCLog("bambi HomeScene -> go to trade scene - objectId: %s",vt_Friends.at(index - 1)->getObjectId().c_str());
 							auto *newScene = TradingScene::scene(vt_Friends.at(index - 1));
 							auto transition = TransitionFade::create(1.0, newScene);
 							Director *pDirector = Director::getInstance();
@@ -1702,17 +1737,17 @@ void HomeScene::responseForQuerryTopFriend(vector<BUserInfor*> friendList) {
 void HomeScene::responseAfterGetStickersDataFromFirebase(string facebookId,
 		string stickerData, string stickedStickerData) {
 	CCLog(
-			"bambi HomeScene responseAfterGetStickersDataFromFirebase - facebookID: %s, stickerData: %s",
+			"bambi HomeScene -> responseAfterGetStickersDataFromFirebase - facebookID: %s, stickerData: %s",
 			facebookId.c_str(), stickerData.c_str());
 	if (facebookId == sdkbox::PluginFacebook::getUserID()) {
 		CCLog(
-				"bambi HomeScene responseAfterGetStickersDataFromFirebase - this is my facebook id");
+				"bambi HomeScene -> responseAfterGetStickersDataFromFirebase - this is my facebook id");
 		if (FacebookHandler::getInstance()->isFacebookFirstTimeLoggingIn()) {
 			CCLog(
-					"bambi HomeScene responseAfterGetStickersDataFromFirebase - is first time logging in");
+					"bambi HomeScene -> responseAfterGetStickersDataFromFirebase - is first time logging in");
 			if (stickerData.length() > 0) {
 				CCLog(
-						"bambi HomeScene responseAfterGetStickersDataFromFirebase - has data from server -> save stickers to local");
+						"bambi HomeScene -> responseAfterGetStickersDataFromFirebase - has data from server -> save stickers to local");
 
 				UserDefault::getInstance()->setStringForKey(CURRENT_STICKER,
 						stickerData);
@@ -1725,7 +1760,7 @@ void HomeScene::responseAfterGetStickersDataFromFirebase(string facebookId,
 				invalidateProgressBar();
 			} else {
 				CCLog(
-						"bambi HomeScene responseAfterGetStickersDataFromFirebase - has no data from server -> save stickers from local to server");
+						"bambi HomeScene -> responseAfterGetStickersDataFromFirebase - has no data from server -> save stickers from local to server");
 				FirebaseHandler::getInstance()->saveToMyStickedStickerList(
 						UserDefault::getInstance()->getStringForKey(
 						STICKED_STICKER));
@@ -1753,7 +1788,7 @@ void HomeScene::responseAfterCheckingGivenSticker(
 
 //	for (PendingRequest* request : vtGivenStickers) {
 //		CCLog(
-//				"bambi responseAfterCheckingGivenSticker, object id: %s - name: %s - stickerId: %s",
+//				"bambi HomeScene -> responseAfterCheckingGivenSticker, object id: %s - name: %s - stickerId: %s",
 //				request->getObjectId().c_str(), request->getName().c_str(),
 //				request->getStickerId().c_str());
 //	}
@@ -1765,14 +1800,14 @@ void HomeScene::responseAfterCheckingPendingRequest(
 
 //	for (PendingRequest* request : vtPendingRequest) {
 //		CCLog(
-//				"bambi responseAfterCheckingPendingRequest, object id: %s - name: %s - stickerId: %s",
+//				"bambi HomeScene -> responseAfterCheckingPendingRequest, object id: %s - name: %s - stickerId: %s",
 //				request->getObjectId().c_str(), request->getName().c_str(),
 //				request->getStickerId().c_str());
 //	}
 }
 
 void HomeScene::responseAfterCheckFacebookIdExistOnFirebase() {
-	CCLog("bambi responseAfterCheckFacebookIdExistOnFirebase");
+	CCLog("bambi HomeScene -> responseAfterCheckFacebookIdExistOnFirebase");
 	if (FacebookHandler::getInstance()->isFacebookLoggedIn()) {
 //			isGettingData = true;
 //			labelError->setVisible(false);
@@ -1784,7 +1819,7 @@ void HomeScene::responseAfterCheckFacebookIdExistOnFirebase() {
 		//After fetch data responseForQuerryTopWorld or responseForQuerryTopFriend will be called.
 	} else {
 		CCLog(
-				"bambi responseAfterCheckFacebookIdExistOnFirebase, facebook is not logged in");
+				"bambi HomeScene -> responseAfterCheckFacebookIdExistOnFirebase, facebook is not logged in");
 //			labelError->setVisible(true);
 //			isGettingData = false;
 	}
@@ -1842,10 +1877,8 @@ void HomeScene::settingButtonsCallback(Ref* pSender,
 }
 
 void HomeScene::onVideoAdsPlayed() {
-	isAPacketAvailable = true;
-	setVisibilityPacket();
-	this->unschedule(schedule_selector(HomeScene::timer));
-
+	StickerHelper::appendAPacketToSharePreferences(STICKER_RARITY::UNKNOWN);
+	addPacketFromUserDefault();
 }
 
 bool HomeScene::onTouchBegan(Touch* touch, Event* event) {
@@ -1866,46 +1899,53 @@ bool HomeScene::onTouchBegan(Touch* touch, Event* event) {
 }
 
 void HomeScene::onInitialized(bool success) {
-	CCLog("bambi IAP onInitialized, success: %s", success ? "true" : "false");
+	CCLog("bambi HomeScene -> IAP onInitialized, success: %s",
+			success ? "true" : "false");
 }
 void HomeScene::onSuccess(const sdkbox::Product& p) {
-	CCLog("bambi IAP onSuccess: %s", p.name.c_str());
+	CCLog("bambi HomeScene -> IAP onSuccess: %s", p.name.c_str());
 	if (p.name == "pack_1") {
 		StickerHelper::appendAPacketToSharePreferences(
 				STICKER_RARITY::UNCOMMON);
 		iapLayer->setVisible(false);
+
+		addPacketFromUserDefault();
 	} else if (p.name == "pack_2") {
 		StickerHelper::appendAPacketToSharePreferences(STICKER_RARITY::COMMON);
 		StickerHelper::appendAPacketToSharePreferences(
 				STICKER_RARITY::UNCOMMON);
 		iapLayer->setVisible(false);
+
+		addPacketFromUserDefault();
 	} else if (p.name == "pack_3") {
 		StickerHelper::appendAPacketToSharePreferences(STICKER_RARITY::COMMON);
 		StickerHelper::appendAPacketToSharePreferences(
 				STICKER_RARITY::UNCOMMON);
 		StickerHelper::appendAPacketToSharePreferences(STICKER_RARITY::RARE);
 		iapLayer->setVisible(false);
+
+		addPacketFromUserDefault();
 	}
 }
 void HomeScene::onFailure(const sdkbox::Product& p, const std::string& msg) {
-	CCLog("bambi IAP onFailure: %s", p.name.c_str());
+	CCLog("bambi HomeScene -> IAP onFailure: %s", p.name.c_str());
 }
 void HomeScene::onCanceled(const sdkbox::Product& p) {
-	CCLog("bambi IAP onCanceled: %s", p.name.c_str());
+	CCLog("bambi HomeScene -> IAP onCanceled: %s", p.name.c_str());
 }
 void HomeScene::onRestored(const sdkbox::Product& p) {
-	CCLog("bambi IAP onRestored: %s", p.name.c_str());
+	CCLog("bambi HomeScene -> IAP onRestored: %s", p.name.c_str());
 }
 void HomeScene::onProductRequestSuccess(
 		const std::vector<sdkbox::Product>& products) {
-	CCLog("bambi IAP onProductRequestSuccess");
+	CCLog("bambi HomeScene -> IAP onProductRequestSuccess");
 }
 void HomeScene::onProductRequestFailure(const std::string& msg) {
-	CCLog("bambi IAP onProductRequestFailure: %s", msg.c_str());
+	CCLog("bambi HomeScene -> IAP onProductRequestFailure: %s", msg.c_str());
 }
 void HomeScene::onRestoreComplete(bool ok, const std::string &msg) {
-	CCLog("bambi IAP onRestoreComplete, ok: %s, msg: %s", ok ? "true" : "false",
-			msg.c_str());
+	CCLog("bambi HomeScene -> IAP onRestoreComplete, ok: %s, msg: %s",
+			ok ? "true" : "false", msg.c_str());
 }
 
 //TODO exist game if press back twice in 2 seconds

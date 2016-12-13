@@ -5,10 +5,10 @@
 #include "../Model/BUserInfor.h"
 #include "../Model/PendingRequest.h"
 #include "../FacebookHandler/FacebookHandler.h"
-#include "../../Constants.h"
-#include "../../Resources.h"
-#include "../../StickerResource.h"
-#include "../../StickerHelper.h"
+#include "../../Constants/Constants.h"
+#include "../../Constants/Resources.h"
+#include "../../Constants/StickerResource.h"
+#include "../../Helper/StickerHelper.h"
 #include "external/json/rapidjson.h"
 #include "external/json/document.h"
 #include <iostream>
@@ -131,10 +131,6 @@ public:
 
 	void askTheStickerOfUer(int stickerId, BUserInfor* user);
 
-	void submitScore(int score);
-	void fetchScoreFromServer();
-	void putScoreToSever(int score);
-	int scoreToSubmit;
 	string friendList;
 
 	//Facebook delegate

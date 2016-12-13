@@ -9,7 +9,6 @@
 #include "FacebookHandler.h"
 
 #include "../FirebaseHandler/FirebaseHandler.h"
-#include "BLeaderBoardContanst.h"
 #include "BUserInfor.h"
 FacebookHandler::FacebookHandler() {
 
@@ -35,6 +34,7 @@ void FacebookHandler::getAllFriendsID() {
 }
 
 void FacebookHandler::loginFacebook() {
+	CCLog("bambi FacebookHandler -> loginFacebook");
 	sdkbox::PluginFacebook::requestReadPermissions( { "public_profile",
 			"user_friends" }); //Including login
 	UserDefault::getInstance()->setBoolForKey(KEY_FACEBOOK_FIRST_TIME_LOGGING_IN, true);
@@ -59,7 +59,7 @@ bool FacebookHandler::isFacebookLoggedIn() {
 bool isGettingMyProfle = false;
 void FacebookHandler::getMyProfile() {
 	isGettingMyProfle = true;
-	CCLog("bambi FacebookHandler getMyProfile");
+	CCLog("bambi FacebookHandler -> getMyProfile");
 	sdkbox::FBAPIParam params;
 	params["fields"] = "name,id";
 	sdkbox::PluginFacebook::api("/me", "GET", params, "/me");
@@ -70,13 +70,13 @@ void FacebookHandler::getMyProfile() {
  * Facebook callbacks
  *********************/
 void FacebookHandler::onLogin(bool isLogin, const std::string& error) {
-	CCLog("##FB onLogin success");
+	CCLog("bambi FacebookHandler -> onLogin success");
 	if (_facebookConnectDelegate != nullptr && isLogin)
 		_facebookConnectDelegate->responseWhenLoginOrLogoutFacebook();
 }
 void FacebookHandler::onAPI(const std::string& tag,
 		const std::string& jsonData) {
-	CCLog("##FB onAPI: tag -> %s, json -> %s", tag.c_str(), jsonData.c_str());
+	CCLog("bambi FacebookHandler -> onAPI: tag -> %s, json -> %s", tag.c_str(), jsonData.c_str());
 	if (isGettingMyProfle) {
 		BUserInfor* user = BUserInfor::parseUserFrom(jsonData);
 		user->setAllStickers(UserDefault::getInstance()->getStringForKey(CURRENT_STICKER, ""));
@@ -88,24 +88,24 @@ void FacebookHandler::onAPI(const std::string& tag,
 	}
 }
 void FacebookHandler::onSharedSuccess(const std::string& message) {
-	CCLog("##FB onSharedSuccess:%s", message.c_str());
+	CCLog("bambi FacebookHandler -> onSharedSuccess:%s", message.c_str());
 
 	MessageBox(message.c_str(), "share success");
 }
 void FacebookHandler::onSharedFailed(const std::string& message) {
-	CCLog("##FB onSharedFailed:%s", message.c_str());
+	CCLog("bambi FacebookHandler -> onSharedFailed:%s", message.c_str());
 
 	MessageBox(message.c_str(), "share failed");
 }
 void FacebookHandler::onSharedCancel() {
-	CCLog("##FB onSharedCancel");
+	CCLog("bambi FacebookHandler -> onSharedCancel");
 }
 void FacebookHandler::onPermission(bool isLogin, const std::string& error) {
 	if (_facebookConnectDelegate != nullptr && isLogin)
 		_facebookConnectDelegate->responseWhenLoginOrLogoutFacebook();
 }
 void FacebookHandler::onFetchFriends(bool ok, const std::string& msg) {
-	CCLog("##FB %s: %d = %s", __FUNCTION__, ok, msg.data());
+	CCLog("bambi FacebookHandler -> %s: %d = %s", __FUNCTION__, ok, msg.data());
 
 	string friendList = "";
 	const std::vector<sdkbox::FBGraphUser>& friends =
@@ -120,19 +120,19 @@ void FacebookHandler::onFetchFriends(bool ok, const std::string& msg) {
 }
 void FacebookHandler::onRequestInvitableFriends(
 		const sdkbox::FBInvitableFriendsInfo& friends) {
-	CCLog("##FB onRequestInvitableFriends");
+	CCLog("bambi FacebookHandler -> onRequestInvitableFriends");
 }
 void FacebookHandler::onInviteFriendsWithInviteIdsResult(bool result,
 		const std::string& msg) {
-	CCLog("##FB onInviteFriendsWithInviteIdsResult");
+	CCLog("bambi FacebookHandler -> onInviteFriendsWithInviteIdsResult");
 }
 void FacebookHandler::onInviteFriendsResult(bool result,
 		const std::string& msg) {
-	CCLog("##FB onInviteFriendsResult");
+	CCLog("bambi FacebookHandler -> onInviteFriendsResult");
 }
 void FacebookHandler::onGetUserInfo(const sdkbox::FBGraphUser& userInfo) {
 	if (isGettingMyProfle) {
-		CCLog("##FB onGetUserInfo, name: %s, id: %s",
+		CCLog("bambi FacebookHandler -> onGetUserInfo, name: %s, id: %s",
 				userInfo.getName().c_str(), userInfo.getUserId().c_str());
 		BUserInfor* user = new BUserInfor();
 		user->setId(userInfo.getUserId());

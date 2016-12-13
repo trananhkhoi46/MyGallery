@@ -282,7 +282,7 @@ void StickerScene::addAllStickersToScrollView() {
 					winSize.height / 2 - scrollviewMarginTop / 2
 							+ scrollviewMarginBottom / 2));
 	scrollview->setScrollBarEnabled(false);
-	CCLog("bambi AlbumScene - inner height: %f, frame hight: %f",
+	CCLog("bambi StickerScene - inner height: %f, frame hight: %f",
 			scrollview->getInnerContainerSize().height, scrollFrameSize.height);
 	if (scrollview->getInnerContainerSize().height <= scrollFrameSize.height) {
 		scrollview->setBounceEnabled(false);
@@ -319,7 +319,7 @@ void StickerScene::addAllStickersToScrollView() {
 						} else
 						{
 							int tag = (int) dynamic_cast<Button*>(pSender)->getTag();
-							CCLog("bambi btnStickerScene->addTouchEventListener, tag: %d",tag);
+							CCLog("bambi StickerScene -> btnStickerScene->addTouchEventListener, tag: %d",tag);
 							openStickerDetailLayer(StickerHelper::getStickerFromId(tag));
 						}
 					}});
@@ -386,7 +386,7 @@ void StickerScene::openStickerDetailLayer(Sticker* sticker) {
 		return;
 	}
 
-	CCLog("bambi openStickerDetailLayer");
+	CCLog("bambi StickerScene -> openStickerDetailLayer");
 	TTFConfig configStickerDetailLabel(s_font, 100 * s_font_ratio);
 
 	//Add blur layer
@@ -516,7 +516,7 @@ void StickerScene::openStickerDetailLayer(Sticker* sticker) {
 }
 
 bool StickerScene::onTouchBegan(Touch* touch, Event* event) {
-	CCLog("bambi onTouchBegan");
+	CCLog("bambi StickerScene -> onTouchBegan");
 	if (backgroundLayer != nullptr && backgroundLayer->isVisible()) {
 		this->removeChild(backgroundLayer, false);
 		backgroundLayer = nullptr;

@@ -158,11 +158,11 @@ bool SettingScene::init() {
 void SettingScene::responseWhenLoginOrLogoutFacebook() {
 	if (FacebookHandler::getInstance()->isFacebookLoggedIn()) {
 		CCLog(
-				"bambi in SettingScene -> responseWhenLoginOrLogoutFacebook logged in");
+				"bambi SettingScene -> responseWhenLoginOrLogoutFacebook logged in");
 		labelLoginLogoutFacebook->setString("LOGOUT");
 	} else {
 		CCLog(
-				"bambi in SettingScene -> responseWhenLoginOrLogoutFacebook logged out");
+				"bambi SettingScene -> responseWhenLoginOrLogoutFacebook logged out");
 		labelLoginLogoutFacebook->setString("LOGIN");
 	}
 }

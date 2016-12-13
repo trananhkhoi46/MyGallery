@@ -18,24 +18,24 @@ Scene* BaseScene::scene() {
 class IAdmobListener : public sdkbox::AdMobListener {
 public:
 	virtual void adViewDidReceiveAd(const std::string &name) {
-		CCLog("bambi admob adViewDidReceiveAd %s: ", name.c_str());
+		CCLog("bambi BaseScene -> BaseScene -> admob adViewDidReceiveAd %s: ", name.c_str());
 		//sdkbox::PluginAdMob::show(name);
 	}
 	virtual void adViewDidFailToReceiveAdWithError(const std::string &name, const std::string &msg) {
-		CCLog("bambi admob adViewDidFailToReceiveAdWithError %s: ", msg.c_str());
+		CCLog("bambi BaseScene -> admob adViewDidFailToReceiveAdWithError %s: ", msg.c_str());
 	}
 	virtual void adViewWillPresentScreen(const std::string &name) {
-		CCLog("bambi admob adViewWillPresentScreen %s: ", name.c_str());
+		CCLog("bambi BaseScene -> admob adViewWillPresentScreen %s: ", name.c_str());
 	}
 	virtual void adViewDidDismissScreen(const std::string &name) {
-		CCLog("bambi admob adViewDidDismissScreen %s: ", name.c_str());
+		CCLog("bambi BaseScene -> admob adViewDidDismissScreen %s: ", name.c_str());
 	}
 	virtual void adViewWillDismissScreen(const std::string &name) {
 		sdkbox::PluginAdMob::cache(name);
-		CCLog("bambi admob adViewWillDismissScreen %s: ", name.c_str());
+		CCLog("bambi BaseScene -> admob adViewWillDismissScreen %s: ", name.c_str());
 	}
 	virtual void adViewWillLeaveApplication(const std::string &name) {
-		CCLog("bambi admob adViewWillLeaveApplication %s: ", name.c_str());
+		CCLog("bambi BaseScene -> admob adViewWillLeaveApplication %s: ", name.c_str());
 	}
 };
 class IChartboostListener : public sdkbox::ChartboostListener {
@@ -43,31 +43,31 @@ public:
 	virtual void onChartboostCached(const std::string& name)
 	{
 		HomeScene::getInstance()->isChartboostAdsAvailable = true;
-		CCLog("bambi chartboost onChartboostCached %s: ", name.c_str());
+		CCLog("bambi BaseScene -> chartboost onChartboostCached %s: ", name.c_str());
 	}
 	virtual bool onChartboostShouldDisplay(const std::string& name)
 	{
-		CCLog("bambi chartboost onChartboostShouldDisplay %s: ", name.c_str());
+		CCLog("bambi BaseScene -> chartboost onChartboostShouldDisplay %s: ", name.c_str());
 	}
 	virtual void onChartboostDisplay(const std::string& name)
 	{
-		CCLog("bambi chartboost onChartboostDisplay %s: ", name.c_str());
+		CCLog("bambi BaseScene -> chartboost onChartboostDisplay %s: ", name.c_str());
 	}
 	virtual void onChartboostDismiss(const std::string& name)
 	{
-		CCLog("bambi chartboost onChartboostDismiss %s: ", name.c_str());
+		CCLog("bambi BaseScene -> chartboost onChartboostDismiss %s: ", name.c_str());
 	}
 	virtual void onChartboostClose(const std::string& name)
 	{
-		CCLog("bambi chartboost onChartboostClose %s: ", name.c_str());
+		CCLog("bambi BaseScene -> chartboost onChartboostClose %s: ", name.c_str());
 	}
 	virtual void onChartboostClick(const std::string& name)
 	{
-		CCLog("bambi chartboost onChartboostClick %s: ", name.c_str());
+		CCLog("bambi BaseScene -> chartboost onChartboostClick %s: ", name.c_str());
 	}
 	virtual void onChartboostReward(const std::string& name, int reward)
 	{
-		CCLog("bambi chartboost onChartboostReward %s: ", name.c_str());
+		CCLog("bambi BaseScene -> chartboost onChartboostReward %s: ", name.c_str());
 
 		HomeScene::getInstance()->isChartboostAdsAvailable = false;
 		//TODO return to the listener
@@ -75,19 +75,19 @@ public:
 	}
 	virtual void onChartboostFailedToLoad(const std::string& name, sdkbox::CB_LoadError e)
 	{
-		CCLog("bambi chartboost onChartboostFailedToLoad %s: ", name.c_str());
+		CCLog("bambi BaseScene -> chartboost onChartboostFailedToLoad %s: ", name.c_str());
 	}
 	virtual void onChartboostFailToRecordClick(const std::string& name, sdkbox::CB_ClickError e)
 	{
-		CCLog("bambi chartboost onChartboostFailToRecordClick %s: ", name.c_str());
+		CCLog("bambi BaseScene -> chartboost onChartboostFailToRecordClick %s: ", name.c_str());
 	}
 	virtual void onChartboostConfirmation()
 	{
-		CCLog("bambi chartboost onChartboostConfirmation");
+		CCLog("bambi BaseScene -> chartboost onChartboostConfirmation");
 	}
 	virtual void onChartboostCompleteStore()
 	{
-		CCLog("bambi chartboost onChartboostCompleteStore");
+		CCLog("bambi BaseScene -> chartboost onChartboostCompleteStore");
 	}
 };
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
@@ -97,32 +97,32 @@ public:
 	virtual void onVungleCacheAvailable()
 	{
 		HomeScene::getInstance()->isVungleAdsAvailable = true;
-		CCLog("bambi vungle onVungleCacheAvailable");
+		CCLog("bambi BaseScene -> vungle onVungleCacheAvailable");
 	}
 	virtual void onVungleStarted()
 	{
-		CCLog("bambi vungle onVungleStarted");
+		CCLog("bambi BaseScene -> vungle onVungleStarted");
 	}
 	virtual void onVungleFinished()
 	{
-		CCLog("bambi vungle onVungleFinished");
+		CCLog("bambi BaseScene -> vungle onVungleFinished");
 	}
 	virtual void onVungleAdViewed(bool isComplete)
 	{
-		CCLog("bambi vungle onVungleAdViewed - isComplete: %s",isComplete?"true":"false");
+		CCLog("bambi BaseScene -> vungle onVungleAdViewed - isComplete: %s",isComplete?"true":"false");
 	}
 	virtual void onVungleAdReward(const std::string& name) {
 		cocos2d::Director::getInstance()->getScheduler()->performFunctionInCocosThread([=]() {
 					HomeScene::getInstance()->isVungleAdsAvailable = false;
 					HomeScene::getInstance()->onVideoAdsPlayed();
-					CCLog("bambi vungle onVungleAdReward - name: %s",name.c_str());
+					CCLog("bambi BaseScene -> vungle onVungleAdReward - name: %s",name.c_str());
 				});
 	}
 };
 #endif
 #endif
 void BaseScene::showFullscreenAds() {
-	CCLog("bambi showFullscreenAds");
+	CCLog("bambi BaseScene -> showFullscreenAds");
 //#ifdef SDKBOX_ENABLED
 //#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
 //	int random = CppUtils::randomBetween(1,3);
@@ -193,7 +193,7 @@ void BaseScene::showRewardedAds() {
 	});
 	this->runAction(Sequence::create(DelayTime::create(1), func, nullptr));
 
-	CCLog("bambi showRewardedAds");
+	CCLog("bambi BaseScene -> showRewardedAds");
 #ifdef SDKBOX_ENABLED
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
 	if(CppUtils::randomBetween(1,2) == 1) {
