@@ -198,6 +198,7 @@ void HomeScene::addPacketFromUserDefault() {
 	vtButtonBottomPackets.clear();
 	vtButtonTopPackets.clear();
 
+	vector<Rect> vtButtonRect;
 	vector<STICKER_RARITY> vtStickerPacketRarity =
 			StickerHelper::getCurrentPacketsFromSharePreferences();
 	for (STICKER_RARITY packetRarity : vtStickerPacketRarity) {
@@ -250,17 +251,47 @@ void HomeScene::addPacketFromUserDefault() {
 		btnPacketBottom->setTag(tag);
 		this->addChild(btnPacketBottom);
 
-		Sequence* actionMoveTo = Sequence::create(DelayTime::create(0.5),MoveTo::create(1,
-				Vec2(
-						CppUtils::randomBetween(winSize.width * 0.15,
-								winSize.width * 0.85),
-						CppUtils::randomBetween(winSize.height * 0.15,
-								winSize.height * 0.85))), nullptr);
+		Vec2 packetRandomPosition = Vec2(
+				CppUtils::randomBetween(winSize.width * 0.18,
+						winSize.width * 0.82),
+				CppUtils::randomBetween(winSize.height * 0.3,
+						winSize.height * 0.65));
+
+		//Create a rect of the packet -> put to vector and make sure random position generated will not be conflicted
+		Rect packetRect;
+		packetRect.size = btnPacketTop->getContentSize() * 2 / 3; //Half of the packet
+		packetRect.origin = packetRandomPosition;
+
+		int index = 0;
+		while (index < 100) {
+			bool conflicted = false;
+			for (Rect rect : vtButtonRect) {
+				if (rect.intersectsRect(packetRect)) {
+					conflicted = true;
+					break;
+				}
+			}
+			if (conflicted) {
+				//Generate another random position if conflicted
+				packetRandomPosition = Vec2(
+						CppUtils::randomBetween(winSize.width * 0.18,
+								winSize.width * 0.82),
+						CppUtils::randomBetween(winSize.height * 0.3,
+								winSize.height * 0.65));
+				packetRect.origin = packetRandomPosition;
+				index++;
+			} else {
+				break;
+			}
+		}
+
+		Sequence* actionMoveTo = Sequence::create(DelayTime::create(0.5),
+				MoveTo::create(1, packetRandomPosition), nullptr);
 		btnPacketBottom->runAction(actionMoveTo);
 		btnPacketTop->runAction(actionMoveTo->clone());
 		vtButtonBottomPackets.push_back(btnPacketBottom);
 		vtButtonTopPackets.push_back(btnPacketTop);
-
+		vtButtonRect.push_back(packetRect);
 		CCLog("bambi HomeScene - > init packet buttons: %d", tag);
 	}
 	isPacketRunningTransactionDone = false;
@@ -1468,7 +1499,10 @@ void HomeScene::packetButtonsCallback(Ref* pSender,
 		CallFunc* funcResetScheduleGetSticker;
 		if (btnPacketTop != nullptr) {
 			btnPacketTop->runAction(
-					Sequence::create(DelayTime::create(0.85),
+					Sequence::create(
+							DelayTime::create(
+									1.7f * btnPacketTop->getPositionX()
+											/ winSize.width),
 							MoveBy::create(0.2, Vec2(0, 100)),
 							DelayTime::create(2),
 							MoveBy::create(0, Vec2(0, -100)), nullptr));

@@ -58,7 +58,7 @@ using namespace std;
 #define MAX_STICKER 5
 #define SELLING_STICKER_NUMBER_TO_GET_A_PACKET 4
 #define TIME_TO_GET_FREE_PACKET_IN_SECOND 300
-#define GIVEN_PACKETS_AT_FIRST_INSTALL "0,1,2,2,2"
+#define GIVEN_PACKETS_AT_FIRST_INSTALL "0,1,2,2"
 
 //URL
 #define s_linkToGooglePlayMoreGame "https://play.google.com/store/apps/developer?id=Khoi+Nguyen+Entertainment"
