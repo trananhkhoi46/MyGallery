@@ -59,7 +59,6 @@ obj/local/armeabi/objs-debug/MyGame_shared/__/__/Classes/Trading/FirebaseHandler
  /Users/TAnh/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/../cocos2d/external/flatbuffers/../json/document.h \
  /Users/TAnh/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/../cocos2d/external/flatbuffers/../json/reader.h \
  /Users/TAnh/Documents/Cocos2dx/ndk/sources/cxx-stl/gnu-libstdc++/4.9/include/iterator \
- jni/../../Classes/Trading/FirebaseHandler/../Model/../../Constants/Constants.h \
  /Users/TAnh/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/../cocos2d/cocos/3d/../cocos2d.h \
  /Users/TAnh/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/../cocos2d/cocos/3d/../base/ccConfig.h \
  /Users/TAnh/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/../cocos2d/cocos/3d/../base/CCAsyncTaskPool.h \
@@ -393,6 +392,7 @@ obj/local/armeabi/objs-debug/MyGame_shared/__/__/Classes/Trading/FirebaseHandler
  /Users/TAnh/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/../cocos2d/cocos/3d/../platform/android/CCApplication-android.h \
  /Users/TAnh/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/../cocos2d/cocos/3d/../renderer/CCGLProgramCache.h \
  /Users/TAnh/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/../cocos2d/cocos/3d/../renderer/ccGLStateCache.h \
+ jni/../../Classes/Trading/FirebaseHandler/../Model/../../Constants/Constants.h \
  jni/../../Classes/Trading/FirebaseHandler/../Model/PendingRequest.h \
  jni/../../Classes/Trading/FirebaseHandler/../FacebookHandler/FacebookHandler.h \
  /Users/TAnh/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/../cocos2d/extensions/../cocos/ui/CocosGUI.h \
@@ -451,7 +451,7 @@ obj/local/armeabi/objs-debug/MyGame_shared/__/__/Classes/Trading/FirebaseHandler
  jni/../../Classes/Trading/FirebaseHandler/../../Helper/../Constants/Constants.h \
  jni/../../Classes/Trading/FirebaseHandler/../../Helper/../Helper/CppUtils.h \
  /Users/TAnh/Documents/Cocos2dx/ndk/sources/cxx-stl/gnu-libstdc++/4.9/include/iostream \
- jni/../../Classes/Trading/FirebaseHandler/FirebaseHandler.h \
+ jni/../../Classes/Trading/FirebaseHandler/../../Helper/../Trading/FirebaseHandler/FirebaseHandler.h \
  /Users/TAnh/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/../cocos2d/extensions/../external/json/rapidjson.h \
  /Users/TAnh/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/../cocos2d/extensions/../external/json/document.h
 
@@ -572,8 +572,6 @@ jni/../../Classes/Trading/FirebaseHandler/../Model/BUserInfor.h:
 /Users/TAnh/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/../cocos2d/external/flatbuffers/../json/reader.h:
 
 /Users/TAnh/Documents/Cocos2dx/ndk/sources/cxx-stl/gnu-libstdc++/4.9/include/iterator:
-
-jni/../../Classes/Trading/FirebaseHandler/../Model/../../Constants/Constants.h:
 
 /Users/TAnh/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/../cocos2d/cocos/3d/../cocos2d.h:
 
@@ -1241,6 +1239,8 @@ jni/../../Classes/Trading/FirebaseHandler/../Model/../../Constants/Constants.h:
 
 /Users/TAnh/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/../cocos2d/cocos/3d/../renderer/ccGLStateCache.h:
 
+jni/../../Classes/Trading/FirebaseHandler/../Model/../../Constants/Constants.h:
+
 jni/../../Classes/Trading/FirebaseHandler/../Model/PendingRequest.h:
 
 jni/../../Classes/Trading/FirebaseHandler/../FacebookHandler/FacebookHandler.h:
@@ -1357,7 +1357,7 @@ jni/../../Classes/Trading/FirebaseHandler/../../Helper/../Helper/CppUtils.h:
 
 /Users/TAnh/Documents/Cocos2dx/ndk/sources/cxx-stl/gnu-libstdc++/4.9/include/iostream:
 
-jni/../../Classes/Trading/FirebaseHandler/FirebaseHandler.h:
+jni/../../Classes/Trading/FirebaseHandler/../../Helper/../Trading/FirebaseHandler/FirebaseHandler.h:
 
 /Users/TAnh/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/../cocos2d/extensions/../external/json/rapidjson.h:
 

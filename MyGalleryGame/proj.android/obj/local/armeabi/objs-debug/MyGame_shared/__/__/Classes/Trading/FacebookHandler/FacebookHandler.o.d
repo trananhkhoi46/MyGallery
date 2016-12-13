@@ -454,7 +454,7 @@ obj/local/armeabi/objs-debug/MyGame_shared/__/__/Classes/Trading/FacebookHandler
  jni/../../Classes/Trading/FacebookHandler/../FirebaseHandler/../../Helper/../Constants/Constants.h \
  jni/../../Classes/Trading/FacebookHandler/../FirebaseHandler/../../Helper/../Helper/CppUtils.h \
  /Users/TAnh/Documents/Cocos2dx/ndk/sources/cxx-stl/gnu-libstdc++/4.9/include/iostream \
- jni/../../Classes/Trading/FirebaseHandler/FirebaseHandler.h \
+ jni/../../Classes/Trading/FacebookHandler/../FirebaseHandler/../../Helper/../Trading/FirebaseHandler/FirebaseHandler.h \
  /Users/TAnh/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/../cocos2d/extensions/../external/json/rapidjson.h \
  /Users/TAnh/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/../cocos2d/extensions/../external/json/document.h \
  jni/../../Classes/Trading/Model/BUserInfor.h
@@ -1367,7 +1367,7 @@ jni/../../Classes/Trading/FacebookHandler/../FirebaseHandler/../../Helper/../Hel
 
 /Users/TAnh/Documents/Cocos2dx/ndk/sources/cxx-stl/gnu-libstdc++/4.9/include/iostream:
 
-jni/../../Classes/Trading/FirebaseHandler/FirebaseHandler.h:
+jni/../../Classes/Trading/FacebookHandler/../FirebaseHandler/../../Helper/../Trading/FirebaseHandler/FirebaseHandler.h:
 
 /Users/TAnh/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/../cocos2d/extensions/../external/json/rapidjson.h:
 

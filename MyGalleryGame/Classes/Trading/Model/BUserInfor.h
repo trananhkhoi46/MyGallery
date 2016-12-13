@@ -8,6 +8,7 @@
 #include <json/prettywriter.h>
 #include <json/filestream.h>
 #include <json/document.h>
+#include "cocos2d.h"
 #include "../../Constants/Constants.h"
 using namespace rapidjson;
 using namespace std;

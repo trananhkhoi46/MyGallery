@@ -669,8 +669,8 @@ void FirebaseHandler::getProbability(string url, vector<string> probabilityKeys,
 void FirebaseHandler::getProbabilityCommonPacket() {
 	string url =
 			"https://gallerygame-fab40.firebaseio.com/json/probability_commonpacket.json?auth=KKgD6eWhfoJC6KUCFwSwEGIJYzxkFAjnMOqNl6ir";
-	vector<string> probabilityKeys = {KEY_PROBABILITY_FREEPACKET_COMMON, KEY_PROBABILITY_FREEPACKET_UNCOMMON,
-		KEY_PROBABILITY_FREEPACKET_RARE, KEY_PROBABILITY_FREEPACKET_VERYRARE, KEY_PROBABILITY_FREEPACKET_RAREST};
+	vector<string> probabilityKeys = {KEY_PROBABILITY_COMMON, KEY_PROBABILITY_UNCOMMON,
+		KEY_PROBABILITY_RARE, KEY_PROBABILITY_VERYRARE, KEY_PROBABILITY_RAREST};
 	FirebaseHandler::getProbability(url, probabilityKeys,
 			STICKER_RARITY::COMMON);
 }
@@ -678,8 +678,8 @@ void FirebaseHandler::getProbabilityCommonPacket() {
 void FirebaseHandler::getProbabilityUncommonPacket() {
 	string url =
 			"https://gallerygame-fab40.firebaseio.com/json/probability_uncommonpacket.json?auth=KKgD6eWhfoJC6KUCFwSwEGIJYzxkFAjnMOqNl6ir";
-	vector<string> probabilityKeys = {KEY_PROBABILITY_FREEPACKET_COMMON, KEY_PROBABILITY_FREEPACKET_UNCOMMON,
-		KEY_PROBABILITY_FREEPACKET_RARE, KEY_PROBABILITY_FREEPACKET_VERYRARE, KEY_PROBABILITY_FREEPACKET_RAREST};
+	vector<string> probabilityKeys = {KEY_PROBABILITY_COMMON, KEY_PROBABILITY_UNCOMMON,
+		KEY_PROBABILITY_RARE, KEY_PROBABILITY_VERYRARE, KEY_PROBABILITY_RAREST};
 	FirebaseHandler::getProbability(url, probabilityKeys,
 			STICKER_RARITY::UNCOMMON);
 }
@@ -687,31 +687,31 @@ void FirebaseHandler::getProbabilityUncommonPacket() {
 void FirebaseHandler::getProbabilityRarePacket() {
 	string url =
 			"https://gallerygame-fab40.firebaseio.com/json/probability_rarepacket.json?auth=KKgD6eWhfoJC6KUCFwSwEGIJYzxkFAjnMOqNl6ir";
-	vector<string> probabilityKeys = {KEY_PROBABILITY_FREEPACKET_COMMON, KEY_PROBABILITY_FREEPACKET_UNCOMMON,
-		KEY_PROBABILITY_FREEPACKET_RARE, KEY_PROBABILITY_FREEPACKET_VERYRARE, KEY_PROBABILITY_FREEPACKET_RAREST};
+	vector<string> probabilityKeys = {KEY_PROBABILITY_COMMON, KEY_PROBABILITY_UNCOMMON,
+		KEY_PROBABILITY_RARE, KEY_PROBABILITY_VERYRARE, KEY_PROBABILITY_RAREST};
 	FirebaseHandler::getProbability(url, probabilityKeys, STICKER_RARITY::RARE);
 }
 void FirebaseHandler::getProbabilityVeryRarePacket() {
 	string url =
 			"https://gallerygame-fab40.firebaseio.com/json/probability_veryrarepacket.json?auth=KKgD6eWhfoJC6KUCFwSwEGIJYzxkFAjnMOqNl6ir";
-	vector<string> probabilityKeys = {KEY_PROBABILITY_FREEPACKET_COMMON, KEY_PROBABILITY_FREEPACKET_UNCOMMON,
-		KEY_PROBABILITY_FREEPACKET_RARE, KEY_PROBABILITY_FREEPACKET_VERYRARE, KEY_PROBABILITY_FREEPACKET_RAREST};
+	vector<string> probabilityKeys = {KEY_PROBABILITY_COMMON, KEY_PROBABILITY_UNCOMMON,
+		KEY_PROBABILITY_RARE, KEY_PROBABILITY_VERYRARE, KEY_PROBABILITY_RAREST};
 	FirebaseHandler::getProbability(url, probabilityKeys,
 			STICKER_RARITY::VERYRARE);
 }
 void FirebaseHandler::getProbabilityRarestPacket() {
 	string url =
 			"https://gallerygame-fab40.firebaseio.com/json/probability_rarestpacket.json?auth=KKgD6eWhfoJC6KUCFwSwEGIJYzxkFAjnMOqNl6ir";
-	vector<string> probabilityKeys = {KEY_PROBABILITY_FREEPACKET_COMMON, KEY_PROBABILITY_FREEPACKET_UNCOMMON,
-		KEY_PROBABILITY_FREEPACKET_RARE, KEY_PROBABILITY_FREEPACKET_VERYRARE, KEY_PROBABILITY_FREEPACKET_RAREST};
+	vector<string> probabilityKeys = {KEY_PROBABILITY_COMMON, KEY_PROBABILITY_UNCOMMON,
+		KEY_PROBABILITY_RARE, KEY_PROBABILITY_VERYRARE, KEY_PROBABILITY_RAREST};
 	FirebaseHandler::getProbability(url, probabilityKeys,
 			STICKER_RARITY::RAREST);
 }
 void FirebaseHandler::getProbabilityFreePacket() {
 	string url =
 			"https://gallerygame-fab40.firebaseio.com/json/probability_freepacket.json?auth=KKgD6eWhfoJC6KUCFwSwEGIJYzxkFAjnMOqNl6ir";
-	vector<string> probabilityKeys = {KEY_PROBABILITY_FREEPACKET_COMMON, KEY_PROBABILITY_FREEPACKET_UNCOMMON,
-		KEY_PROBABILITY_FREEPACKET_RARE, KEY_PROBABILITY_FREEPACKET_VERYRARE, KEY_PROBABILITY_FREEPACKET_RAREST};
+	vector<string> probabilityKeys = {KEY_PROBABILITY_COMMON, KEY_PROBABILITY_UNCOMMON,
+		KEY_PROBABILITY_RARE, KEY_PROBABILITY_VERYRARE, KEY_PROBABILITY_RAREST};
 	FirebaseHandler::getProbability(url, probabilityKeys,
 			STICKER_RARITY::UNKNOWN);
 }

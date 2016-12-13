@@ -398,7 +398,7 @@ void HomeScene::initOtherViews() {
 	progressBar = LoadingBar::create();
 	progressBar->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
 	progressBar->loadTexture(s_homescene_progress);
-	progressBar->setPercent(currentStickers * 100 / MAX_STICKER);
+	progressBar->setPercent(currentStickers * 100 / vt_stickers.size());
 	progressBar->setPosition(
 			Vec2(winSize.width - progressBar->getContentSize().width / 2 - 40,
 					winSize.height * 0.8));
@@ -412,7 +412,7 @@ void HomeScene::initOtherViews() {
 
 	labelSticker = Label::createWithTTF(configLabelSticker,
 			String::createWithFormat("%d/%d stickers", currentStickers,
-			MAX_STICKER)->getCString(), TextHAlignment::CENTER);
+			vt_stickers.size())->getCString(), TextHAlignment::CENTER);
 	labelSticker->setPosition(
 			Vec2(progressBackground->getPositionX(),
 					progressBackground->getPositionY()));
@@ -841,8 +841,8 @@ void HomeScene::invalidateProgressBar() {
 	currentStickers = StickerHelper::getCurrentExistStickerNumber(true);
 	labelSticker->setString(
 			String::createWithFormat("%d/%d stickers", currentStickers,
-			MAX_STICKER)->getCString());
-	progressBar->setPercent(currentStickers * 100 / MAX_STICKER);
+			vt_stickers.size())->getCString());
+	progressBar->setPercent(currentStickers * 100 / vt_stickers.size());
 }
 
 void HomeScene::invalidateMenuBarPosition() {

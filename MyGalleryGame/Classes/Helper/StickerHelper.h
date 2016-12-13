@@ -5,7 +5,7 @@
 #include "../Constants/StickerResource.h"
 #include "../Constants/Constants.h"
 #include "../Helper/CppUtils.h"
-#include "Trading/FirebaseHandler/FirebaseHandler.h"
+#include "../Trading/FirebaseHandler/FirebaseHandler.h"
 
 USING_NS_CC;
 using namespace std;

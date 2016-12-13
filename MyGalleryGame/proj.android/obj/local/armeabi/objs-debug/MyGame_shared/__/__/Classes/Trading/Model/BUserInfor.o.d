@@ -35,7 +35,6 @@ obj/local/armeabi/objs-debug/MyGame_shared/__/__/Classes/Trading/Model/BUserInfo
  /Users/TAnh/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/../cocos2d/external/flatbuffers/../json/document.h \
  /Users/TAnh/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/../cocos2d/external/flatbuffers/../json/reader.h \
  /Users/TAnh/Documents/Cocos2dx/ndk/sources/cxx-stl/gnu-libstdc++/4.9/include/iterator \
- jni/../../Classes/Trading/Model/../../Constants/Constants.h \
  /Users/TAnh/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/../cocos2d/cocos/3d/../cocos2d.h \
  /Users/TAnh/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/../cocos2d/cocos/3d/../base/ccConfig.h \
  /Users/TAnh/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/../cocos2d/cocos/3d/../platform/CCPlatformConfig.h \
@@ -390,7 +389,8 @@ obj/local/armeabi/objs-debug/MyGame_shared/__/__/Classes/Trading/Model/BUserInfo
  /Users/TAnh/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/../cocos2d/cocos/3d/../platform/CCApplication.h \
  /Users/TAnh/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/../cocos2d/cocos/3d/../platform/android/CCApplication-android.h \
  /Users/TAnh/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/../cocos2d/cocos/3d/../renderer/CCGLProgramCache.h \
- /Users/TAnh/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/../cocos2d/cocos/3d/../renderer/ccGLStateCache.h
+ /Users/TAnh/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/../cocos2d/cocos/3d/../renderer/ccGLStateCache.h \
+ jni/../../Classes/Trading/Model/../../Constants/Constants.h
 
 jni/../../Classes/Trading/Model/BUserInfor.h:
 
@@ -461,8 +461,6 @@ jni/../../Classes/Trading/Model/BUserInfor.h:
 /Users/TAnh/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/../cocos2d/external/flatbuffers/../json/reader.h:
 
 /Users/TAnh/Documents/Cocos2dx/ndk/sources/cxx-stl/gnu-libstdc++/4.9/include/iterator:
-
-jni/../../Classes/Trading/Model/../../Constants/Constants.h:
 
 /Users/TAnh/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/../cocos2d/cocos/3d/../cocos2d.h:
 
@@ -1173,3 +1171,5 @@ jni/../../Classes/Trading/Model/../../Constants/Constants.h:
 /Users/TAnh/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/../cocos2d/cocos/3d/../renderer/CCGLProgramCache.h:
 
 /Users/TAnh/Documents/Cocos2dx/Freelance/MyGallery/MyGalleryGame/proj.android/../cocos2d/cocos/3d/../renderer/ccGLStateCache.h:
+
+jni/../../Classes/Trading/Model/../../Constants/Constants.h:
