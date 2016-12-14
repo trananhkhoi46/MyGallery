@@ -123,27 +123,27 @@ public:
 #endif
 void BaseScene::showFullscreenAds() {
 	CCLog("bambi BaseScene -> showFullscreenAds");
-//#ifdef SDKBOX_ENABLED
-//#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-//	int random = CppUtils::randomBetween(1,3);
-//	if(random == 1)
-//	{
-//		sdkbox::PluginChartboost::show(kChartboostInstitialAds);
-//	} else if(random == 2) {
-//		sdkbox::PluginAdMob::show(kAdmobInstitialAds);
-//	} else {
-//		sdkbox::PluginVungle::show(kVungleInstitialAds);
-//	}
-//#else
-//	int random = CppUtils::randomBetween(1,2);
-//	if(random == 1)
-//	{
-//		sdkbox::PluginChartboost::show(kChartboostInstitialAds);
-//	} else {
-//		sdkbox::PluginAdMob::show(kAdmobInstitialAds);
-//	}
-//#endif
-//#endif
+#ifdef SDKBOX_ENABLED
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+	int random = CppUtils::randomBetween(1,3);
+	if(random == 1)
+	{
+		sdkbox::PluginChartboost::show(kChartboostInstitialAds);
+	} else if(random == 2) {
+		sdkbox::PluginAdMob::show(kAdmobInstitialAds);
+	} else {
+		sdkbox::PluginVungle::show(kVungleInstitialAds);
+	}
+#else
+	int random = CppUtils::randomBetween(1,2);
+	if(random == 1)
+	{
+		sdkbox::PluginChartboost::show(kChartboostInstitialAds);
+	} else {
+		sdkbox::PluginAdMob::show(kAdmobInstitialAds);
+	}
+#endif
+#endif
 }
 
 bool BaseScene::isRewardedAdsAvailable() {

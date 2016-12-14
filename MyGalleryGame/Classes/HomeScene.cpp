@@ -119,6 +119,8 @@ bool HomeScene::init() {
 	//Schedule game loops
 	scheduleUpdate();
 	schedule(schedule_selector(HomeScene::timer), 1);
+    timer(1); //Call it immediately 2 times
+    timer(1); //Call it immediately 2 times
 	return result;
 }
 //---------------------------------------------------------------------End of constructor methods
@@ -505,8 +507,7 @@ void HomeScene::initOtherViews() {
 							});
 					this->runAction(Sequence::create(DelayTime::create(1), func, nullptr));
 
-					sdkbox::PluginFacebook::inviteFriends("https://fb.me/322164761287181",
-							"http://www.cocos2d-x.org/attachments/801/cocos2dx_portrait.png");
+					sdkbox::PluginFacebook::inviteFriends(FACEBOOK_INVITE_APP_URL,FACEBOOK_INVITE_IMAGE_URL);
 				}});
 	friendLayer->addChild(btnInviteFacebook);
 
@@ -597,11 +598,16 @@ void HomeScene::initOtherViews() {
 			Widget::TouchEventType type) {
 		if (type == cocos2d::ui::Widget::TouchEventType::ENDED)
 		{
-			sdkbox::IAP::purchase("pack_1");
-
+#if(CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+            sdkbox::IAP::purchase(IAP_IOS_PACK1_KEY);
+#endif
+#if(CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+            sdkbox::IAP::purchase(IAP_ANDROID_PACK1_KEY);
+#endif
+            
 //			//FIXME for testing
 //			sdkbox::Product product;
-//			product.name = "pack_1";
+//			product.name = IAP_IOS_PACK1_KEY;
 //			onSuccess(product);
 		}});
 	iapLayer->addChild(btnIAP1);
@@ -617,8 +623,14 @@ void HomeScene::initOtherViews() {
 	btnIAP2->addTouchEventListener([this](Ref *pSender,
 			Widget::TouchEventType type) {
 		if (type == cocos2d::ui::Widget::TouchEventType::ENDED)
-		{
-			sdkbox::IAP::purchase("pack_2");
+        {
+#if(CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+            sdkbox::IAP::purchase(IAP_IOS_PACK2_KEY);
+#endif
+#if(CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+            sdkbox::IAP::purchase(IAP_ANDROID_PACK2_KEY);
+#endif
+            
 		}});
 	iapLayer->addChild(btnIAP2);
 
@@ -633,8 +645,14 @@ void HomeScene::initOtherViews() {
 	btnIAP3->addTouchEventListener([this](Ref *pSender,
 			Widget::TouchEventType type) {
 		if (type == cocos2d::ui::Widget::TouchEventType::ENDED)
-		{
-			sdkbox::IAP::purchase("pack_3");
+        {
+#if(CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+            sdkbox::IAP::purchase(IAP_IOS_PACK3_KEY);
+#endif
+#if(CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+            sdkbox::IAP::purchase(IAP_ANDROID_PACK3_KEY);
+#endif
+            
 		}});
 	iapLayer->addChild(btnIAP3);
 }
@@ -1938,20 +1956,20 @@ void HomeScene::onInitialized(bool success) {
 }
 void HomeScene::onSuccess(const sdkbox::Product& p) {
 	CCLog("bambi HomeScene -> IAP onSuccess: %s", p.name.c_str());
-	if (p.name == "pack_1") {
+	if (p.name == IAP_ANDROID_PACK1_KEY || p.name == IAP_IOS_PACK1_KEY) {
 		StickerHelper::appendAPacketToSharePreferences(
 				STICKER_RARITY::UNCOMMON);
 		iapLayer->setVisible(false);
 
 		addPacketFromUserDefault();
-	} else if (p.name == "pack_2") {
+	} else if (p.name == IAP_ANDROID_PACK2_KEY || p.name == IAP_IOS_PACK2_KEY) {
 		StickerHelper::appendAPacketToSharePreferences(STICKER_RARITY::COMMON);
 		StickerHelper::appendAPacketToSharePreferences(
 				STICKER_RARITY::UNCOMMON);
 		iapLayer->setVisible(false);
 
 		addPacketFromUserDefault();
-	} else if (p.name == "pack_3") {
+	} else if (p.name == IAP_ANDROID_PACK3_KEY || p.name == IAP_IOS_PACK3_KEY) {
 		StickerHelper::appendAPacketToSharePreferences(STICKER_RARITY::COMMON);
 		StickerHelper::appendAPacketToSharePreferences(
 				STICKER_RARITY::UNCOMMON);
@@ -1959,7 +1977,7 @@ void HomeScene::onSuccess(const sdkbox::Product& p) {
 		iapLayer->setVisible(false);
 
 		addPacketFromUserDefault();
-	}
+    }
 }
 void HomeScene::onFailure(const sdkbox::Product& p, const std::string& msg) {
 	CCLog("bambi HomeScene -> IAP onFailure: %s", p.name.c_str());

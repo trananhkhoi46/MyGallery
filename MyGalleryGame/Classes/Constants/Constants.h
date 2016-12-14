@@ -40,6 +40,14 @@
 #define SELLING_STICKER_NUMBER_TO_GET_A_PACKET 4 //sacrifice 4 stickers to get a packet
 #define TIME_TO_GET_FREE_PACKET_IN_SECOND 300 //300 seconds to get a free packet
 #define GIVEN_PACKETS_AT_FIRST_INSTALL "0,1,2,2" //Give user 1 free packet, 1 common packet, 2 uncommon packet when first installed
+#define IAP_ANDROID_PACK1_KEY "pack_1"
+#define IAP_ANDROID_PACK2_KEY "pack_2"
+#define IAP_ANDROID_PACK3_KEY "pack_3"
+#define IAP_IOS_PACK1_KEY "coin_package"
+#define IAP_IOS_PACK2_KEY "coin_package2"
+#define IAP_IOS_PACK3_KEY "remove_ads"
+#define FACEBOOK_INVITE_IMAGE_URL "http://www.cocos2d-x.org/attachments/801/cocos2dx_portrait.png"
+#define FACEBOOK_INVITE_APP_URL "https://fb.me/322164761287181"
 
 //URL
 #define s_linkToGooglePlayMoreGame "https://play.google.com/store/apps/developer?id=Khoi+Nguyen+Entertainment"
