@@ -5,7 +5,6 @@
 #define kTagLoginLogoutFacebook 1
 #define kTagMusic 2
 #define kTagSound 3
-#define kTagAlert 4
 
 Scene* SettingScene::scene() {
 	// 'scene' is an autorelease object
@@ -59,7 +58,7 @@ bool SettingScene::init() {
 			isMusic ?
 					s_settingscene_rdb_selected :
 					s_settingscene_rdb_unselected);
-	btnMusic->setPosition(Vec2(winSize.width * 0.6, winSize.height * 0.8));
+	btnMusic->setPosition(Vec2(winSize.width * 0.6, winSize.height * 0.7));
 	btnMusic->setTouchEnabled(true);
 	btnMusic->setPressedActionEnabled(true);
 	btnMusic->addTouchEventListener(
@@ -83,7 +82,7 @@ bool SettingScene::init() {
 			isSound ?
 					s_settingscene_rdb_selected :
 					s_settingscene_rdb_unselected);
-	btnSound->setPosition(Vec2(winSize.width * 0.6, winSize.height * 0.65));
+	btnSound->setPosition(Vec2(winSize.width * 0.6, winSize.height * 0.5));
 	btnSound->setTouchEnabled(true);
 	btnSound->setPressedActionEnabled(true);
 	btnSound->addTouchEventListener(
@@ -102,31 +101,7 @@ bool SettingScene::init() {
 	labelSound->setColor(Color3B::BLACK);
 	this->addChild(labelSound);
 
-	//Add btn alert
-	Button* btnAlert = Button::create(
-			isAlert ?
-					s_settingscene_rdb_selected :
-					s_settingscene_rdb_unselected);
-	btnAlert->setPosition(Vec2(winSize.width * 0.6, winSize.height * 0.5));
-	btnAlert->setTouchEnabled(true);
-	btnAlert->setPressedActionEnabled(true);
-	btnAlert->addTouchEventListener(
-			CC_CALLBACK_2(SettingScene::settingButtonsCallback, this));
-	btnAlert->setTag(kTagAlert);
-	this->addChild(btnAlert);
-
-	Label* labelAlert = Label::createWithTTF(config, "ALERT",
-			TextHAlignment::CENTER);
-	labelAlert->setPosition(
-			Vec2(
-					btnAlert->getPositionX()
-							- labelAlert->getContentSize().width / 2 - 200,
-					btnAlert->getPositionY()));
-	labelAlert->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
-	labelAlert->setColor(Color3B::BLACK);
-	this->addChild(labelAlert);
-
-	//Add btn login logout facebook
+    //Add btn login logout facebook
 	Button* btnLoginLogoutFacebook = Button::create(s_settingscene_btn_loggout);
 	btnLoginLogoutFacebook->setPosition(
 			Vec2(winSize.width * 0.5, winSize.height * 0.3));
@@ -173,6 +148,9 @@ void SettingScene::settingButtonsCallback(Ref* pSender,
 		int tag = (int) button->getTag();
 		switch (tag) {
 		case kTagBack: {
+            if(isSound){
+                CocosDenshion::SimpleAudioEngine::getInstance()->playEffect(s_click);
+            }
 			isTouchedOnFacebookConnect = true;
 			if (!isTouchedOnFacebookConnect) {
 				CustomDirector *director =
@@ -188,6 +166,9 @@ void SettingScene::settingButtonsCallback(Ref* pSender,
 		}
 			break;
 		case kTagLoginLogoutFacebook: {
+            if(isSound){
+                CocosDenshion::SimpleAudioEngine::getInstance()->playEffect(s_click);
+            }
 			isTouchedOnFacebookConnect = true;
 			if (FacebookHandler::getInstance()->isFacebookLoggedIn()) {
 				FacebookHandler::getInstance()->logoutFacebook();
@@ -204,19 +185,18 @@ void SettingScene::settingButtonsCallback(Ref* pSender,
 							s_settingscene_rdb_selected :
 							s_settingscene_rdb_unselected,
 					TextureResType::LOCAL);
-		}
-			break;
-		case kTagAlert: {
-			isAlert = !isAlert;
-			UserDefault::getInstance()->setBoolForKey(ALERT, isAlert);
-			button->loadTextureNormal(
-					isAlert ?
-							s_settingscene_rdb_selected :
-							s_settingscene_rdb_unselected,
-					TextureResType::LOCAL);
+            
+            if(isMusic){
+                CocosDenshion::SimpleAudioEngine::getInstance()->playBackgroundMusic(s_gameon);
+            }else{
+                CocosDenshion::SimpleAudioEngine::getInstance()->stopBackgroundMusic();
+            }
 		}
 			break;
 		case kTagSound: {
+            if(isSound){
+                CocosDenshion::SimpleAudioEngine::getInstance()->playEffect(s_click);
+            }
 			isSound = !isSound;
 			UserDefault::getInstance()->setBoolForKey(SOUND, isSound);
 			button->loadTextureNormal(
@@ -238,6 +218,10 @@ void SettingScene::onKeyReleased(EventKeyboard::KeyCode keycode, Event* event) {
 					(CustomDirector *) CustomDirector::getInstance();
 			director->popSceneWithTransitionFade(1);
 		} else {
+            if(isSound){
+                CocosDenshion::SimpleAudioEngine::getInstance()->playEffect(s_click);
+            }
+            
 			auto *newScene = HomeScene::scene();
 			auto transition = TransitionFade::create(1.0, newScene);
 			Director *pDirector = Director::getInstance();

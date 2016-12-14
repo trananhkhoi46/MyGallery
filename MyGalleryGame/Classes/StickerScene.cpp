@@ -115,13 +115,19 @@ void StickerScene::initMenuBottom() {
 						this->removeChild(backgroundLayer, false);
 						backgroundLayer = nullptr;
 						scrollview->setVisible(true);
-					} else if(searchingType != SEARCH_TYPE_ALL)
+                    } else {
+                     
+                        if(isSound){
+                            CocosDenshion::SimpleAudioEngine::getInstance()->playEffect(s_click);
+                        }
+                        if(searchingType != SEARCH_TYPE_ALL)
 					{
 						auto *newScene = StickerScene::scene(SEARCH_TYPE_ALL);
 						auto transition = TransitionFade::create(1.0, newScene);
 						Director *pDirector = Director::getInstance();
 						pDirector->replaceScene(transition);
 					}
+                }
 				}});
 	this->addChild(btnSearchAll);
 	if (searchingType == SEARCH_TYPE_ALL) {
@@ -144,13 +150,18 @@ void StickerScene::initMenuBottom() {
 						this->removeChild(backgroundLayer, false);
 						backgroundLayer = nullptr;
 						scrollview->setVisible(true);
-					} else if(searchingType != SEARCH_TYPE_STICK)
+                    } else{
+                        if(isSound){
+                            CocosDenshion::SimpleAudioEngine::getInstance()->playEffect(s_click);
+                        }
+                        if(searchingType != SEARCH_TYPE_STICK)
 					{
 						auto *newScene = StickerScene::scene(SEARCH_TYPE_STICK);
 						auto transition = TransitionFade::create(1.0, newScene);
 						Director *pDirector = Director::getInstance();
 						pDirector->replaceScene(transition);
 					}
+                }
 				}});
 	this->addChild(btnSearchStick);
 	if (searchingType == SEARCH_TYPE_STICK) {
@@ -168,6 +179,9 @@ void StickerScene::initMenuBottom() {
 			Widget::TouchEventType type) {
 		if (type == cocos2d::ui::Widget::TouchEventType::ENDED)
 		{
+            if(isSound){
+                CocosDenshion::SimpleAudioEngine::getInstance()->playEffect(s_click);
+            }
 			auto *newScene = StickerScene::scene(SEARCH_TYPE_SELL);
 			auto transition = TransitionFade::create(1.0, newScene);
 			Director *pDirector = Director::getInstance();
@@ -224,6 +238,9 @@ void StickerScene::initControlButtons() {
 						scrollview->setVisible(true);
 					} else
 					{
+                        if(isSound){
+                            CocosDenshion::SimpleAudioEngine::getInstance()->playEffect(s_click);
+                        }
 						auto *newScene = AlbumScene::scene();
 						auto transition = TransitionFade::create(1.0, newScene);
 						Director *pDirector = Director::getInstance();
@@ -254,6 +271,9 @@ void StickerScene::initControlButtons() {
 						scrollview->setVisible(true);
 					} else
 					{
+                        if(isSound){
+                            CocosDenshion::SimpleAudioEngine::getInstance()->playEffect(s_click);
+                        }
 						auto *newScene = HomeScene::scene();
 						auto transition = TransitionFade::create(1.0, newScene);
 						Director *pDirector = Director::getInstance();
@@ -318,6 +338,9 @@ void StickerScene::addAllStickersToScrollView() {
 							scrollview->setVisible(true);
 						} else
 						{
+                            if(isSound){
+                                CocosDenshion::SimpleAudioEngine::getInstance()->playEffect(s_click);
+                            }
 							int tag = (int) dynamic_cast<Button*>(pSender)->getTag();
 							CCLog("bambi StickerScene -> btnStickerScene->addTouchEventListener, tag: %d",tag);
 							openStickerDetailLayer(StickerHelper::getStickerFromId(tag));
@@ -482,6 +505,9 @@ void StickerScene::openStickerDetailLayer(Sticker* sticker) {
 						Widget::TouchEventType type) {
 					if (type == cocos2d::ui::Widget::TouchEventType::ENDED)
 					{
+                        if(isSound){
+                            CocosDenshion::SimpleAudioEngine::getInstance()->playEffect(s_click);
+                        }
 						auto *newScene = AlbumScene::scene(sticker->sticker_page_id - 1);
 						auto transition = TransitionFade::create(1.0, newScene);
 						Director *pDirector = Director::getInstance();
@@ -503,6 +529,10 @@ void StickerScene::openStickerDetailLayer(Sticker* sticker) {
 				Widget::TouchEventType type) {
 			if (type == cocos2d::ui::Widget::TouchEventType::ENDED)
 			{
+                if(isSound){
+                    CocosDenshion::SimpleAudioEngine::getInstance()->playEffect(s_click);
+                }
+                
 				StickerHelper::sellSticker(sticker);
 				auto *newScene = StickerScene::scene(searchingType);
 				Director *pDirector = Director::getInstance();
@@ -534,6 +564,9 @@ void StickerScene::onKeyReleased(EventKeyboard::KeyCode keycode, Event* event) {
 			scrollview->setVisible(true);
 		} else {
 			if (firstClickInStickerScene) {
+                if(isSound){
+                    CocosDenshion::SimpleAudioEngine::getInstance()->playEffect(s_click);
+                }
 				firstClickInStickerScene = false;
 				SocialPlugin::showToast("Press back again to Exit!");
 

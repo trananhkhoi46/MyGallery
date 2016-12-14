@@ -84,6 +84,9 @@ void AlbumScene::initScrollView() {
 			Widget::TouchEventType type) {
 		if (type == cocos2d::ui::Widget::TouchEventType::ENDED)
 		{
+            if(isSound){
+                CocosDenshion::SimpleAudioEngine::getInstance()->playEffect(s_click);
+            }
 			isMenuBarShowing = !isMenuBarShowing;
 			setVisibilityMenuBar();
 		}});
@@ -128,6 +131,9 @@ void AlbumScene::initScrollView() {
 				Widget::TouchEventType type) {
 			if (type == cocos2d::ui::Widget::TouchEventType::ENDED)
 			{
+                if(isSound){
+                    CocosDenshion::SimpleAudioEngine::getInstance()->playEffect(s_click);
+                }
 				int tag = (int) dynamic_cast<Button*>(pSender)->getTag();
 				scrollToPageIndex(tag);
 				setVisibilityBtnLeftRight();
@@ -308,6 +314,9 @@ void AlbumScene::initControlButtons() {
 			Widget::TouchEventType type) {
 		if (type == cocos2d::ui::Widget::TouchEventType::ENDED)
 		{
+            if(isSound){
+                CocosDenshion::SimpleAudioEngine::getInstance()->playEffect(s_click);
+            }
 			auto *newScene = StickerScene::scene();
 			auto transition = TransitionFade::create(1.0, newScene);
 			Director *pDirector = Director::getInstance();
@@ -341,6 +350,9 @@ void AlbumScene::initControlButtons() {
 			Widget::TouchEventType type) {
 		if (type == cocos2d::ui::Widget::TouchEventType::ENDED)
 		{
+            if(isSound){
+                CocosDenshion::SimpleAudioEngine::getInstance()->playEffect(s_click);
+            }
 			auto *newScene = HomeScene::scene();
 			auto transition = TransitionFade::create(1.0, newScene);
 			Director *pDirector = Director::getInstance();
@@ -359,6 +371,9 @@ void AlbumScene::initControlButtons() {
 			Widget::TouchEventType type) {
 		if (type == cocos2d::ui::Widget::TouchEventType::ENDED)
 		{
+            if(isSound){
+                CocosDenshion::SimpleAudioEngine::getInstance()->playEffect(s_click);
+            }
 			scrollToPageIndex(pageView->getCurrentPageIndex() - 1);
 		}});
 	this->addChild(btnLeft);
@@ -377,6 +392,9 @@ void AlbumScene::initControlButtons() {
 					Widget::TouchEventType type) {
 				if (type == cocos2d::ui::Widget::TouchEventType::ENDED)
 				{
+                    if(isSound){
+                        CocosDenshion::SimpleAudioEngine::getInstance()->playEffect(s_click);
+                    }
 					CCLog("bambi, AlbumScene -> currentPageIndex: %d",pageView->getCurrentPageIndex());
 					scrollToPageIndex(pageView->getCurrentPageIndex() + 1);
 				}});
@@ -463,6 +481,9 @@ bool firstClickInAlbumScene = true;
 void AlbumScene::onKeyReleased(EventKeyboard::KeyCode keycode, Event* event) {
 	if (keycode == EventKeyboard::KeyCode::KEY_ESCAPE) {
 		if (firstClickInAlbumScene) {
+            if(isSound){
+                CocosDenshion::SimpleAudioEngine::getInstance()->playEffect(s_click);
+            }
 			firstClickInAlbumScene = false;
 			SocialPlugin::showToast("Press back again to Exit!");
 

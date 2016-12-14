@@ -455,6 +455,9 @@ void HomeScene::initOtherViews() {
 			Widget::TouchEventType type) {
 		if (type == cocos2d::ui::Widget::TouchEventType::ENDED)
 		{
+            if(isSound){
+                CocosDenshion::SimpleAudioEngine::getInstance()->playEffect(s_click);
+            }
 			closeBlurLayer();
 		}});
 	blurLayer->addChild(btnContinue);
@@ -487,6 +490,9 @@ void HomeScene::initOtherViews() {
 			Widget::TouchEventType type) {
 		if (type == cocos2d::ui::Widget::TouchEventType::ENDED)
 		{
+            if(isSound){
+                CocosDenshion::SimpleAudioEngine::getInstance()->playEffect(s_click);
+            }
 			closeFriendLayer();
 		}});
 	friendLayer->addChild(btnClose);
@@ -501,6 +507,9 @@ void HomeScene::initOtherViews() {
 					Widget::TouchEventType type) {
 				if (type == cocos2d::ui::Widget::TouchEventType::ENDED && !isInviting)
 				{
+                    if(isSound){
+                        CocosDenshion::SimpleAudioEngine::getInstance()->playEffect(s_click);
+                    }
 					isInviting = true;
 					auto func = CallFunc::create([=]() {
 								isInviting = false;
@@ -539,6 +548,9 @@ void HomeScene::initOtherViews() {
 			Widget::TouchEventType type) {
 		if (type == cocos2d::ui::Widget::TouchEventType::ENDED)
 		{
+            if(isSound){
+                CocosDenshion::SimpleAudioEngine::getInstance()->playEffect(s_click);
+            }
 			closeTradeLayer();
 		}});
 	tradeLayer->addChild(btnClose2);
@@ -582,6 +594,9 @@ void HomeScene::initOtherViews() {
 			Widget::TouchEventType type) {
 		if (type == cocos2d::ui::Widget::TouchEventType::ENDED)
 		{
+            if(isSound){
+                CocosDenshion::SimpleAudioEngine::getInstance()->playEffect(s_click);
+            }
 			iapLayer->setVisible(false);
 		}});
 	iapLayer->addChild(btnClose3);
@@ -598,6 +613,9 @@ void HomeScene::initOtherViews() {
 			Widget::TouchEventType type) {
 		if (type == cocos2d::ui::Widget::TouchEventType::ENDED)
 		{
+            if(isSound){
+                CocosDenshion::SimpleAudioEngine::getInstance()->playEffect(s_click);
+            }
 #if(CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
             sdkbox::IAP::purchase(IAP_IOS_PACK1_KEY);
 #endif
@@ -624,6 +642,10 @@ void HomeScene::initOtherViews() {
 			Widget::TouchEventType type) {
 		if (type == cocos2d::ui::Widget::TouchEventType::ENDED)
         {
+            if(isSound){
+                CocosDenshion::SimpleAudioEngine::getInstance()->playEffect(s_click);
+            }
+            
 #if(CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
             sdkbox::IAP::purchase(IAP_IOS_PACK2_KEY);
 #endif
@@ -646,6 +668,9 @@ void HomeScene::initOtherViews() {
 			Widget::TouchEventType type) {
 		if (type == cocos2d::ui::Widget::TouchEventType::ENDED)
         {
+            if(isSound){
+                CocosDenshion::SimpleAudioEngine::getInstance()->playEffect(s_click);
+            }
 #if(CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
             sdkbox::IAP::purchase(IAP_IOS_PACK3_KEY);
 #endif
@@ -742,6 +767,9 @@ void HomeScene::initControlButtons() {
 						backgroundLayer = nullptr;
 					} else
 					{
+                        if(isSound){
+                            CocosDenshion::SimpleAudioEngine::getInstance()->playEffect(s_click);
+                        }
 						auto *newScene = StickerScene::scene();
 						auto transition = TransitionFade::create(1.0, newScene);
 						Director *pDirector = Director::getInstance();
@@ -771,6 +799,9 @@ void HomeScene::initControlButtons() {
 						backgroundLayer = nullptr;
 					} else
 					{
+                        if(isSound){
+                            CocosDenshion::SimpleAudioEngine::getInstance()->playEffect(s_click);
+                        }
 						auto *newScene = AlbumScene::scene();
 						auto transition = TransitionFade::create(1.0, newScene);
 						Director *pDirector = Director::getInstance();
@@ -1035,6 +1066,9 @@ void HomeScene::earn3Stickers(STICKER_RARITY rarity) {
 							backgroundLayer = nullptr;
 						} else
 						{
+                            if(isSound){
+                                CocosDenshion::SimpleAudioEngine::getInstance()->playEffect(s_click);
+                            }
 							openStickerDetailLayer(sticker);
 						}}});
 		stickerBtn->setTag(kTagNewSticker);
@@ -1306,6 +1340,9 @@ void HomeScene::addElementsToTradeLayer() {
 						Widget::TouchEventType type) {
 					if (type == cocos2d::ui::Widget::TouchEventType::ENDED && !isAcceptingRequest)
 					{
+                        if(isSound){
+                            CocosDenshion::SimpleAudioEngine::getInstance()->playEffect(s_click);
+                        }
 						isAcceptingRequest = true;
 						auto func = CallFunc::create([=]() {
 									isAcceptingRequest = false;
@@ -1333,6 +1370,9 @@ void HomeScene::addElementsToTradeLayer() {
 						Widget::TouchEventType type) {
 					if (type == cocos2d::ui::Widget::TouchEventType::ENDED && !isDenyingRequest)
 					{
+                        if(isSound){
+                            CocosDenshion::SimpleAudioEngine::getInstance()->playEffect(s_click);
+                        }
 						isDenyingRequest = true;
 						auto func = CallFunc::create([=]() {
 									isDenyingRequest = false;
@@ -1440,6 +1480,9 @@ void HomeScene::addElementsToTradeLayer() {
 						Widget::TouchEventType type) {
 					if (type == cocos2d::ui::Widget::TouchEventType::ENDED && !isAcceptingRequest)
 					{
+                        if(isSound){
+                            CocosDenshion::SimpleAudioEngine::getInstance()->playEffect(s_click);
+                        }
 						isAcceptingRequest = true;
 						auto func = CallFunc::create([=]() {
 									isAcceptingRequest = false;
@@ -1487,6 +1530,10 @@ void HomeScene::packetButtonsCallback(Ref* pSender,
 			&& !tradeLayer->isVisible() && !iapLayer->isVisible()
 			&& isPacketRunningTransactionDone
 			&& cut->numberOfRunningActions() == 0) {
+        if(isSound){
+            CocosDenshion::SimpleAudioEngine::getInstance()->playEffect(s_click);
+        }
+        
 		int animationDuration = 3;
 		Button* btnPacketBottom = dynamic_cast<Button*>(pSender);
 		int tag = (int) btnPacketBottom->getTag();
@@ -1593,10 +1640,14 @@ void HomeScene::iapButtonsCallback(Ref* pSender,
 	if (eEventType == ui::Widget::TouchEventType::ENDED
 			&& !blurLayer->isVisible() && !friendLayer->isVisible()
 			&& !tradeLayer->isVisible() && !iapLayer->isVisible()) {
-		if (backgroundLayer != nullptr && backgroundLayer->isVisible()) {
+      	if (backgroundLayer != nullptr && backgroundLayer->isVisible()) {
 			this->removeChild(backgroundLayer, false);
 			backgroundLayer = nullptr;
 		} else {
+            if(isSound){
+                CocosDenshion::SimpleAudioEngine::getInstance()->playEffect(s_click);
+            }
+            
 			iapLayer->setVisible(true);
 		}
 	}
@@ -1620,12 +1671,18 @@ void HomeScene::tradeButtonCallback(Ref* pSender,
 	if (eEventType == ui::Widget::TouchEventType::ENDED
 			&& !blurLayer->isVisible() && !friendLayer->isVisible()
 			&& !tradeLayer->isVisible() && !iapLayer->isVisible()) {
-		int numberOfPendingRequest = vtPendingRequest.size();
+  		int numberOfPendingRequest = vtPendingRequest.size();
 		int numberOfGivenStickers = vtGivenSticker.size();
 		if (backgroundLayer != nullptr && backgroundLayer->isVisible()) {
 			this->removeChild(backgroundLayer, false);
 			backgroundLayer = nullptr;
-		} else if (numberOfGivenStickers > 0 || numberOfPendingRequest > 0) {
+		} else
+        {
+            if(isSound){
+                CocosDenshion::SimpleAudioEngine::getInstance()->playEffect(s_click);
+            }
+            
+            if (numberOfGivenStickers > 0 || numberOfPendingRequest > 0) {
 			CCLog(
 					"bambi HomeScene -> tradeButtonCallback -> going to addElementsToTradeLayer, numberOfGivenStickers: %d, numberOfPendingRequest: %d",
 					numberOfGivenStickers, numberOfPendingRequest);
@@ -1639,6 +1696,7 @@ void HomeScene::tradeButtonCallback(Ref* pSender,
 			SocialPlugin::showToast(
 					"Your inbox is empty right now. Ask your friends for more stickers!");
 		}
+        }
 	}
 }
 
@@ -1647,10 +1705,13 @@ void HomeScene::friendButtonCallback(Ref* pSender,
 	if (eEventType == ui::Widget::TouchEventType::ENDED
 			&& !blurLayer->isVisible() && !friendLayer->isVisible()
 			&& !tradeLayer->isVisible() && !iapLayer->isVisible()) {
-		if (backgroundLayer != nullptr && backgroundLayer->isVisible()) {
+    	if (backgroundLayer != nullptr && backgroundLayer->isVisible()) {
 			this->removeChild(backgroundLayer, false);
 			backgroundLayer = nullptr;
 		} else {
+            if(isSound){
+                CocosDenshion::SimpleAudioEngine::getInstance()->playEffect(s_click);
+            }
 			friendLayer->setVisible(true);
 			isMenuBarShowing = false;
 			invalidateMenuBarPosition();
@@ -1669,6 +1730,9 @@ void HomeScene::facebookConnectButtonCallback(Ref* pSender,
 			this->removeChild(backgroundLayer, false);
 			backgroundLayer = nullptr;
 		} else {
+            if(isSound){
+                CocosDenshion::SimpleAudioEngine::getInstance()->playEffect(s_click);
+            }
 			CCLog("bambi HomeScene -> logging in");
 			isLoggingInFacebook = true;
 			auto func = CallFunc::create([=]() {
@@ -1739,6 +1803,9 @@ void HomeScene::responseForQuerryTopFriend(vector<BUserInfor*> friendList) {
 						Widget::TouchEventType type) {
 					if (type == cocos2d::ui::Widget::TouchEventType::ENDED && !isOpeningAnotherScene)
 					{
+                        if(isSound){
+                            CocosDenshion::SimpleAudioEngine::getInstance()->playEffect(s_click);
+                        }
 						isOpeningAnotherScene = true;
 						auto func = CallFunc::create([=]() {
 									isOpeningAnotherScene = false;
@@ -1891,6 +1958,9 @@ void HomeScene::settingButtonsCallback(Ref* pSender,
 			this->removeChild(backgroundLayer, false);
 			backgroundLayer = nullptr;
 		} else {
+            if(isSound){
+                CocosDenshion::SimpleAudioEngine::getInstance()->playEffect(s_click);
+            }
 			int tag = (int) dynamic_cast<Button*>(pSender)->getTag();
 			switch (tag) {
 			case kTagFacebookPage:
@@ -1941,6 +2011,10 @@ bool HomeScene::onTouchBegan(Touch* touch, Event* event) {
 	Rect rect = menuBar->getBoundingBox();
 	rect.setRect(rect.origin.x, rect.origin.y, rect.size.width, 200);
 	if (rect.containsPoint(touch->getLocation())) {
+        if(isSound){
+            CocosDenshion::SimpleAudioEngine::getInstance()->playEffect(s_click);
+        }
+        
 		isMenuBarShowing = !isMenuBarShowing;
 		invalidateMenuBarPosition();
 	} else if (backgroundLayer != nullptr && backgroundLayer->isVisible()) {

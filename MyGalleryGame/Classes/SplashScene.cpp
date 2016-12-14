@@ -31,6 +31,11 @@ bool SplashScene::init() {
 
 	SplashScene::PreloadSounds();
 
+    //Background music
+    if (isMusic) {
+        CocosDenshion::SimpleAudioEngine::getInstance()->playBackgroundMusic(s_gameon,true);
+    }
+    
 	return result;
 }
 

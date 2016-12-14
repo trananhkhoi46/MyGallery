@@ -250,6 +250,9 @@ void TradingScene::addAllStickersToScrollView() {
 						Widget::TouchEventType type) {
 					if (type == cocos2d::ui::Widget::TouchEventType::ENDED)
 					{
+                        if(isSound){
+                            CocosDenshion::SimpleAudioEngine::getInstance()->playEffect(s_click);
+                        }
 						int tag = (int) dynamic_cast<Button*>(pSender)->getTag();
 						CCLog("bambi TradingScene -> btnStickerScene->addTouchEventListener, tag: %d",tag);
 						openStickerDetailLayer(StickerHelper::getStickerFromId(tag));
@@ -422,6 +425,9 @@ void TradingScene::openStickerDetailLayer(Sticker* sticker) {
 					Widget::TouchEventType type) {
 				if (type == cocos2d::ui::Widget::TouchEventType::ENDED)
 				{
+                    if(isSound){
+                        CocosDenshion::SimpleAudioEngine::getInstance()->playEffect(s_click);
+                    }
 					CCLog("bambi TradingScene -> btnStickerScene->addTouchEventListener, tag: %d - userobjectId: %s",sticker->sticker_id, user->getObjectId().c_str());
 					FirebaseHandler::getInstance()->askTheStickerOfUer(sticker->sticker_id, user);
 				}});
@@ -503,6 +509,9 @@ void TradingScene::onKeyReleased(EventKeyboard::KeyCode keycode, Event* event) {
 			scrollview->setVisible(true);
 		} else {
 			isDataChanged = true;
+            if(isSound){
+                CocosDenshion::SimpleAudioEngine::getInstance()->playEffect(s_click);
+            }
 			if (isDataChanged) {
 				auto *newScene = HomeScene::scene();
 				auto transition = TransitionFade::create(1.0, newScene);
@@ -520,6 +529,9 @@ void TradingScene::backToHome(Ref* pSender,
 		ui::Widget::TouchEventType eEventType) {
 	if (eEventType == ui::Widget::TouchEventType::ENDED) {
 		isDataChanged = true;
+        if(isSound){
+            CocosDenshion::SimpleAudioEngine::getInstance()->playEffect(s_click);
+        }
 		if (isDataChanged) {
 			auto *newScene = HomeScene::scene();
 			auto transition = TransitionFade::create(1.0, newScene);
